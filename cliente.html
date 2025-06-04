@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&amp;display=swap" rel="stylesheet"/>
+<style>body { font-family: 'Poppins', sans-serif; }</style>
+<meta charset="utf-8"/>
+<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
+<meta content="MaxPlay TV - Guia" property="og:title"/>
+<meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
+<meta content="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" property="og:image"/>
+<link href="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" rel="icon"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MaxPlay TV - Guia</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-blue': '#0f172a',
+                        'vibrant-orange': '#ff6b00',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #ff6b00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .category-title {
+            position: relative;
+            padding-left: 15px;
+        }
+        .category-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background-color: #ff6b00;
+            border-radius: 2px;
+        }
+        .channel-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .channel-card:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .programme-item {
+            border-left: 2px solid #ff6b00;
+            transition: all 0.2s ease;
+        }
+        .programme-item:hover {
+            background-color: rgba(255, 107, 0, 0.1);
+        }
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+        .filter-btn.active {
+            background-color: #ff6b00;
+            color: white;
+        }
+        .filter-btn:hover:not(.active) {
+            background-color: rgba(255, 107, 0, 0.2);
+        }
+        .rating-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .channel-card {
+    border: 1px solid rgba(255, 107, 0, 0.3); /* Borda laranja clara */
+    border-radius: 6px;
+}
+        /* Modal styles */
+        .channel-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    padding: 0.25rem;
+    border: 1px solid #ff6b00; /* Borda laranja */
+    border-radius: 6px;
+}
+
+.channel-card .p-3 {
+    padding: 0.3rem !important;
+}
+
+.programmes-list {
+    padding: 0.3rem !important;
+}
+
+.programme-item {
+    padding: 0.2rem 0.4rem;
+    margin-bottom: 0.2rem;
+}
+
+.channel-card button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.channel-card h3 {
+    margin-bottom: 0.2rem;
+}
+
+.channel-card .programme-title {
+    margin-bottom: 0.1rem;
+}
+
+/* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 50;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #1a2234;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s;
+        }
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .modal-close {
+            color: #a0aec0;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-close:hover {
+            color: #ff6b00;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 0, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 0, 0.8);
+        }
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .filters-container {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 10px;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+        .current-time {
+            background-color: rgba(255, 107, 0, 0.2);
+            border: 1px solid #ff6b00;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        .current-time svg {
+            margin-right: 6px;
+        }
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(220, 38, 38, 0.2);
+            color: #ef4444;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .live-indicator::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            margin-right: 4px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .auto-update-notice {
+            background-color: rgba(255, 107, 0, 0.1);
+            border-left: 3px solid #ff6b00;
+            padding: 8px 12px;
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+        }
+        .auto-update-notice svg {
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        .weekday {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-left: 2px;
+        }
+    </style>
+</meta></head>
+<body>
+<header class="mb-6">
+<div class="flex flex-col md:flex-row justify-between items-center mb-6">
+<div class="flex items-center mb-4 md:mb-0">
+<img alt="MaxPlay TV Logo" class="h-12 mr-3" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
+<h1 class="text-2xl font-bold text-white">MaxPlay TV <span class="text-vibrant-orange">– Guia</span></h1>
+</div>
+<div class="flex flex-col sm:flex-row w-full md:w-auto gap-2">
+<div class="relative flex-grow">
+<input class="w-full p-2 pl-3 pr-10 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-vibrant-orange" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
+<svg class="h-5 w-5 absolute right-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<button class="px-4 py-2 bg-vibrant-orange text-white rounded-md hover:bg-opacity-90 transition-colors whitespace-nowrap" id="reload-epg">
+<svg class="h-5 w-5 inline-block mr-1" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                        Recarregar Programação MaxPlay
+                    </button>
+</div>
+</div>
+<div class="flex justify-between items-center mb-4">
+<div class="current-time">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span id="current-time-display">Carregando...</span>
+</div>
+<div class="text-sm text-gray-400">
+                    Última atualização: <span id="last-update">Carregando...</span>
+</div>
+</div>
+</header><section class="px-4 py-6 text-white" id="filmes-destaque">
+<h2 class="text-2xl font-bold mb-4 text-orange-500">🎬 FILMES PARA ASSISTIR HOJE</h2>
+<div class="flex gap-4 overflow-x-auto pb-4" id="filmes"></div>
+</section><section class="px-4 py-6 text-white" id="jogos-hoje">
+<h2 class="text-2xl font-bold mb-4 text-orange-500">🏆 JOGOS DE HOJE</h2>
+<div class="flex gap-4 overflow-x-auto pb-4" id="jogos-container">
+<div class="loading-spinner"></div>
+<p class="ml-4 text-gray-300">Carregando jogos...</p>
+</div>
+</section>
+<div class="container mx-auto px-4 py-6">
+<div class="flex justify-center items-center h-40" id="loading">
+<div class="loading-spinner"></div>
+<p class="ml-4 text-gray-300">Carregando programação...</p>
+</div>
+<div class="hidden bg-red-900 border border-red-700 text-white px-4 py-3 rounded mb-4" id="error-message"></div>
+<h2 class="text-2xl font-bold mb-4 text-orange-500">📺 CANAIS E PROGRAMAÇÃO DE HOJE</h2><div class="filters-container overflow-x-auto pb-2">
+<div class="flex space-x-2 mb-4">
+<button class="filter-btn active px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="all">Todos</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="movies">Filmes e Séries</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="documentary">Documentários</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="kids">Infantis</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="sports">Esportes</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="adult">Adulto</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="open">Canais Abertos</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="news">Canal Notícias</button>
+</div>
+</div><div class="hidden" id="channels-container">
+<!-- Movies and Series Section -->
+<section class="mb-8" id="movies-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Filmes e Séries</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="movies-channels"></div>
+</section>
+<!-- Documentary Section -->
+<section class="mb-8" id="documentary-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Documentários</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="documentary-channels"></div>
+</section>
+<!-- Kids Section -->
+<section class="mb-8" id="kids-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Infantis</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kids-channels"></div>
+</section>
+<!-- Sports Section -->
+<section class="mb-8" id="sports-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Esportes</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="sports-channels"></div>
+</section>
+<!-- Other Channels Section -->
+<section class="mb-8" id="other-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Outros Canais</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="other-channels"></div>
+</section>
+</div>
+</div>
+<!-- Full Schedule Modal -->
+<div class="modal" id="schedule-modal">
+<div class="modal-content">
+<div class="modal-header bg-gray-800">
+<div class="flex items-center">
+<img alt="Channel Logo" class="h-8 mr-2" id="modal-channel-logo" src=""/>
+<h3 class="text-lg font-bold text-white" id="modal-channel-name">Canal</h3>
+</div>
+<span class="modal-close">×</span>
+</div>
+<div class="modal-body">
+<div class="space-y-3" id="modal-schedule-list">
+<!-- Programme items will be added here -->
+</div>
+</div>
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error-message');
+            const channelsContainer = document.getElementById('channels-container');
+            const channelSearch = document.getElementById('channel-search');
+            const reloadButton = document.getElementById('reload-epg');
+            const modal = document.getElementById('schedule-modal');
+            const modalClose = document.querySelector('.modal-close');
+            const modalChannelName = document.getElementById('modal-channel-name');
+            const modalChannelLogo = document.getElementById('modal-channel-logo');
+            const modalScheduleList = document.getElementById('modal-schedule-list');
+            const currentTimeDisplay = document.getElementById('current-time-display');
+            const lastUpdateDisplay = document.getElementById('last-update');
+            
+            // Channel category containers
+            const moviesChannels = document.getElementById('movies-channels');
+            const documentaryChannels = document.getElementById('documentary-channels');
+            const kidsChannels = document.getElementById('kids-channels');
+            const sportsChannels = document.getElementById('sports-channels');
+            const otherChannels = document.getElementById('other-channels');
+            
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            // Store all EPG data for reuse
+            let allProgrammesByChannel = {};
+            
+            // Auto-update timer
+            let autoUpdateTimer = null;
+            const AUTO_UPDATE_INTERVAL = 60000; // Update every minute
+            
+            // Channel categories mapping
+            const channelCategories = {
+                // Movies and Series channels
+                'movies': ['HBO', 'HBO2', 'HBO Plus', 'HBO Family', 'HBO Signature', 'HBO Mundi', 'HBO Pop', 'HBO Xtreme', 
+                          'Telecine Premium', 'Telecine Action', 'Telecine Touch', 'Telecine Fun', 'Telecine Pipoca', 'Telecine Cult',
+                          'Megapix', 'Universal TV', 'Studio Universal', 'Warner', 'AXN', 'Sony', 'FX', 'Paramount Network',
+                          'Cinemax', 'Prime Box Brazil', 'TNT', 'TNT Series', 'TNT Novelas', 'Space', 'AMC', 'Film&Arts', 'Syfy', 'Comedy Central',
+                          'TBS', 'A&E', 'Star Channel', 'Lifetime', 'Canal Brasil', 'TCM', 'Cine Brasil TV', 'CineBrasilTV', 'Sony Movies', 'Fox'],
+                
+                // Documentary channels
+                'documentary': ['Discovery Channel', 'Animal Planet', 'Nat Geo', 'National Geographic', 'History', 'History 2', 'Discovery Science', 
+                               'Discovery Theater', 'Discovery World', 'Discovery Turbo', 'Discovery Home & Health', 'Discovery ID', 'TLC', 
+                               'E!', 'Curta!', 'Arte 1', 'Fashion TV', 'Travel Box Brazil', 'Fish TV', 'Smithsonian Channel'],
+                
+                // Kids channels
+                'kids': ['Cartoon Network', 'Nickelodeon', 'Nick Jr.', 'Disney Channel', 'Disney Junior', 'Discovery Kids', 'Gloob', 
+                        'Gloobinho', 'Tooncast', 'Cartoonito', 'ZooMoo', 'TV Rá-Tim-Bum', 'Nat Geo Kids'],
+                
+                // Sports channels
+                'sports': ['SporTV', 'SporTV 2', 'SporTV 3', 'ESPN', 'ESPN 2', 'ESPN 3', 'ESPN 4', 'Fox Sports 2', 
+                          'Band Sports', 'Premiere', 'Premiere 2', 'Premiere 3', 'Premiere 4', 'Premiere 5', 'Premiere 6', 
+                          'Premiere 7', 'Premiere 8', 'Combate', 'OFF', 'Woohoo'],
+                
+                // News channels
+                'news': ['GloboNews', 'CNN Brasil', 'Record News', 'BandNews', 'Jovem Pan News', 'Bloomberg'],
+                
+                // Open channels
+                'open': ['Globo', 'SBT', 'Record', 'Band', 'RedeTV!', 'TV Cultura', 'TV Brasil', 'TV Gazeta', 'Futura', 'TV Câmara', 'TV Senado', 'TV Justiça'],
+                
+                // Adult channels
+                'adult': ['Playboy TV', 'Sexy Hot', 'Venus', 'Sextreme', 'Hustler TV', 'Penthouse TV']
+            };
+            
+            // Rating images mapping
+            const ratingImages = {
+                'L': 'https://i.postimg.cc/7PnzwZp7/IMG-6891.png',
+                '10': 'https://i.postimg.cc/FzpkZTjG/IMG-6892.png',
+                '12': 'https://i.postimg.cc/LXz1q95c/IMG-6893.png',
+                '14': 'https://i.postimg.cc/sxsZ7kZv/IMG-6894.png',
+                '16': 'https://i.postimg.cc/wvKNTyq5/IMG-6895.png',
+                '18': 'https://i.postimg.cc/LsgfpBp6/IMG-6896.png'
+            };
+            
+            // Channel logos mapping with the provided real logos
+            const channelLogos = {
+                'Warner': 'https://i.postimg.cc/SxBRcBBk/IMG-6821.png',
+                'Sony': 'https://i.postimg.cc/bwDdDyFm/IMG-6878.jpg',
+                'TNT': 'https://i.postimg.cc/kXhBg6wV/IMG-6879.png',
+                'TNT Novelas': 'https://i.postimg.cc/1RB8bYqr/IMG-6880.jpg',
+                'Space': 'https://i.postimg.cc/D0xms8TM/IMG-6881.jpg',
+                'Cinemax': 'https://i.postimg.cc/x8fccLWm/IMG-6882.jpg',
+                'Megapix': 'https://i.postimg.cc/fLjVz8gZ/IMG-6883.jpg',
+                'Sony Movies': 'https://i.postimg.cc/mDGcWvj8/IMG-6884.jpg',
+                'Fox': 'https://i.postimg.cc/0NS63kYz/IMG-6885.jpg',
+                'Animal Planet': 'https://i.postimg.cc/pXdmvYQb/IMG-6886.png',
+                'History': 'https://i.postimg.cc/FH7kyg1g/IMG-6887.jpg',
+                'Discovery Kids': 'https://i.postimg.cc/bwWD3DtX/IMG-6888.png',
+                'Band': 'https://i.postimg.cc/c41nHNSz/IMG-6889.png',
+                'Band Sports': 'https://i.postimg.cc/Pr68vFf5/IMG-6890.png',
+                // Add more default logos for common channels
+                'Globo': 'https://logodownload.org/wp-content/uploads/2013/12/rede-globo-logo-0.png',
+                'SBT': 'https://logodownload.org/wp-content/uploads/2013/12/sbt-logo-0.png',
+                'Record': 'https://logodownload.org/wp-content/uploads/2014/02/record-logo-tv-0.png',
+                'HBO': 'https://logodownload.org/wp-content/uploads/2017/04/hbo-logo-1.png',
+                'Telecine': 'https://logodownload.org/wp-content/uploads/2017/07/telecine-logo-1.png',
+                'SporTV': 'https://logodownload.org/wp-content/uploads/2017/07/sportv-logo-0.png',
+                'ESPN': 'https://logodownload.org/wp-content/uploads/2015/05/espn-logo-4.png',
+                'Discovery': 'https://logodownload.org/wp-content/uploads/2017/04/discovery-channel-logo-1.png',
+                'Cartoon Network': 'https://logodownload.org/wp-content/uploads/2018/06/cartoon-network-logo-1.png',
+                'Nickelodeon': 'https://logodownload.org/wp-content/uploads/2018/07/nickelodeon-logo-1.png',
+                'Disney': 'https://logodownload.org/wp-content/uploads/2018/10/disney-channel-logo-1.png',
+                'GloboNews': 'https://logodownload.org/wp-content/uploads/2017/07/globo-news-logo-0.png',
+                'CNN Brasil': 'https://logodownload.org/wp-content/uploads/2020/02/cnn-brasil-logo-0.png'
+            ,
+                "AMC": "https://i.postimg.cc/t4vK31X0/IMG-6911.jpg",
+                "AXN": "https://i.postimg.cc/qM4H4VmF/IMG-6909.jpg",
+                "A&E": "https://i.postimg.cc/15BhzC23/IMG-6912.png",
+                "Prime Box Brazil": "https://i.postimg.cc/2yYMkhxW/IMG-6913.png",
+                "Comedy Central": "https://i.postimg.cc/k5kLHk6f/IMG-6914.png",
+                "Paramount Network": "https://i.postimg.cc/KzBChJtF/IMG-6915.png",
+                "Travel Box": "https://i.postimg.cc/xjGBsp03/IMG-6916.png",
+                "TLC": "https://i.postimg.cc/Prt90bJs/IMG-6917.png",
+                "E!": "https://i.postimg.cc/SND34XYX/IMG-6918.jpg",
+                "Arte 1": "https://i.postimg.cc/VkvTkYXK/IMG-6919.png",
+                "Fish": "https://i.postimg.cc/T3ssyZ9f/IMG-6920.png",
+                "Nick Jr.": "https://i.postimg.cc/Xqn1S3Vc/IMG-6924.png",
+                "Nickelodeon": "https://i.postimg.cc/yNSb0vQ9/IMG-6921.png",
+                "Cartoon Network": "https://i.postimg.cc/ZRtDHp2Q/IMG-6922.png",
+                "Cartoonito": "https://i.postimg.cc/hjLZ5hqt/IMG-6923.png",
+                "Premiere": "https://i.postimg.cc/dQ9SR7BW/IMG-6926.png",
+                "Record": "https://i.postimg.cc/Vv4GzTvy/IMG-6925.png",
+                "RedeTV!": "https://i.postimg.cc/xTTp60p9/IMG-6927.png",
+            };
+            
+            // Dias da semana abreviados
+            const weekdaysShort = {
+                0: 'dom',
+                1: 'seg',
+                2: 'ter',
+                3: 'qua',
+                4: 'qui',
+                5: 'sex',
+                6: 'sab'
+            };
+            
+            // Initialize clock and update display
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
+            // Fetch and parse XML data
+            fetchEPGData();
+            
+            // Search functionality
+            channelSearch.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const channelCards = document.querySelectorAll('.channel-card');
+                
+                channelCards.forEach(card => {
+                    const channelName = card.querySelector('.channel-name').textContent.toLowerCase();
+                    const programmes = Array.from(card.querySelectorAll('.programme-title')).map(el => el.textContent.toLowerCase());
+                    
+                    if (channelName.includes(searchTerm) || programmes.some(prog => prog.includes(searchTerm))) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+                
+                // Check if sections are empty after filtering
+                checkEmptySections();
+            });
+            
+            // Reload EPG data
+            reloadButton.addEventListener('click', () => {
+                // Show loading
+                loadingElement.classList.remove('hidden');
+                channelsContainer.classList.add('hidden');
+                errorElement.classList.add('hidden');
+                
+                // Clear existing channels
+                moviesChannels.innerHTML = '';
+                documentaryChannels.innerHTML = '';
+                kidsChannels.innerHTML = '';
+                sportsChannels.innerHTML = '';
+                otherChannels.innerHTML = '';
+                
+                // Clear auto-update timer
+                if (autoUpdateTimer) {
+                    clearInterval(autoUpdateTimer);
+                }
+                
+                // Fetch new data
+                fetchEPGData();
+            });
+            
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const filter = button.dataset.filter;
+                    const sections = document.querySelectorAll('section');
+                    const channelCards = document.querySelectorAll('.channel-card');
+                    
+                    if (filter === 'all') {
+                        // Show all sections and channels
+                        sections.forEach(section => section.classList.remove('hidden'));
+                        channelCards.forEach(card => card.classList.remove('hidden'));
+                    } else {
+                        // Show only relevant section and hide others
+                        sections.forEach(section => {
+                            if (section.id === 'filmes-destaque') {
+                                section.classList.remove('hidden'); // Sempre mostra os filmes do dia
+                            } else if (section.id === `${filter}-section`) {
+                                section.classList.remove('hidden');
+                            } else {
+                                section.classList.add('hidden');
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Modal close functionality
+            modalClose.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            function updateCurrentTime() {
+                const now = new Date();
+                currentTimeDisplay.textContent = now.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            }
+            
+            function fetchEPGData() {
+                const xmlUrl = 'https://raw.githubusercontent.com/limaalef/BrazilTVEPG/refs/heads/main/vivoplay.xml';
+                
+                fetch(xmlUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Não foi possível carregar o arquivo XML');
+                        }
+                        return response.text();
+                    })
+                    .then(xmlText => {
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        processEPGData(xmlDoc);
+                        
+                        // Update last update time
+                        const now = new Date();
+                        lastUpdateDisplay.textContent = now.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        // Set up auto-update timer
+                        if (autoUpdateTimer) {
+                            clearInterval(autoUpdateTimer);
+                        }
+                        autoUpdateTimer = setInterval(updateProgrammesDisplay, AUTO_UPDATE_INTERVAL);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar o EPG:', error);
+                        loadingElement.classList.add('hidden');
+                        errorElement.textContent = `Erro ao carregar a programação: ${error.message}`;
+                        errorElement.classList.remove('hidden');
+                    });
+            }
+            
+            function processEPGData(xmlDoc) {
+                try {
+                    const channels = xmlDoc.getElementsByTagName('channel');
+                    const programmes = xmlDoc.getElementsByTagName('programme');
+                    
+                    // Create a map to store programmes by channel ID
+                    allProgrammesByChannel = {};
+                    
+                    // Group programmes by channel
+                    for (let i = 0; i < programmes.length; i++) {
+                        const programme = programmes[i];
+                        const channelId = programme.getAttribute('channel');
+                        
+                        if (!allProgrammesByChannel[channelId]) {
+                            allProgrammesByChannel[channelId] = [];
+                        }
+                        
+                        allProgrammesByChannel[channelId].push(programme);
+                    }
+                    
+                    // Process each channel
+                    for (let i = 0; i < channels.length; i++) {
+                        const channel = channels[i];
+                        const channelId = channel.getAttribute('id');
+                        const displayName = channel.getElementsByTagName('display-name')[0]?.textContent || 'Canal sem nome';
+                        
+                        // Create channel card with current programmes
+                        createAndAppendChannelCard(displayName, channelId);
+                    }
+                    
+                    // Hide empty sections
+                    checkEmptySections();
+                    
+                    // Hide loading and show content
+                    loadingElement.classList.add('hidden');
+                    channelsContainer.classList.remove('hidden');
+                    
+                } catch (error) {
+                    console.error('Erro ao processar o EPG:', error);
+                    loadingElement.classList.add('hidden');
+                    errorElement.textContent = `Erro ao processar a programação: ${error.message}`;
+                    errorElement.classList.remove('hidden');
+                }
+            }
+            
+            function updateProgrammesDisplay() {
+                // Update all channel cards with current programmes
+                const channelCards = document.querySelectorAll('.channel-card');
+                
+                channelCards.forEach(card => {
+                    const channelId = card.dataset.channelId;
+                    const channelName = card.querySelector('.channel-name').textContent;
+                    const programmesList = card.querySelector('.programmes-list');
+                    
+                    // Get updated programmes for this channel
+                    const channelProgrammes = allProgrammesByChannel[channelId] || [];
+                    const currentProgrammes = getExactlyFiveProgrammes(channelProgrammes).slice(0, 2);
+                    
+                    // Clear and update programmes list
+                    programmesList.innerHTML = '';
+                    
+                    if (currentProgrammes.length === 0) {
+                        const noProgrammes = document.createElement('p');
+                        noProgrammes.className = 'text-gray-400 italic text-sm';
+                        noProgrammes.textContent = 'Nenhuma programação disponível';
+                        programmesList.appendChild(noProgrammes);
+                    } else {
+                        currentProgrammes.forEach((programme, index) => {
+                            const programmeItem = createProgrammeItem(programme, index === 0);
+                            programmesList.appendChild(programmeItem);
+                        });
+                    }
+                });
+                
+                // Update last update time
+                const now = new Date();
+                lastUpdateDisplay.textContent = now.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+            
+            function checkEmptySections() {
+                const sections = [
+                    { id: 'movies-section', container: moviesChannels },
+                    { id: 'documentary-section', container: documentaryChannels },
+                    { id: 'kids-section', container: kidsChannels },
+                    { id: 'sports-section', container: sportsChannels },
+                    { id: 'other-section', container: otherChannels }
+                ];
+                
+                sections.forEach(section => {
+                    const visibleChannels = section.container.querySelectorAll('.channel-card:not(.hidden)');
+                    const sectionElement = document.getElementById(section.id);
+                    
+                    if (visibleChannels.length === 0) {
+                        sectionElement.classList.add('hidden');
+                    } else {
+                        sectionElement.classList.remove('hidden');
+                    }
+                });
+            }
+            
+            // Função para converter a data do EPG para o formato de data JavaScript
+            function parseEPGDate(dateString) {
+                // EPG date format: YYYYMMDDHHMMSS +0000
+                const year = parseInt(dateString.substring(0, 4));
+                const month = parseInt(dateString.substring(4, 6)) - 1; // Months are 0-indexed in JS
+                const day = parseInt(dateString.substring(6, 8));
+                const hour = parseInt(dateString.substring(8, 10));
+                const minute = parseInt(dateString.substring(10, 12));
+                const second = parseInt(dateString.substring(12, 14));
+                
+                // Criar a data com os valores do XML
+                const date = new Date(year, month, day, hour, minute, second);
+                
+                return date;
+            }
+            
+            function formatDateTime(date) {
+                // Obter o dia da semana abreviado
+                const weekday = weekdaysShort[date.getDay()];
+                
+                // Formatar a hora e adicionar o dia da semana
+                return `${date.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })} | ${weekday}`;
+            }
+            
+            function formatFullDateTime(date) {
+                // Obter o dia da semana abreviado
+                const weekday = weekdaysShort[date.getDay()];
+                
+                return `${date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit'
+                })} ${date.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })} | ${weekday}`;
+            }
+            
+            function getChannelLogo(channelName) {
+                // Try to find an exact match
+                for (const [key, url] of Object.entries(channelLogos)) {
+                    if (channelName.includes(key)) {
+                        return url;
+                    }
+                }
+                
+                // If no match, return a placeholder
+                return `https://via.placeholder.com/50x30/1a1a2e/ffffff?text=${encodeURIComponent(channelName.substring(0, 3))}`;
+            }
+            
+            function getRatingImage(rating) {
+                // Map common rating texts to our rating images
+                if (!rating) return null;
+                
+                rating = rating.toUpperCase();
+                
+                if (rating.includes('LIVRE') || rating === 'L') {
+                    return ratingImages['L'];
+                } else if (rating.includes('10') || rating.includes('DEZ')) {
+                    return ratingImages['10'];
+                } else if (rating.includes('12') || rating.includes('DOZE')) {
+                    return ratingImages['12'];
+                } else if (rating.includes('14') || rating.includes('QUATORZE')) {
+                    return ratingImages['14'];
+                } else if (rating.includes('16') || rating.includes('DEZESSEIS')) {
+                    return ratingImages['16'];
+                } else if (rating.includes('18') || rating.includes('DEZOITO')) {
+                    return ratingImages['18'];
+                }
+                
+                return null;
+            }
+            
+            // Função para obter exatamente 5 programas a partir do horário atual
+            function getExactlyFiveProgrammes(programmes) {
+                const now = new Date();
+                
+                // Sort programmes by start time
+                const sortedProgrammes = [...programmes].sort((a, b) => {
+                    const startTimeA = parseEPGDate(a.getAttribute('start'));
+                    const startTimeB = parseEPGDate(b.getAttribute('start'));
+                    return startTimeA - startTimeB;
+                });
+                
+                // Encontrar o programa atual ou o próximo programa
+                let currentIndex = -1;
+                
+                // Primeiro, procuramos um programa que esteja passando agora
+                for (let i = 0; i < sortedProgrammes.length; i++) {
+                    const startTime = parseEPGDate(sortedProgrammes[i].getAttribute('start'));
+                    const endTime = parseEPGDate(sortedProgrammes[i].getAttribute('stop'));
+                    
+                    if (startTime <= now && endTime > now) {
+                        // Este é o programa atual
+                        currentIndex = i;
+                        break;
+                    }
+                }
+                
+                // Se não encontramos um programa atual, procuramos o próximo programa
+                if (currentIndex === -1) {
+                    for (let i = 0; i < sortedProgrammes.length; i++) {
+                        const startTime = parseEPGDate(sortedProgrammes[i].getAttribute('start'));
+                        
+                        if (startTime > now) {
+                            // Este é o próximo programa
+                            currentIndex = i;
+                            break;
+                        }
+                    }
+                }
+                
+                // Se ainda não encontramos nenhum programa, não há programas futuros
+                if (currentIndex === -1) {
+                    return [];
+                }
+                
+                // Retornar exatamente 5 programas a partir do programa atual/próximo (limitado a 2 na exibição)
+                return sortedProgrammes.slice(currentIndex, currentIndex + 5);
+            }
+            
+            function createAndAppendChannelCard(channelName, channelId) {
+                // Get programmes for this channel
+                const channelProgrammes = allProgrammesByChannel[channelId] || [];
+                
+                // Get exactly 5 programmes from current time
+                const exactlyTwoProgrammes = getExactlyFiveProgrammes(channelProgrammes).slice(0, 2);
+                
+                // Create channel card
+                const channelCard = createChannelCard(channelName, exactlyTwoProgrammes, channelId);
+                
+                // Determine which category this channel belongs to
+                let categoryFound = false;
+                for (const [category, channelList] of Object.entries(channelCategories)) {
+                    if (channelList.some(name => channelName.includes(name))) {
+                        categoryFound = true;
+                        switch (category) {
+                            case 'movies':
+                                moviesChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'movies';
+                                break;
+                            case 'documentary':
+                                documentaryChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'documentary';
+                                break;
+                            case 'kids':
+                                kidsChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'kids';
+                                break;
+                            case 'sports':
+                                sportsChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'sports';
+                                break;
+                            default:
+                                otherChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'other';
+                        }
+                        break;
+                    }
+                }
+                
+                // If no category matched, put in "other"
+                if (!categoryFound) {
+                    otherChannels.appendChild(channelCard);
+                    channelCard.dataset.category = 'other';
+                }
+            }
+            
+            function createChannelCard(channelName, programmes, channelId) {
+                const card = document.createElement('div');
+                card.className = 'channel-card rounded-lg overflow-hidden shadow-lg';
+                card.dataset.channelId = channelId;
+                
+                // Channel header
+                const header = document.createElement('div');
+                header.className = 'bg-gray-800 p-3 flex items-center';
+                
+                const logoUrl = getChannelLogo(channelName);
+                const logoElement = document.createElement('img');
+                logoElement.className = 'h-8 mr-2 object-contain';
+                logoElement.src = logoUrl;
+                logoElement.alt = `${channelName} Logo`;
+                logoElement.onerror = function() {
+                    this.onerror = null;
+                    this.src = `https://via.placeholder.com/50x30/1a1a2e/ffffff?text=${encodeURIComponent(channelName.substring(0, 3))}`;
+                };
+                
+                const nameElement = document.createElement('h3');
+                nameElement.className = 'channel-name text-sm font-semibold text-white truncate';
+                nameElement.textContent = channelName;
+                
+                header.appendChild(logoElement);
+                header.appendChild(nameElement);
+                card.appendChild(header);
+                
+                // Programmes list
+                const programmesList = document.createElement('div');
+                programmesList.className = 'programmes-list p-3 space-y-3';
+                
+                if (programmes.length === 0) {
+                    const noProgrammes = document.createElement('p');
+                    noProgrammes.className = 'text-gray-400 italic text-sm';
+                    noProgrammes.textContent = 'Nenhuma programação disponível';
+                    programmesList.appendChild(noProgrammes);
+                } else {
+                    programmes.forEach((programme, index) => {
+                        const programmeItem = createProgrammeItem(programme, index === 0);
+                        programmesList.appendChild(programmeItem);
+                    });
+                }
+                
+                card.appendChild(programmesList);
+                
+                // "Ver programação completa" button
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'px-3 pb-3';
+                
+                const button = document.createElement('button');
+                button.className = 'w-full py-1.5 text-sm bg-gray-800 hover:bg-gray-700 text-white rounded transition-colors';
+                button.textContent = 'Ver programação completa';
+                button.onclick = function() {
+                    showFullSchedule(channelName, channelId, logoUrl);
+                };
+                
+                buttonContainer.appendChild(button);
+                card.appendChild(buttonContainer);
+                
+                return card;
+            }
+            
+            function createProgrammeItem(programme, isCurrent = false) {
+                const startTime = parseEPGDate(programme.getAttribute('start'));
+                const endTime = parseEPGDate(programme.getAttribute('stop'));
+                const title = programme.getElementsByTagName('title')[0]?.textContent || 'Programa sem título';
+                const description = programme.getElementsByTagName('desc')[0]?.textContent || '';
+                
+                // Try to find rating information
+                let ratingValue = null;
+                const ratingElements = programme.getElementsByTagName('rating');
+                if (ratingElements.length > 0) {
+                    const valueElement = ratingElements[0].getElementsByTagName('value')[0];
+                    if (valueElement) {
+                        ratingValue = valueElement.textContent;
+                    }
+                }
+                
+                const programmeItem = document.createElement('div');
+                programmeItem.className = 'programme-item pl-3 py-1.5';
+                
+                // Add special styling for current programme
+                if (isCurrent) {
+                    const now = new Date();
+                    if (startTime <= now && endTime > now) {
+                        programmeItem.classList.add('bg-gray-800', 'bg-opacity-30');
+                    }
+                }
+                
+                const timeElement = document.createElement('div');
+                timeElement.className = 'flex items-center text-xs font-medium text-vibrant-orange';
+                timeElement.innerHTML = `${formatDateTime(startTime)} - ${formatDateTime(endTime)}`;
+                
+                // Add "AO VIVO" indicator for current programme
+                const now = new Date();
+                if (startTime <= now && endTime > now) {
+                    const liveIndicator = document.createElement('span');
+                    liveIndicator.className = 'live-indicator';
+                    liveIndicator.textContent = 'AO VIVO';
+                    timeElement.appendChild(liveIndicator);
+                }
+                
+                const titleContainer = document.createElement('div');
+                titleContainer.className = 'flex items-center';
+                
+                const titleElement = document.createElement('div');
+                titleElement.className = 'programme-title font-medium text-sm';
+                titleElement.textContent = title;
+                
+                titleContainer.appendChild(titleElement);
+                
+                // Add rating image if available
+                const ratingImageUrl = getRatingImage(ratingValue);
+                if (ratingImageUrl) {
+                    const ratingImg = document.createElement('img');
+                    ratingImg.className = 'rating-icon ml-2';
+                    ratingImg.src = ratingImageUrl;
+                    ratingImg.alt = `Classificação ${ratingValue}`;
+                    titleContainer.appendChild(ratingImg);
+                }
+                
+                programmeItem.appendChild(timeElement);
+                programmeItem.appendChild(titleContainer);
+                
+                if (description) {
+                    const descElement = document.createElement('div');
+                    descElement.className = 'text-xs text-gray-400 truncate mt-0.5';
+                    descElement.title = description;
+                    descElement.textContent = description.length > 80 ? 
+                        description.substring(0, 80) + '...' : description;
+                    programmeItem.appendChild(descElement);
+                }
+                
+                return programmeItem;
+            }
+            
+            function showFullSchedule(channelName, channelId, logoUrl) {
+                // Set modal title and logo
+                modalChannelName.textContent = channelName;
+                modalChannelLogo.src = logoUrl;
+                modalChannelLogo.alt = `${channelName} Logo`;
+                
+                // Clear previous schedule
+                modalScheduleList.innerHTML = '';
+                
+                // Get all programmes for this channel
+                const channelProgrammes = allProgrammesByChannel[channelId] || [];
+                
+                // Get current date for filtering
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                // Filter to show ONLY current and upcoming programmes
+                const futureProgrammes = channelProgrammes.filter(programme => {
+                    const endTime = parseEPGDate(programme.getAttribute('stop'));
+                    return endTime > now; // Only include programmes that haven't ended yet
+                }).sort((a, b) => {
+                    const startTimeA = parseEPGDate(a.getAttribute('start'));
+                    const startTimeB = parseEPGDate(b.getAttribute('start'));
+                    return startTimeA - startTimeB;
+                });
+                
+                if (futureProgrammes.length === 0) {
+                    const noProgrammes = document.createElement('p');
+                    noProgrammes.className = 'text-gray-400 italic text-center py-4';
+                    noProgrammes.textContent = 'Nenhuma programação disponível para as próximas 24 horas';
+                    modalScheduleList.appendChild(noProgrammes);
+                } else {
+                    // Create a date header for the current day
+                    const dateHeader = document.createElement('div');
+                    dateHeader.className = 'text-vibrant-orange font-bold text-lg mb-2 border-b border-gray-700 pb-1';
+                    
+                    // Usar a data atual do dispositivo
+                    const firstProgrammeDate = parseEPGDate(futureProgrammes[0].getAttribute('start'));
+                    dateHeader.textContent = firstProgrammeDate.toLocaleDateString('pt-BR', { 
+                        weekday: 'long', 
+                        day: '2-digit', 
+                        month: '2-digit', 
+                        year: 'numeric' 
+                    });
+                    
+                    modalScheduleList.appendChild(dateHeader);
+                    
+                    // Add all future programmes
+                    futureProgrammes.forEach((programme, index) => {
+                        const startTime = parseEPGDate(programme.getAttribute('start'));
+                        const endTime = parseEPGDate(programme.getAttribute('stop'));
+                        const title = programme.getElementsByTagName('title')[0]?.textContent || 'Programa sem título';
+                        const description = programme.getElementsByTagName('desc')[0]?.textContent || '';
+                        
+                        // Try to find rating information
+                        let ratingValue = null;
+                        const ratingElements = programme.getElementsByTagName('rating');
+                        if (ratingElements.length > 0) {
+                            const valueElement = ratingElements[0].getElementsByTagName('value')[0];
+                            if (valueElement) {
+                                ratingValue = valueElement.textContent;
+                            }
+                        }
+                        
+                        const programmeItem = document.createElement('div');
+                        programmeItem.className = 'bg-gray-800 bg-opacity-30 rounded-md p-3 mb-2';
+                        
+                        // Highlight current programme
+                        const now = new Date();
+                        if (startTime <= now && endTime > now) {
+                            programmeItem.classList.add('border', 'border-vibrant-orange');
+                        }
+                        
+                        const timeElement = document.createElement('div');
+                        timeElement.className = 'flex items-center text-sm font-medium text-vibrant-orange mb-1';
+                        
+                        // Adicionar dia da semana abreviado
+                        const startWeekday = weekdaysShort[startTime.getDay()];
+                        const endWeekday = weekdaysShort[endTime.getDay()];
+                        
+                        timeElement.innerHTML = `${startTime.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })} | ${startWeekday} - ${endTime.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })} | ${endWeekday}`;
+                        
+                        // Add "AO VIVO" indicator for current programme
+                        if (startTime <= now && endTime > now) {
+                            const liveIndicator = document.createElement('span');
+                            liveIndicator.className = 'live-indicator';
+                            liveIndicator.textContent = 'AO VIVO';
+                            timeElement.appendChild(liveIndicator);
+                        }
+                        
+                        const titleContainer = document.createElement('div');
+                        titleContainer.className = 'flex items-center mb-1';
+                        
+                        const titleElement = document.createElement('div');
+                        titleElement.className = 'font-medium';
+                        titleElement.textContent = title;
+                        
+                        titleContainer.appendChild(titleElement);
+                        
+                        // Add rating image if available
+                        const ratingImageUrl = getRatingImage(ratingValue);
+                        if (ratingImageUrl) {
+                            const ratingImg = document.createElement('img');
+                            ratingImg.className = 'rating-icon ml-2';
+                            ratingImg.src = ratingImageUrl;
+                            ratingImg.alt = `Classificação ${ratingValue}`;
+                            titleContainer.appendChild(ratingImg);
+                        }
+                        
+                        programmeItem.appendChild(timeElement);
+                        programmeItem.appendChild(titleContainer);
+                        
+                        if (description) {
+                            const descElement = document.createElement('div');
+                            descElement.className = 'text-sm text-gray-300 mt-1';
+                            descElement.textContent = description;
+                            programmeItem.appendChild(descElement);
+                        }
+                        
+                        modalScheduleList.appendChild(programmeItem);
+                    });
+                }
+                
+                // Show modal
+                modal.style.display = 'block';
+            }
+        });
+    </script>
+<script>
+const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
+
+
+async function buscarImagemFilme(tituloOriginal) {
+  const variacoes = [
+    tituloOriginal,
+    tituloOriginal.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), // remove acentos
+    tituloOriginal.split(":")[0], // parte antes dos dois-pontos
+    tituloOriginal.split("-")[0], // parte antes do hífen
+    tituloOriginal.replace(/\s+\d{4}$/, "") // remove ano, ex: "Matrix 1999" => "Matrix"
+  ];
+
+  for (const titulo of variacoes) {
+    try {
+      const resposta = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${encodeURIComponent(titulo.trim())}`);
+      const dados = await resposta.json();
+
+      const filme = dados.results?.find(f => f.poster_path || f.backdrop_path);
+
+      if (filme) {
+        if (filme.poster_path) {
+          return `https://image.tmdb.org/t/p/w500${filme.poster_path}`;
+        } else if (filme.backdrop_path) {
+          return `https://image.tmdb.org/t/p/w500${filme.backdrop_path}`;
+        }
+      }
+    } catch (erro) {
+      console.error("Erro ao tentar buscar com variação:", titulo, erro);
+    }
+  }
+
+  return `https://via.placeholder.com/300x450?text=${encodeURIComponent(tituloOriginal)}`;
+}
+
+
+async function carregarFilmes() {
+  const canais = [
+    "Telecine Action", "Telecine Premium", "Telecine Pipoca", "Megapix", "HBO Family", "HBO", "HBO2",
+    "Cinemax", "Telecine Touch", "Paramount", "Telecine Fun"
+  ];
+
+  const epgUrl = "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/refs/heads/main/vivoplay.xml";
+  const response = await fetch(epgUrl);
+  const xmlText = await response.text();
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, "text/xml");
+
+  const programas = Array.from(xml.getElementsByTagName("programme"));
+  const hoje = new Date();
+  const hojeStr = hoje.toISOString().split("T")[0].replace(/-/g, "");
+
+  const titulosUnicos = new Set();
+  const container = document.getElementById("filmes");
+  container.innerHTML = "";
+
+  for (const canal of canais) {
+    const programasDoCanal = programas.filter(p => {
+      const channel = p.getAttribute("channel") || "";
+      const start = p.getAttribute("start") || "";
+
+      const startTime = new Date(
+        parseInt(start.slice(0, 4)),
+        parseInt(start.slice(4, 6)) - 1,
+        parseInt(start.slice(6, 8)),
+        parseInt(start.slice(8, 10)),
+        parseInt(start.slice(10, 12))
+      );
+
+      return channel.toLowerCase().includes(canal.toLowerCase()) &&
+             start.startsWith(hojeStr) &&
+             startTime >= new Date();
+    });
+
+    for (const filme of programasDoCanal) {
+      const titleRaw = filme.getElementsByTagName("title")[0]?.textContent || "Sem título";
+      const titleClean = titleRaw.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+      if (titulosUnicos.has(titleClean)) continue;
+
+      const img = await buscarImagemFilme(titleRaw);
+      if (img.includes("via.placeholder.com")) continue;
+
+      titulosUnicos.add(titleClean);
+
+      const channel = filme.getAttribute("channel");
+      const start = filme.getAttribute("start");
+      const horario = start ? start.slice(8, 10) + ":" + start.slice(10, 12) : "--:--";
+      const rating = filme.getElementsByTagName("rating")[0]?.textContent || "L";
+
+      const card = document.createElement("div");
+      card.className = "min-w-[180px] max-w-[200px] bg-white bg-opacity-5 rounded p-2 shadow flex-shrink-0";
+      card.innerHTML = `
+        <img src="${img}" alt="${titleRaw}" class="w-full h-60 object-cover mb-2 rounded">
+        <h3 class="text-sm font-bold text-white">${titleRaw}</h3>
+        <p class="text-xs text-gray-300">Canal: ${channel}</p>
+        <p class="text-xs text-gray-300">Horário: ${horario}</p>
+        <p class="text-xs text-yellow-400">Classificação: ${rating}</p>
+      `;
+      container.appendChild(card);
+
+      break;
+    }
+  }
+}
+
+
+window.addEventListener("DOMContentLoaded", carregarFilmes);
+setInterval(carregarFilmes, 60000);
+</script><script>
+const jogosXMLs = [
+  "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/refs/heads/main/claro.xml",
+  "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/refs/heads/main/epg.xml"
+];
+
+const jogosContainer = document.getElementById("jogos-container");
+const regexJogo = /.+\s+(vs|x)\s+.+/i;
+
+function parseEPGDate(dateString) {
+  return new Date(
+    parseInt(dateString.slice(0, 4)), 
+    parseInt(dateString.slice(4, 6)) - 1, 
+    parseInt(dateString.slice(6, 8)), 
+    parseInt(dateString.slice(8, 10)), 
+    parseInt(dateString.slice(10, 12))
+  );
+}
+
+async function carregarJogos() {
+  const hoje = new Date();
+  const jogosUnicos = new Set();
+  jogosContainer.innerHTML = "";
+
+  for (const url of jogosXMLs) {
+    try {
+      const res = await fetch(url);
+      const xmlText = await res.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(xmlText, "text/xml");
+      const programas = Array.from(xml.getElementsByTagName("programme"));
+
+      for (const prog of programas) {
+        const title = prog.getElementsByTagName("title")[0]?.textContent || "";
+        const channel = prog.getAttribute("channel") || "";
+        const startStr = prog.getAttribute("start") || "";
+        const stopStr = prog.getAttribute("stop") || "";
+        if (!regexJogo.test(title)) continue;
+
+        const start = parseEPGDate(startStr);
+        const stop = parseEPGDate(stopStr);
+        const key = title + startStr;
+
+        if (jogosUnicos.has(key)) continue;
+        jogosUnicos.add(key);
+
+        const hojeStr = hoje.toISOString().slice(0, 10);
+        const jogoDataStr = start.toISOString().slice(0, 10);
+        const aoVivo = start <= new Date() && stop > new Date();
+
+        const card = document.createElement("div");
+        card.className = "min-w-[180px] max-w-[220px] bg-white bg-opacity-5 rounded p-3 shadow flex-shrink-0";
+
+        card.innerHTML = `
+          <h3 class="text-sm font-bold text-white mb-1">${title}</h3>
+          <p class="text-xs text-gray-300 mb-1">Canal: ${channel}</p>
+          <p class="text-xs text-gray-300 mb-1">Data: ${jogoDataStr}</p>
+          <p class="text-xs text-gray-300 mb-1">Início: ${start.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}</p>
+          ${aoVivo ? `<span class="live-indicator text-red-500 text-xs font-bold">AO VIVO</span>` : ""}
+        `;
+        jogosContainer.appendChild(card);
+      }
+    } catch (e) {
+      console.error("Erro ao carregar jogos:", url, e);
+    }
+  }
+
+  if (!jogosContainer.hasChildNodes()) {
+    jogosContainer.innerHTML = '<p class="text-gray-400 italic">Nenhum jogo encontrado para hoje.</p>';
+  }
+}
+
+carregarJogos();
+setInterval(carregarJogos, 60000); // atualiza a cada minuto
+</script></body>
+</html>

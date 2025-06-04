@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - MaxPlay TV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'dark-blue': '#0f172a',
+            'vibrant-orange': '#ff6b00',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen px-4">
+  <div class="bg-gray-900 p-8 rounded-lg w-full max-w-md shadow-xl border border-gray-700">
+    <div class="text-center mb-6">
+      <img src="https://i.postimg.cc/jdWznxbC/IMG-6850.png" alt="MaxPlay Logo" class="h-16 mx-auto mb-4">
+      <h1 class="text-xl font-bold text-vibrant-orange">Acesso do Cliente</h1>
+      <p class="text-gray-400 text-sm mt-1">Digite seu usuário e senha para continuar</p>
+    </div>
+
+    <label class="block text-sm mb-1">Usuário</label>
+    <input id="usuario" class="w-full mb-4 px-3 py-2 rounded bg-gray-800 border border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Digite o usuário">
+
+    <label class="block text-sm mb-1">Senha</label>
+    <input id="senha" type="password" class="w-full mb-6 px-3 py-2 rounded bg-gray-800 border border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Digite a senha">
+
+    <button onclick="validarLogin()" class="w-full bg-vibrant-orange hover:bg-orange-600 text-white py-2 rounded font-semibold">
+      Entrar
+    </button>
+
+    <p id="erro" class="text-red-400 text-center text-sm mt-4 hidden">Usuário ou senha incorretos.</p>
+  </div>
+
+  <script>
+    const USUARIO_PADRAO = "clientemax";
+    const SENHA_PADRAO = "clientemax";
+
+    function validarLogin() {
+      const usuario = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+      const erro = document.getElementById("erro");
+
+      if (usuario === USUARIO_PADRAO && senha === SENHA_PADRAO) {
+        localStorage.setItem("clienteAutenticado", "true");
+        window.location.href = "cliente.html";
+      } else {
+        erro.classList.remove("hidden");
+      }
+    }
+  </script>
+</body>
+</html>
