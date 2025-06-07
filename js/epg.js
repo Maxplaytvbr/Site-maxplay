@@ -1,7 +1,7 @@
 // Variáveis principais
 const epgXmlUrl = "https://corsproxy.io/?https://raw.githubusercontent.com/guiamax/tvxml/main/xml_guia.xml";
-const tmdbApiKey = "COLE_SUA_CHAVE_DO_TMDB_AQUI";
-const youtubeApiKey = "COLE_SUA_CHAVE_DO_YOUTUBE_AQUI";
+const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
+const youtubeApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
 
 let currentSportFilter = "Futebol";
 let currentDayOffset = 0;
