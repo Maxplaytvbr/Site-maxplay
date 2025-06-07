@@ -1,507 +1,2481 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MaxPlay TV - Guia de Programação</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MaxPlay TV - Guia</title>
+<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
+<meta content="MaxPlay TV - Guia" property="og:title"/>
+<meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
+<meta content="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" property="og:image"/>
+<link href="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" rel="icon"/>
+<!-- Fontes -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com">
+function carregarFilmes() {
+    const filmesContainer = document.getElementById("filmes");
+    filmesContainer.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    const diasSemana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+    const filmesUnicos = new Set();
+    const filmes = [];
+    const hoje = new Date();
+
+    fetch("https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml")
+        .then(response => response.text())
+        .then(xmlText => {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            const programmes = Array.from(xmlDoc.getElementsByTagName("programme"));
+
+            for (let diaOffset = 0; diaOffset <= 3; diaOffset++) {
+                const data = new Date();
+                data.setDate(hoje.getDate() + diaOffset);
+                const inicioDia = new Date(data.setHours(0, 0, 0, 0));
+                const fimDia = new Date(data.setHours(23, 59, 59, 999));
+
+                programmes.forEach(programme => {
+                    const canal = programme.getAttribute("channel");
+                    const titulo = programme.getElementsByTagName("title")[0]?.textContent.trim() || "";
+                    const inicio = parseEPGDate(programme.getAttribute("start"));
+                    const desc = programme.getElementsByTagName("desc")[0]?.textContent || "";
+
+                    if (!titulo || inicio < inicioDia || inicio > fimDia) return;
+
+                    const nomeNormalizado = titulo.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/gi, "");
+
+                    if (filmesUnicos.has(nomeNormalizado)) return;
+
+                    if (titulo.length < 2 || titulo.includes("(") || titulo.includes("...")) return;
+
+                    if (!desc.toLowerCase().includes("filme") && !desc.toLowerCase().includes("cinema") && !desc.toLowerCase().includes("movie")) return;
+
+                    filmesUnicos.add(nomeNormalizado);
+                    filmes.push({ titulo, inicio, canal });
+                });
+            }
+
+            filmes.sort((a, b) => a.inicio - b.inicio);
+            filmesContainer.innerHTML = "";
+
+            filmes.forEach(filme => {
+                const horario = filme.inicio.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+                const diaSemana = diasSemana[filme.inicio.getDay()];
+
+                const card = document.createElement("div");
+                card.className = "movie-card";
+                card.innerHTML = `
+                    <h3 class="text-sm font-semibold mb-1">${filme.titulo}</h3>
+                    <p class="text-xs text-gray-300">${horario} | ${diaSemana}</p>
+                `;
+                filmesContainer.appendChild(card);
+            });
+        })
+        .catch(() => {
+            filmesContainer.innerHTML = "<p class='text-red-500 text-sm'>Erro ao carregar filmes.</p>";
+        });
+}
+
+</script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-blue': '#0f172a',
+                        'vibrant-orange': '#ff6b00',
+                        'favorite-yellow': '#facc15',
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    
+function carregarFilmes() {
+    const filmesContainer = document.getElementById("filmes");
+    filmesContainer.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    const diasSemana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+    const filmesUnicos = new Set();
+    const filmes = [];
+    const hoje = new Date();
+
+    fetch("https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml")
+        .then(response => response.text())
+        .then(xmlText => {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            const programmes = Array.from(xmlDoc.getElementsByTagName("programme"));
+
+            for (let diaOffset = 0; diaOffset <= 3; diaOffset++) {
+                const data = new Date();
+                data.setDate(hoje.getDate() + diaOffset);
+                const inicioDia = new Date(data.setHours(0, 0, 0, 0));
+                const fimDia = new Date(data.setHours(23, 59, 59, 999));
+
+                programmes.forEach(programme => {
+                    const canal = programme.getAttribute("channel");
+                    const titulo = programme.getElementsByTagName("title")[0]?.textContent.trim() || "";
+                    const inicio = parseEPGDate(programme.getAttribute("start"));
+                    const desc = programme.getElementsByTagName("desc")[0]?.textContent || "";
+
+                    if (!titulo || inicio < inicioDia || inicio > fimDia) return;
+
+                    const nomeNormalizado = titulo.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/gi, "");
+
+                    if (filmesUnicos.has(nomeNormalizado)) return;
+
+                    if (titulo.length < 2 || titulo.includes("(") || titulo.includes("...")) return;
+
+                    if (!desc.toLowerCase().includes("filme") && !desc.toLowerCase().includes("cinema") && !desc.toLowerCase().includes("movie")) return;
+
+                    filmesUnicos.add(nomeNormalizado);
+                    filmes.push({ titulo, inicio, canal });
+                });
+            }
+
+            filmes.sort((a, b) => a.inicio - b.inicio);
+            filmesContainer.innerHTML = "";
+
+            filmes.forEach(filme => {
+                const horario = filme.inicio.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+                const diaSemana = diasSemana[filme.inicio.getDay()];
+
+                const card = document.createElement("div");
+                card.className = "movie-card";
+                card.innerHTML = `
+                    <h3 class="text-sm font-semibold mb-1">${filme.titulo}</h3>
+                    <p class="text-xs text-gray-300">${horario} | ${diaSemana}</p>
+                `;
+                filmesContainer.appendChild(card);
+            });
+        })
+        .catch(() => {
+            filmesContainer.innerHTML = "<p class='text-red-500 text-sm'>Erro ao carregar filmes.</p>";
+        });
+}
+
+</script>
+<style>
         body {
-            font-family: 'Poppins', sans-serif;
             background-color: #0f172a;
-            color: #e2e8f0;
+            color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
         }
+        
+        /* Loader */
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #ff6b00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Categorias */
+        .category-title {
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .category-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background-color: #ff6b00;
+            border-radius: 2px;
+        }
+        
+        /* Cards de canal */
         .channel-card {
+            background-color: rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
-            background-color: #1e293b;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            min-height: 240px;
+            overflow: hidden;
         }
+        
         .channel-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .program-item {
-            border-left: 3px solid #3b82f6;
+        
+        .channel-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
         }
+        
+        .programme-item {
+            border-left: 2px solid #ff6b00;
+            transition: all 0.2s ease;
+            padding: 0.3rem 0.5rem;
+        }
+        
+        .programme-item:hover {
+            background-color: rgba(255, 107, 0, 0.1);
+        }
+        
+        .programme-title, .programme-desc {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .programme-time {
+            white-space: nowrap;
+        }
+        
+        /* Filtros */
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: #ff6b00;
+            color: white;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background-color: rgba(255, 107, 0, 0.2);
+        }
+        
+        /* Filtro Favoritos */
+        .favorite-filter {
+            background: linear-gradient(135deg, #facc15, #eab308);
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        /* Classificação indicativa */
+        .rating-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        /* Modal */
         .modal {
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 50;
+            overflow-y: auto;
         }
-        .favorite {
-            color: #fbbf24;
+        
+        .modal-content {
+            background-color: #1a2234;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s;
         }
-    </style>
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .modal-close {
+            color: #a0aec0;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-close:hover {
+            color: #ff6b00;
+        }
+        
+        /* Modal de trailer */
+        .trailer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+        }
+        
+        .trailer-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            margin: 5% auto;
+            background-color: #1a2234;
+            border-radius: 8px;
+            padding: 20px;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        .trailer-iframe-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .trailer-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .trailer-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 101;
+        }
+        
+        .trailer-not-found {
+            padding: 40px;
+            text-align: center;
+            color: #fff;
+        }
+        
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 0, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 0, 0.8);
+        }
+        
+        /* Hora atual */
+        .current-time {
+            background-color: rgba(255, 107, 0, 0.2);
+            border: 1px solid #ff6b00;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        /* Indicador AO VIVO */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(220, 38, 38, 0.2);
+            color: #ef4444;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .live-indicator::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            margin-right: 4px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Em breve */
+        .soon-indicator {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(234, 179, 8, 0.2);
+            color: #eab308;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .soon-indicator::before {
+            content: '⏱';
+            margin-right: 4px;
+        }
+        
+        /* Notificação de atualização */
+        .auto-update-notice {
+            background-color: rgba(255, 107, 0, 0.1);
+            border-left: 3px solid #ff6b00;
+            padding: 8px 12px;
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Dias da semana */
+        .weekday {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-left: 2px;
+        }
+        
+        /* Cards de filmes */
+        .movie-card {
+            min-width: 180px;
+            max-width: 200px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 0.75rem;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Cards de eventos esportivos */
+        .sport-event-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            min-width: 280px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+        
+        .sport-event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 107, 0, 0.5);
+        }
+        
+        .sport-event-card.live {
+            border-color: #ef4444;
+            background-color: rgba(220, 38, 38, 0.1);
+        }
+        
+        .sport-event-card.soon {
+            border-color: #eab308;
+            background-color: rgba(234, 179, 8, 0.1);
+        }
+        
+        .sport-event-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .sport-event-desc {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Cards de eventos MMA */
+        .sport-event-card.mma {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid #d20a0a;
+        }
+        
+        .sport-event-card.mma .fighter-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #d20a0a;
+            margin-bottom: 8px;
+        }
+        
+        .sport-event-card.mma .fighter-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .sport-event-card.mma .fighter-nickname {
+            font-size: 0.8rem;
+            color: #d20a0a;
+            font-style: italic;
+        }
+        
+        .sport-event-card.mma .fighter-record {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+        
+        /* Botão Voltar ao Topo */
+        #back-to-top {
+            transition: all 0.3s ease;
+        }
+        
+        #back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(255, 107, 0, 0.3);
+        }
+        
+        /* Estrela de favoritos */
+        .favorite-star {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.2rem;
+        }
+        
+        .favorite-star:hover {
+            transform: scale(1.2);
+        }
+        
+        .favorite-star.active {
+            color: #facc15;
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+        }
+        
+        /* Canal logo em cards de filmes */
+        .channel-logo {
+            height: 20px;
+            width: auto;
+            object-fit: contain;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 640px) {
+            .filters-container {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .channel-card {
+                min-height: 200px;
+            }
+            
+            .sport-event-card {
+                min-width: 240px;
+            }
+            
+            .movie-card {
+                min-width: 150px;
+            }
+        }
+    
+
+.filter-btn.active { 
+    background-color: #ff6b00 !important; 
+    color: white !important; 
+    border-bottom: 2px solid white; 
+}
+</style>
 </head>
-<body class="min-h-screen">
-    <header class="bg-slate-900 py-4 px-6 shadow-lg">
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center mb-4 md:mb-0">
-                <img src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" alt="MaxPlay TV Logo" class="h-12 mr-4">
-                <h1 class="text-2xl font-bold text-blue-400">Guia de Programação</h1>
-            </div>
-            <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-                <div class="relative">
-                    <input type="text" id="searchInput" placeholder="Buscar canal ou programa..." 
-                           class="bg-slate-800 text-white px-4 py-2 rounded-lg w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
-                </div>
-                <button id="reloadBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-sync-alt mr-2"></i> Recarregar
+<body>
+<div class="text-center my-4"><a href="filmes.html" class="text-orange-500 underline text-lg font-semibold">🎬 Ver Destaques de Filmes</a></div>
+<!-- Botão Voltar ao Topo -->
+<button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
+<svg aria-hidden="true" class="h-6 w-6" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Modal de Trailer -->
+<div class="trailer-modal" id="trailer-modal">
+<div class="trailer-modal-content">
+<span class="trailer-close">×</span>
+<div class="trailer-iframe-container" id="trailer-container">
+<div class="trailer-not-found hidden" id="trailer-not-found">
+<p>Trailer não encontrado para este filme.</p>
+</div>
+</div>
+</div>
+</div>
+<header class="mb-6">
+<div class="flex flex-col md:flex-row justify-between items-center mb-6">
+<div class="flex items-center mb-4 md:mb-0">
+<img alt="MaxPlay TV Logo" class="h-12 mr-3" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
+<h1 class="text-2xl font-bold text-white">MaxPlay TV <span class="text-vibrant-orange">– Guia</span></h1>
+</div>
+<div class="flex flex-col sm:flex-row w-full md:w-auto gap-2">
+<div class="relative flex-grow">
+<input class="w-full p-2 pl-3 pr-10 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-vibrant-orange" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
+<svg aria-hidden="true" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<button class="px-4 py-2 bg-vibrant-orange text-white rounded-md hover:bg-opacity-90 transition-colors whitespace-nowrap" id="reload-epg">
+<svg aria-hidden="true" class="h-5 w-5 inline-block mr-1" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                    Recarregar Programação
                 </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="container mx-auto py-6 px-4">
-        <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto pb-2">
-            <button class="category-btn px-4 py-2 rounded-full bg-blue-600 text-white" data-category="all">Todos</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="movies">Filmes/Séries</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="documentaries">Documentários</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="kids">Infantis</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="sports">Esportes</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="open">Abertos</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="news">Notícias</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="adult">Adulto</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-yellow-600 hover:bg-yellow-700" data-category="favorites">Favoritos</button>
-        </div>
-
-        <div id="loading" class="text-center py-12">
-            <i class="fas fa-circle-notch fa-spin text-4xl text-blue-400"></i>
-            <p class="mt-4">Carregando programação...</p>
-        </div>
-
-        <div id="channelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
-            <!-- Canais serão inseridos aqui via JavaScript -->
-        </div>
-
-        <div id="noResults" class="text-center py-12 hidden">
-            <i class="fas fa-tv text-4xl text-slate-500"></i>
-            <p class="mt-4 text-xl">Nenhum canal encontrado</p>
-            <p class="text-slate-400">Tente ajustar sua busca ou filtro</p>
-        </div>
-    </main>
-
-    <!-- Modal de Programação Completa -->
-    <div id="programModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 invisible opacity-0">
-        <div class="bg-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <div class="flex justify-between items-center bg-slate-900 px-6 py-4 border-b border-slate-700">
-                <h2 id="modalChannelName" class="text-xl font-bold"></h2>
-                <button id="closeModal" class="text-slate-400 hover:text-white">
-                    <i class="fas fa-times text-2xl"></i>
+</div>
+</div>
+<div class="flex justify-between items-center mb-4">
+<div class="current-time">
+<svg aria-hidden="true" class="h-4 w-4" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span id="current-time-display">Carregando...</span>
+</div>
+<div class="text-sm text-gray-400">
+                Última atualização: <span id="last-update">Carregando...</span>
+</div>
+</div>
+</header>
+<!-- Seção de Eventos Esportivos -->
+<!-- <section class="px-4 py-6 text-white" id="jogos-hoje">
+<h2 class="text-2xl font-bold mb-4 text-orange-500">🏟️ EVENTOS ESPORTIVOS MAXPLAY</h2>
+<div class="flex flex-wrap gap-2 mb-4" id="filtros-esportes">
+<button class="filter-esporte px-3 py-1 rounded bg-orange-600 text-white text-sm" data-esporte="Futebol">Futebol</button>
+<button class="filter-esporte px-3 py-1 rounded bg-gray-700 text-white text-sm" data-esporte="UFC">UFC</button>
+<button class="filter-esporte px-3 py-1 rounded bg-gray-700 text-white text-sm" data-esporte="Boxe">Boxe</button>
+<button class="filter-esporte px-3 py-1 rounded bg-gray-700 text-white text-sm" data-esporte="Vôlei">Vôlei</button>
+<button class="filter-esporte px-3 py-1 rounded bg-gray-700 text-white text-sm" data-esporte="Basquete">Basquete</button>
+<button class="filter-esporte px-3 py-1 rounded bg-gray-700 text-white text-sm" data-esporte="Outros Esportes">Outros</button>
+</div>
+<div class="flex overflow-x-auto gap-4 pb-4" id="jogos-container">
+<div class="loading-spinner mx-auto"></div>
+</div>
+<div class="flex justify-center mt-4 gap-2">
+<button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition hidden" id="ver-dia-anterior">
+<svg aria-hidden="true" class="h-5 w-5 inline-block mr-1" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Dia Anterior
+            </button>
+<button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition hidden" id="ver-hoje">
+<svg aria-hidden="true" class="h-5 w-5 inline-block mr-1" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Ver Hoje
+            </button>
+<button class="px-4 py-2 bg-vibrant-orange text-white rounded hover:bg-orange-600 transition" id="ver-proximo-dia">
+                Próximo Dia
+                <svg aria-hidden="true" class="h-5 w-5 inline-block ml-1" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</section> -->
+<!-- Seção Principal de Canais -->
+<div class="container mx-auto px-4 py-6">
+<div class="flex justify-center items-center h-40" id="loading">
+<div class="loading-spinner"></div>
+<p class="ml-4 text-gray-300">Carregando programação...</p>
+</div>
+<div class="hidden bg-red-900 border border-red-700 text-white px-4 py-3 rounded mb-4" id="error-message"></div>
+<h2 class="text-2xl font-bold mb-4 text-orange-500">📺 CANAIS E PROGRAMAÇÃO DE HOJE</h2>
+<div class="filters-container overflow-x-auto pb-2">
+<div class="flex space-x-2 mb-4"><button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium favorite-filter" data-filter="favorites">
+<svg aria-hidden="true" class="h-4 w-4 inline-block mr-1" fill="currentColor" role="img" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+</svg>
+                    Favoritos
                 </button>
-            </div>
-            <div class="p-6 overflow-y-auto max-h-[70vh]">
-                <div id="modalChannelLogo" class="flex justify-center mb-6">
-                    <img src="" alt="" class="h-20">
-                </div>
-                <div id="modalProgramList" class="space-y-4">
-                    <!-- Programas serão inseridos aqui via JavaScript -->
-                </div>
-            </div>
-            <div class="bg-slate-900 px-6 py-3 border-t border-slate-700 text-right">
-                <button id="closeModalBottom" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    Fechar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Objeto com os logos dos canais (exemplos - substitua pelos reais)
+<button class="filter-btn active px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="all">Todos</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="movies">Filmes e Séries</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="documentary">Documentários</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="kids">Infantis</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="sports">Esportes</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="adult">Adulto</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="open">Canais Abertos</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="news">Notícias</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="morning">Manhã</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="afternoon">Tarde</button>
+<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="evening">Noite</button>
+</div>
+</div>
+<div class="hidden" id="channels-container">
+<!-- Seção de Filmes e Séries -->
+<section class="mb-8" id="movies-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Filmes e Séries</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="movies-channels"></div>
+</section>
+<!-- Seção de Documentários -->
+<section class="mb-8" id="documentary-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Documentários</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="documentary-channels"></div>
+</section>
+<!-- Seção Infantil -->
+<section class="mb-8" id="kids-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Infantis</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kids-channels"></div>
+</section>
+<!-- Seção de Esportes -->
+<section class="mb-8" id="sports-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Esportes</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="sports-channels"></div>
+</section>
+<!-- Seção de Outros Canais -->
+<section class="mb-8" id="other-section">
+<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Outros Canais</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="other-channels"></div>
+</section>
+</div>
+</div>
+<!-- Modal de Programação Completa -->
+<div class="modal" id="schedule-modal">
+<div class="modal-content">
+<div class="modal-header bg-gray-800">
+<div class="flex items-center">
+<img alt="Channel Logo" class="h-8 mr-2" id="modal-channel-logo" src=""/>
+<h3 class="text-lg font-bold text-white" id="modal-channel-name">Canal</h3>
+</div>
+<span class="modal-close">×</span>
+</div>
+<div class="modal-body">
+<div class="space-y-3" id="modal-schedule-list"></div>
+</div>
+</div>
+</div>
+<!-- JavaScript -->
+<script>
+        // Configurações globais
+        const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
+        const epgXmlUrl = "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml";
+        const sportEventsUrls = [
+            "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/claro.xml",
+            "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/epg.xml"
+        ];
+        
+        // Canais esportivos permitidos
+        const canaisEsportivos = [
+            "SporTV", "SporTV 2", "SporTV 3", "ESPN", "ESPN 2", "ESPN 3", "ESPN 4",
+            "Fox Sports", "Fox Sports 2", "Band Sports", "Premiere", "Combate", "OFF", "Woohoo"
+        ];
+        
+        // Mapeamento de logos de canais
         const channelLogos = {
-            "Globo": "https://logodownload.org/wp-content/uploads/2013/12/tv-globo-logo-1-1.png",
-            "SBT": "https://logodownload.org/wp-content/uploads/2013/12/sbt-logo-1.png",
-            "Record": "https://logodownload.org/wp-content/uploads/2014/05/record-tv-logo-1.png",
-            "Band": "https://logodownload.org/wp-content/uploads/2014/05/band-logo-1.png",
-            "RedeTV!": "https://logodownload.org/wp-content/uploads/2014/05/redetv-logo-1.png",
-            "HBO": "https://logodownload.org/wp-content/uploads/2018/01/hbo-logo.png",
-            "Fox": "https://logodownload.org/wp-content/uploads/2018/01/fox-logo-1.png",
-            "Discovery": "https://logodownload.org/wp-content/uploads/2018/01/discovery-channel-logo.png",
-            "National Geographic": "https://logodownload.org/wp-content/uploads/2018/01/national-geographic-logo.png",
-            "Cartoon Network": "https://logodownload.org/wp-content/uploads/2017/11/cartoon-network-logo.png",
-            "Nickelodeon": "https://logodownload.org/wp-content/uploads/2018/01/nickelodeon-logo.png",
-            "ESPN": "https://logodownload.org/wp-content/uploads/2014/10/espn-logo-1.png",
-            "Fox Sports": "https://logodownload.org/wp-content/uploads/2018/01/fox-sports-logo.png",
-            "CNN": "https://logodownload.org/wp-content/uploads/2018/01/cnn-logo.png",
-            "GloboNews": "https://logodownload.org/wp-content/uploads/2018/01/globonews-logo.png",
-            "Playboy TV": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Playboy_TV_logo.svg/1200px-Playboy_TV_logo.svg.png",
-            "Sexy Hot": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Sexy_Hot_logo.svg/1200px-Sexy_Hot_logo.svg.png"
+            'Warner': 'https://i.postimg.cc/SxBRcBBk/IMG-6821.png',
+            'Sony': 'https://i.postimg.cc/bwDdDyFm/IMG-6878.jpg',
+            'TNT': 'https://i.postimg.cc/kXhBg6wV/IMG-6879.png',
+            'TNT Novelas': 'https://i.postimg.cc/1RB8bYqr/IMG-6880.jpg',
+            'Space': 'https://i.postimg.cc/D0xms8TM/IMG-6881.jpg',
+            'Cinemax': 'https://i.postimg.cc/x8fccLWm/IMG-6882.jpg',
+            'Megapix': 'https://i.postimg.cc/fLjVz8gZ/IMG-6883.jpg',
+            'Sony Movies': 'https://i.postimg.cc/mDGcWvj8/IMG-6884.jpg',
+            'Fox': 'https://i.postimg.cc/0NS63kYz/IMG-6885.jpg',
+            'Animal Planet': 'https://i.postimg.cc/pXdmvYQb/IMG-6886.png',
+            'History': 'https://i.postimg.cc/FH7kyg1g/IMG-6887.jpg',
+            'Discovery Kids': 'https://i.postimg.cc/bwWD3DtX/IMG-6888.png',
+            'Band': 'https://i.postimg.cc/c41nHNSz/IMG-6889.png',
+            'Band Sports': 'https://i.postimg.cc/Pr68vFf5/IMG-6890.png',
+            'Globo': 'https://logodownload.org/wp-content/uploads/2013/12/rede-globo-logo-0.png',
+            'SBT': 'https://logodownload.org/wp-content/uploads/2013/12/sbt-logo-0.png',
+            'Record': 'https://logodownload.org/wp-content/uploads/2014/02/record-logo-tv-0.png',
+            'HBO': 'https://logodownload.org/wp-content/uploads/2017/04/hbo-logo-1.png',
+            'Telecine': 'https://logodownload.org/wp-content/uploads/2017/07/telecine-logo-1.png',
+            'SporTV': 'https://logodownload.org/wp-content/uploads/2017/07/sportv-logo-0.png',
+            'ESPN': 'https://logodownload.org/wp-content/uploads/2015/05/espn-logo-4.png',
+            'Discovery': 'https://logodownload.org/wp-content/uploads/2017/04/discovery-channel-logo-1.png',
+            'Cartoon Network': 'https://logodownload.org/wp-content/uploads/2018/06/cartoon-network-logo-1.png',
+            'Nickelodeon': 'https://logodownload.org/wp-content/uploads/2018/07/nickelodeon-logo-1.png',
+            'Disney': 'https://logodownload.org/wp-content/uploads/2018/10/disney-channel-logo-1.png',
+            'GloboNews': 'https://logodownload.org/wp-content/uploads/2017/07/globo-news-logo-0.png',
+            'CNN Brasil': 'https://logodownload.org/wp-content/uploads/2020/02/cnn-brasil-logo-0.png',
+            "AMC": "https://i.postimg.cc/t4vK31X0/IMG-6911.jpg",
+            "AXN": "https://i.postimg.cc/qM4H4VmF/IMG-6909.jpg",
+            "A&E": "https://i.postimg.cc/15BhzC23/IMG-6912.png",
+            "Prime Box Brazil": "https://i.postimg.cc/2yYMkhxW/IMG-6913.png",
+            "Comedy Central": "https://i.postimg.cc/k5kLHk6f/IMG-6914.png",
+            "Paramount Network": "https://i.postimg.cc/KzBChJtF/IMG-6915.png",
+            "Travel Box": "https://i.postimg.cc/xjGBsp03/IMG-6916.png",
+            "TLC": "https://i.postimg.cc/Prt90bJs/IMG-6917.png",
+            "E!": "https://i.postimg.cc/SND34XYX/IMG-6918.jpg",
+            "Arte 1": "https://i.postimg.cc/VkvTkYXK/IMG-6919.png",
+            "Fish": "https://i.postimg.cc/T3ssyZ9f/IMG-6920.png",
+            "Nick Jr.": "https://i.postimg.cc/Xqn1S3Vc/IMG-6924.png",
+            "Nickelodeon": "https://i.postimg.cc/yNSb0vQ9/IMG-6921.png",
+            "Cartoon Network": "https://i.postimg.cc/ZRtDHp2Q/IMG-6922.png",
+            "Cartoonito": "https://i.postimg.cc/hjLZ5hqt/IMG-6923.png",
+            "Premiere": "https://i.postimg.cc/dQ9SR7BW/IMG-6926.png",
+            "Record": "https://i.postimg.cc/Vv4GzTvy/IMG-6925.png",
+            "RedeTV!": "https://i.postimg.cc/xTTp60p9/IMG-6927.png"
+        };
+        
+        // Logos dos canais esportivos
+        const logosCanaisEsportivos = {
+            "SporTV": "https://logodownload.org/wp-content/uploads/2017/07/sportv-logo.png",
+            "ESPN": "https://logodownload.org/wp-content/uploads/2015/05/espn-logo.png",
+            "Premiere": "https://logodownload.org/wp-content/uploads/2020/04/premiere-fc-logo.png",
+            "Fox Sports": "https://logodownload.org/wp-content/uploads/2018/09/fox-sports-logo.png",
+            "Band Sports": "https://logodownload.org/wp-content/uploads/2017/07/band-sports-logo.png",
+            "Combate": "https://logodownload.org/wp-content/uploads/2017/07/combate-logo.png"
+        };
+        
+        // Escudos de times esportivos
+        const escudos = {
+            // Times brasileiros
+            "Corinthians": "https://logodownload.org/wp-content/uploads/2019/12/corinthians-logo.png",
+            "Palmeiras": "https://logodownload.org/wp-content/uploads/2019/12/palmeiras-logo.png",
+            "São Paulo": "https://logodownload.org/wp-content/uploads/2019/12/sao-paulo-logo.png",
+            "Santos": "https://logodownload.org/wp-content/uploads/2019/12/santos-logo.png",
+            "Flamengo": "https://logodownload.org/wp-content/uploads/2019/12/flamengo-logo.png",
+            "Fluminense": "https://logodownload.org/wp-content/uploads/2019/12/fluminense-logo.png",
+            "Vasco": "https://logodownload.org/wp-content/uploads/2019/12/vasco-logo.png",
+            "Botafogo": "https://logodownload.org/wp-content/uploads/2019/12/botafogo-logo.png",
+            "Grêmio": "https://logodownload.org/wp-content/uploads/2019/12/gremio-logo.png",
+            "Internacional": "https://logodownload.org/wp-content/uploads/2019/12/internacional-logo.png",
+            "Atlético-MG": "https://logodownload.org/wp-content/uploads/2019/12/atletico-mineiro-logo.png",
+            "Cruzeiro": "https://logodownload.org/wp-content/uploads/2019/12/cruzeiro-logo.png",
+            "Bahia": "https://logodownload.org/wp-content/uploads/2019/12/bahia-logo.png",
+            "Vitória": "https://logodownload.org/wp-content/uploads/2019/12/vitoria-logo.png",
+            "Sport": "https://logodownload.org/wp-content/uploads/2019/12/sport-logo.png",
+            "Náutico": "https://logodownload.org/wp-content/uploads/2019/12/nautico-logo.png",
+            "Ceará": "https://logodownload.org/wp-content/uploads/2019/12/ceara-logo.png",
+            "Fortaleza": "https://logodownload.org/wp-content/uploads/2019/12/fortaleza-logo.png",
+            "Figueirense": "https://logodownload.org/wp-content/uploads/2019/12/figueirense-logo.png",
+            
+            // Times internacionais
+            "Brasil": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/1200px-Flag_of_Brazil.svg.png",
+            "Argentina": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/1200px-Flag_of_Argentina.svg.png",
+            "França": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_France.svg/1200px-Flag_of_France.svg.png",
+            "Alemanha": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1200px-Flag_of_Germany.svg.png",
+            "PSG": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Paris_Saint-Germain_F.C..svg/1200px-Paris_Saint-Germain_F.C..svg.png",
+            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/1200px-Real_Madrid_CF.svg.png",
+            "Barcelona": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/1200px-FC_Barcelona_%28crest%29.svg.png",
+            "Manchester United": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/1200px-Manchester_United_FC_crest.svg.png",
+            "Liverpool": "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/1200px-Liverpool_FC.svg.png",
+            "Bayern Munich": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/1200px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png",
+            
+            // Vôlei
+            "Sada Cruzeiro": "https://upload.wikimedia.org/wikipedia/pt/thumb/5/5e/Sada_Cruzeiro_Volei.png/1200px-Sada_Cruzeiro_Volei.png",
+            "Minas": "https://upload.wikimedia.org/wikipedia/pt/thumb/2/2e/Minas_T%C3%AAnis_Clube.png/1200px-Minas_T%C3%AAnis_Clube.png",
+            "TAU": "https://upload.wikimedia.org/wikipedia/pt/thumb/1/1e/Taubat%C3%A9_VC.png/1200px-Taubat%C3%A9_VC.png",
+            
+            // Basquete
+            "Flamengo Basquete": "https://upload.wikimedia.org/wikipedia/pt/thumb/f/f7/Flamengo_logo.svg/1200px-Flamengo_logo.svg.png",
+            "São Paulo Basquete": "https://upload.wikimedia.org/wikipedia/pt/thumb/2/2e/Sao_Paulo_FC_logo.svg/1200px-Sao_Paulo_FC_logo.svg.png",
+            
+            // NBA
+            "Lakers": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Los_Angeles_Lakers_logo.svg/1200px-Los_Angeles_Lakers_logo.svg.png",
+            "Warriors": "https://upload.wikimedia.org/wikipedia/en/thumb/0/01/Golden_State_Warriors_logo.svg/1200px-Golden_State_Warriors_logo.svg.png",
+            "Bulls": "https://upload.wikimedia.org/wikipedia/en/thumb/6/67/Chicago_Bulls_logo.svg/1200px-Chicago_Bulls_logo.svg.png",
+            
+            // UFC (para eventos de MMA)
+            "UFC": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UFC_Logo.svg/1200px-UFC_Logo.svg.png"
         };
 
-        // Categorias dos canais
+        // Imagens de lutadores do UFC
+        const lutadoresUFC = {
+            "Gilbert Burns": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-03/BURNS_GILBERT_L_BELTON_03_04.png",
+            "Rodolfo Bellato": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-11/BELLATO_RODOLFO_L_11-04.png",
+            "Mairon Santos": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2024-01/SANTOS_MAIRON_L_01-20.png",
+            "Luana Santos": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-06/SANTOS_LUANA_L_06-03.png",
+            "Luana Pinheiro": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-05/PINHEIRO_LUANA_L_05-06.png",
+            "Sean O'Malley": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-08/OMALLEY_SEAN_L_08-19.png",
+            "Israel Adesanya": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-09/ADESANYA_ISRAEL_L_09-09.png",
+            "Jon Jones": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2023-03/JONES_JON_L_03-04.png",
+            "Anderson Silva": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2020-07/SILVA_ANDERSON_L_07-11.png",
+            "Vitor Belfort": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2018-05/BELFORT_VITOR_L_05-12.png",
+            "José Aldo": "https://dmxg5wxfqgb4u.cloudfront.net/styles/athlete_bio_full_body/s3/2022-08/ALDO_JOSE_L_08-20.png"
+        };
+
+        // Classificação indicativa
+        const ratingImages = {
+            'L': 'https://i.postimg.cc/7PnzwZp7/IMG-6891.png',
+            '10': 'https://i.postimg.cc/FzpkZTjG/IMG-6892.png',
+            '12': 'https://i.postimg.cc/LXz1q95c/IMG-6893.png',
+            '14': 'https://i.postimg.cc/sxsZ7kZv/IMG-6894.png',
+            '16': 'https://i.postimg.cc/wvKNTyq5/IMG-6895.png',
+            '18': 'https://i.postimg.cc/LsgfpBp6/IMG-6896.png'
+        };
+        
+        // Dias da semana abreviados
+        const weekdaysShort = {
+            0: 'dom', 1: 'seg', 2: 'ter', 3: 'qua', 4: 'qui', 5: 'sex', 6: 'sab'
+        };
+        
+        // Categorias de canais
         const channelCategories = {
-            "Globo": "open",
-            "SBT": "open",
-            "Record": "open",
-            "Band": "open",
-            "RedeTV!": "open",
-            "HBO": "movies",
-            "Fox": "movies",
-            "Discovery": "documentaries",
-            "National Geographic": "documentaries",
-            "Cartoon Network": "kids",
-            "Nickelodeon": "kids",
-            "ESPN": "sports",
-            "Fox Sports": "sports",
-            "CNN": "news",
-            "GloboNews": "news",
-            "Playboy TV": "adult",
-            "Sexy Hot": "adult"
+            'movies': ['HBO', 'HBO2', 'HBO Plus', 'HBO Family', 'HBO Signature', 'HBO Mundi', 'HBO Pop', 'HBO Xtreme', 
+                      'Telecine Premium', 'Telecine Action', 'Telecine Touch', 'Telecine Fun', 'Telecine Pipoca', 'Telecine Cult',
+                      'Megapix', 'Universal TV', 'Studio Universal', 'Warner', 'AXN', 'Sony', 'FX', 'Paramount Network',
+                      'Cinemax', 'Prime Box Brazil', 'TNT', 'TNT Series', 'TNT Novelas', 'Space', 'AMC', 'Film&Arts', 'Syfy', 'Comedy Central',
+                      'TBS', 'A&E', 'Star Channel', 'Lifetime', 'Canal Brasil', 'TCM', 'Cine Brasil TV', 'CineBrasilTV', 'Sony Movies', 'Fox'],
+            
+            'documentary': ['Discovery Channel', 'Animal Planet', 'Nat Geo', 'National Geographic', 'History', 'History 2', 'Discovery Science', 
+                           'Discovery Theater', 'Discovery World', 'Discovery Turbo', 'Discovery Home & Health', 'Discovery ID', 'TLC', 
+                           'E!', 'Curta!', 'Arte 1', 'Fashion TV', 'Travel Box Brazil', 'Fish TV', 'Smithsonian Channel'],
+            
+            'kids': ['Cartoon Network', 'Nickelodeon', 'Nick Jr.', 'Disney Channel', 'Disney Junior', 'Discovery Kids', 'Gloob', 
+                    'Gloobinho', 'Tooncast', 'Cartoonito', 'ZooMoo', 'TV Rá-Tim-Bum', 'Nat Geo Kids'],
+            
+            'sports': ['SporTV', 'SporTV 2', 'SporTV 3', 'ESPN', 'ESPN 2', 'ESPN 3', 'ESPN 4', 'Fox Sports', 'Fox Sports 2', 
+                      'Band Sports', 'Premiere', 'Premiere 2', 'Premiere 3', 'Premiere 4', 'Premiere 5', 'Premiere 6', 
+                      'Premiere 7', 'Premiere 8', 'Combate', 'OFF', 'Woohoo'],
+            
+            'news': ['GloboNews', 'CNN Brasil', 'Record News', 'BandNews', 'Jovem Pan News', 'Bloomberg'],
+            
+            'open': ['Globo', 'SBT', 'Record', 'Band', 'RedeTV!', 'TV Cultura', 'TV Brasil', 'TV Gazeta', 'Futura', 'TV Câmara', 'TV Senado', 'TV Justiça'],
+            
+            'adult': ['Playboy TV', 'Sexy Hot', 'Venus', 'Sextreme', 'Hustler TV', 'Penthouse TV']
         };
 
-        // Variáveis globais
-        let epgData = [];
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let currentCategory = 'all';
-        let currentSearch = '';
-
-        // DOM Elements
-        const channelsContainer = document.getElementById('channelsContainer');
-        const loadingElement = document.getElementById('loading');
-        const noResultsElement = document.getElementById('noResults');
-        const searchInput = document.getElementById('searchInput');
-        const reloadBtn = document.getElementById('reloadBtn');
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        const programModal = document.getElementById('programModal');
-        const closeModalButtons = document.querySelectorAll('#closeModal, #closeModalBottom');
-        const modalChannelName = document.getElementById('modalChannelName');
-        const modalChannelLogo = document.getElementById('modalChannelLogo').querySelector('img');
-        const modalProgramList = document.getElementById('modalProgramList');
-
-        // Função para carregar o EPG
-        async function loadEPG() {
-            try {
+        // Inicialização quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos da interface
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error-message');
+            const channelsContainer = document.getElementById('channels-container');
+            const channelSearch = document.getElementById('channel-search');
+            const reloadButton = document.getElementById('reload-epg');
+            const modal = document.getElementById('schedule-modal');
+            const modalClose = document.querySelector('.modal-close');
+            const modalChannelName = document.getElementById('modal-channel-name');
+            const modalChannelLogo = document.getElementById('modal-channel-logo');
+            const modalScheduleList = document.getElementById('modal-schedule-list');
+            const currentTimeDisplay = document.getElementById('current-time-display');
+            const lastUpdateDisplay = document.getElementById('last-update');
+            const verProximoDiaBtn = document.getElementById('ver-proximo-dia');
+            const verHojeBtn = document.getElementById('ver-hoje');
+            const verDiaAnteriorBtn = document.getElementById('ver-dia-anterior');
+            const backToTopButton = document.getElementById('back-to-top');
+            const trailerModal = document.getElementById('trailer-modal');
+            const trailerClose = document.querySelector('.trailer-close');
+            const trailerContainer = document.getElementById('trailer-container');
+            const trailerNotFound = document.getElementById('trailer-not-found');
+            
+            // Containers de canais por categoria
+            const moviesChannels = document.getElementById('movies-channels');
+            const documentaryChannels = document.getElementById('documentary-channels');
+            const kidsChannels = document.getElementById('kids-channels');
+            const sportsChannels = document.getElementById('sports-channels');
+            const otherChannels = document.getElementById('other-channels');
+            
+            // Filtros
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const filterEsporteButtons = document.querySelectorAll('.filter-esporte');
+            
+            // Variáveis de estado
+            let allProgrammesByChannel = {};
+            let autoUpdateTimer = null;
+            const AUTO_UPDATE_INTERVAL = 60000; // 1 minuto
+            let currentSportFilter = 'Futebol';
+            let currentDayOffset = 0;
+            let favoriteChannels = JSON.parse(localStorage.getItem('favoriteChannels')) || {};
+            const trailerCache = JSON.parse(localStorage.getItem('trailerCache')) || {};
+            
+            // Inicialização
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
+            // Configurar botão voltar ao topo
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.remove('hidden');
+                } else {
+                    backToTopButton.classList.add('hidden');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Configurar modal de trailer
+            trailerClose.addEventListener('click', () => {
+                trailerModal.style.display = 'none';
+                // Remove o iframe quando o modal é fechado
+                const iframe = trailerContainer.querySelector('iframe');
+                if (iframe) {
+                    iframe.remove();
+                }
+                trailerNotFound.classList.add('hidden');
+            });
+            
+            window.addEventListener('click', (event) => {
+                if (event.target === trailerModal) {
+                    trailerModal.style.display = 'none';
+                    // Remove o iframe quando o modal é fechado
+                    const iframe = trailerContainer.querySelector('iframe');
+                    if (iframe) {
+                        iframe.remove();
+                    }
+                    trailerNotFound.classList.add('hidden');
+                }
+            });
+            
+            fetchEPGData();
+            carregarFilmes();
+            carregarEventosEsportivos();
+            
+            // Event Listeners
+            channelSearch.addEventListener('input', handleSearch);
+            reloadButton.addEventListener('click', handleReload);
+            modalClose.addEventListener('click', () => modal.style.display = 'none');
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) modal.style.display = 'none';
+            });
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.dataset.time) {
+                        handleTimeFilterClick.call(this);
+                    } else {
+                        handleFilterClick.call(this);
+                    }
+                });
+            });
+            
+            filterEsporteButtons.forEach(button => {
+                button.addEventListener('click', handleSportFilterClick);
+            });
+            
+            verProximoDiaBtn.addEventListener('click', () => {
+                currentDayOffset++;
+                updateDayNavigationButtons();
+                carregarEventosEsportivos();
+            });
+            
+            verHojeBtn.addEventListener('click', () => {
+                currentDayOffset = 0;
+                updateDayNavigationButtons();
+                carregarEventosEsportivos();
+            });
+            
+            verDiaAnteriorBtn.addEventListener('click', () => {
+                currentDayOffset--;
+                updateDayNavigationButtons();
+                carregarEventosEsportivos();
+            });
+            
+            // Funções principais
+            function updateCurrentTime() {
+                const now = new Date();
+                currentTimeDisplay.textContent = now.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            }
+            
+            function updateDayNavigationButtons() {
+                if (currentDayOffset > 0) {
+                    verDiaAnteriorBtn.classList.remove('hidden');
+                    verHojeBtn.classList.remove('hidden');
+                } else if (currentDayOffset < 0) {
+                    verDiaAnteriorBtn.classList.remove('hidden');
+                    verHojeBtn.classList.remove('hidden');
+                } else {
+                    verDiaAnteriorBtn.classList.add('hidden');
+                    verHojeBtn.classList.add('hidden');
+                }
+            }
+            
+            function handleSearch(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const channelCards = document.querySelectorAll('.channel-card');
+                
+                channelCards.forEach(card => {
+                    const channelName = card.querySelector('.channel-name').textContent.toLowerCase();
+                    const programmes = Array.from(card.querySelectorAll('.programme-title')).map(el => el.textContent.toLowerCase());
+                    
+                    if (channelName.includes(searchTerm) || programmes.some(prog => prog.includes(searchTerm))) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+                
+                checkEmptySections();
+            }
+            
+            function handleReload() {
                 loadingElement.classList.remove('hidden');
                 channelsContainer.classList.add('hidden');
-                noResultsElement.classList.add('hidden');
-
-                // Usando um proxy CORS para evitar problemas de acesso
-                const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                const epgUrl = encodeURIComponent('https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml');
-                const response = await fetch(proxyUrl + epgUrl);
+                errorElement.classList.add('hidden');
                 
-                if (!response.ok) throw new Error('Falha ao carregar EPG');
+                moviesChannels.innerHTML = '';
+                documentaryChannels.innerHTML = '';
+                kidsChannels.innerHTML = '';
+                sportsChannels.innerHTML = '';
+                otherChannels.innerHTML = '';
                 
-                const xmlText = await response.text();
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-
-                epgData = [];
+                if (autoUpdateTimer) clearInterval(autoUpdateTimer);
                 
-                // Processar canais
-                const channels = xmlDoc.getElementsByTagName('channel');
-                const channelMap = {};
+                fetchEPGData();
+                carregarFilmes();
+                carregarEventosEsportivos();
+            }
+            
+            function handleFilterClick() {
+                filterButtons.forEach(btn => {
+                    if (!btn.dataset.time) {
+                        btn.classList.remove('active');
+                    }
+                });
+                this.classList.add('active');
                 
-                for (let channel of channels) {
-                    const channelId = channel.getAttribute('id');
-                    const channelName = channel.querySelector('display-name')?.textContent.trim() || channelId;
+                const filter = this.dataset.filter;
+                const sections = document.querySelector('#channels-container').querySelectorAll('section');
+                const channelCards = document.querySelectorAll('.channel-card');
+                
+                if (filter === 'all') {
+                    sections.forEach(section => section.classList.remove('hidden'));
+                    channelCards.forEach(card => card.classList.remove('hidden'));
+                } else if (filter === 'favorites') {
+                    // Filtro de favoritos
+                    sections.forEach(section => section.classList.remove('hidden'));
+                    channelCards.forEach(card => {
+                        const channelId = card.dataset.channelId;
+                        if (favoriteChannels[channelId]) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                } else {
+                    sections.forEach(section => {
+                        if (section.id === 'filmes-destaque') {
+                            section.classList.remove('hidden');
+                        } else if (section.id === `${filter}-section`) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    });
+                }
+                
+                checkEmptySections();
+            }
+            
+            function handleTimeFilterClick() {
+                const timeRange = this.dataset.time;
+                const now = new Date();
+                const currentHour = now.getHours();
+                
+                document.querySelectorAll('.programme-item').forEach(item => {
+                    const timeText = item.querySelector('.programme-time').textContent;
+                    const hourMatch = timeText.match(/(\d{1,2}):\d{2}/);
+                    if (!hourMatch) return;
                     
-                    // Mapear ID do canal para nome
-                    channelMap[channelId] = channelName;
+                    const hour = parseInt(hourMatch[1]);
+                    let showItem = false;
                     
-                    // Verificar se temos logo e categoria para este canal
-                    const hasLogo = channelLogos[channelName] !== undefined;
-                    const category = channelCategories[channelName] || 'other';
+                    switch(timeRange) {
+                        case 'morning':
+                            showItem = hour >= 6 && hour < 12;
+                            break;
+                        case 'afternoon':
+                            showItem = hour >= 12 && hour < 18;
+                            break;
+                        case 'evening':
+                            showItem = hour >= 18 || hour < 6;
+                            break;
+                        default:
+                            showItem = true;
+                    }
                     
-                    if (hasLogo) {
-                        epgData.push({
-                            id: channelId,
-                            name: channelName,
-                            programs: [], // Será preenchido abaixo
-                            category: category,
-                            logo: channelLogos[channelName]
+                    item.style.display = showItem ? 'block' : 'none';
+                });
+            }
+            
+            function handleSportFilterClick() {
+                filterEsporteButtons.forEach(btn => btn.classList.remove('bg-orange-600'));
+                this.classList.add('bg-orange-600');
+                currentSportFilter = this.dataset.esporte;
+                currentDayOffset = 0;
+                updateDayNavigationButtons();
+                carregarEventosEsportivos();
+            }
+            
+            function fetchEPGData() {
+                fetch(epgXmlUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Não foi possível carregar o arquivo XML');
+                        return response.text();
+                    })
+                    .then(xmlText => {
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        processEPGData(xmlDoc);
+                        
+                        const now = new Date();
+                        lastUpdateDisplay.textContent = now.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        if (autoUpdateTimer) clearInterval(autoUpdateTimer);
+                        autoUpdateTimer = setInterval(updateProgrammesDisplay, AUTO_UPDATE_INTERVAL);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar o EPG:', error);
+                        loadingElement.classList.add('hidden');
+                        errorElement.textContent = `Erro ao carregar a programação: ${error.message}`;
+                        errorElement.classList.remove('hidden');
+                    });
+            }
+            
+            function processEPGData(xmlDoc) {
+                try {
+                    const channels = xmlDoc.getElementsByTagName('channel');
+                    const programmes = xmlDoc.getElementsByTagName('programme');
+                    
+                    allProgrammesByChannel = {};
+                    
+                    // Agrupar programas por canal
+                    for (let i = 0; i < programmes.length; i++) {
+                        const programme = programmes[i];
+                        const channelId = programme.getAttribute('channel');
+                        
+                        if (!allProgrammesByChannel[channelId]) {
+                            allProgrammesByChannel[channelId] = [];
+                        }
+                        
+                        allProgrammesByChannel[channelId].push(programme);
+                    }
+                    
+                    // Processar cada canal
+                    for (let i = 0; i < channels.length; i++) {
+                        const channel = channels[i];
+                        const channelId = channel.getAttribute('id');
+                        const displayName = channel.getElementsByTagName('display-name')[0]?.textContent || 'Canal sem nome';
+                        
+                        createAndAppendChannelCard(displayName, channelId);
+                    }
+                    
+                    checkEmptySections();
+                    loadingElement.classList.add('hidden');
+                    channelsContainer.classList.remove('hidden');
+                    
+                } catch (error) {
+                    console.error('Erro ao processar o EPG:', error);
+                    loadingElement.classList.add('hidden');
+                    errorElement.textContent = `Erro ao processar a programação: ${error.message}`;
+                    errorElement.classList.remove('hidden');
+                }
+            }
+            
+            function updateProgrammesDisplay() {
+                const channelCards = document.querySelectorAll('.channel-card');
+                
+                channelCards.forEach(card => {
+                    const channelId = card.dataset.channelId;
+                    const programmesList = card.querySelector('.programmes-list');
+                    const channelProgrammes = allProgrammesByChannel[channelId] || [];
+                    const currentProgrammes = getExactlyFiveProgrammes(channelProgrammes).slice(0, 2);
+                    
+                    programmesList.innerHTML = '';
+                    
+                    if (currentProgrammes.length === 0) {
+                        programmesList.innerHTML = '<p class="text-gray-400 italic text-sm">Nenhuma programação disponível</p>';
+                    } else {
+                        currentProgrammes.forEach((programme, index) => {
+                            programmesList.appendChild(createProgrammeItem(programme, index === 0));
                         });
                     }
-                }
-                
-                // Processar programas
-                const programs = xmlDoc.getElementsByTagName('programme');
-                
-                for (let program of programs) {
-                    const channelId = program.getAttribute('channel');
-                    const channelName = channelMap[channelId];
-                    
-                    // Só adicionar se o canal estiver na nossa lista
-                    if (channelName && channelLogos[channelName]) {
-                        const startTime = program.getAttribute('start');
-                        const endTime = program.getAttribute('stop');
-                        const title = program.querySelector('title')?.textContent.trim() || 'Programa desconhecido';
-                        const desc = program.querySelector('desc')?.textContent.trim() || 'Sem descrição disponível';
-                        
-                        // Encontrar o canal no EPG
-                        const channel = epgData.find(c => c.id === channelId);
-                        if (channel) {
-                            channel.programs.push({
-                                start: formatTime(startTime),
-                                end: formatTime(endTime),
-                                title,
-                                desc,
-                                rawStart: startTime
-                            });
-                        }
-                    }
-                }
-                
-                // Ordenar programas por horário em cada canal
-                epgData.forEach(channel => {
-                    channel.programs.sort((a, b) => a.rawStart.localeCompare(b.rawStart));
                 });
-
-                renderChannels();
-            } catch (error) {
-                console.error('Erro ao carregar EPG:', error);
-                loadingElement.innerHTML = `
-                    <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
-                    <p class="mt-4">Falha ao carregar a programação</p>
-                    <p class="text-sm text-slate-400 mt-2">${error.message}</p>
-                    <button onclick="loadEPG()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                        Tentar novamente
-                    </button>
-                `;
-            }
-        }
-
-        // Formatar hora
-        function formatTime(timeString) {
-            try {
-                // O formato é YYYYMMDDHHMMSS + timezone (ex: 20230618200000 -0300)
-                const year = timeString.substring(0, 4);
-                const month = timeString.substring(4, 6) - 1; // Mês é 0-indexed
-                const day = timeString.substring(6, 8);
-                const hour = timeString.substring(8, 10);
-                const minute = timeString.substring(10, 12);
                 
-                const date = new Date(year, month, day, hour, minute);
-                return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            } catch (e) {
-                console.error('Erro ao formatar hora:', e);
-                return timeString.substring(8, 10) + ':' + timeString.substring(10, 12); // Retorna apenas HH:MM como fallback
-            }
-        }
-
-        // Renderizar canais
-        function renderChannels() {
-            loadingElement.classList.add('hidden');
-            
-            let filteredChannels = [...epgData];
-            
-            // Aplicar filtro de categoria
-            if (currentCategory !== 'all') {
-                if (currentCategory === 'favorites') {
-                    filteredChannels = filteredChannels.filter(channel => favorites.includes(channel.name));
-                } else {
-                    filteredChannels = filteredChannels.filter(channel => channel.category === currentCategory);
-                }
-            }
-            
-            // Aplicar filtro de busca
-            if (currentSearch) {
-                const searchTerm = currentSearch.toLowerCase();
-                filteredChannels = filteredChannels.filter(channel => 
-                    channel.name.toLowerCase().includes(searchTerm) || 
-                    channel.programs.some(program => 
-                        program.title.toLowerCase().includes(searchTerm) || 
-                        program.desc.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            // Ordenar canais (favoritos primeiro, depois por nome)
-            filteredChannels.sort((a, b) => {
-                const aIsFavorite = favorites.includes(a.name);
-                const bIsFavorite = favorites.includes(b.name);
-                
-                if (aIsFavorite && !bIsFavorite) return -1;
-                if (!aIsFavorite && bIsFavorite) return 1;
-                return a.name.localeCompare(b.name);
-            });
-            
-            // Limpar container
-            channelsContainer.innerHTML = '';
-            
-            // Adicionar canais filtrados
-            filteredChannels.forEach(channel => {
                 const now = new Date();
-                const currentTime = now.getTime();
+                lastUpdateDisplay.textContent = now.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+            
+            function checkEmptySections() {
+                const sections = [
+                    { id: 'movies-section', container: moviesChannels },
+                    { id: 'documentary-section', container: documentaryChannels },
+                    { id: 'kids-section', container: kidsChannels },
+                    { id: 'sports-section', container: sportsChannels },
+                    { id: 'other-section', container: otherChannels }
+                ];
                 
-                // Encontrar programas atuais e próximos
-                const currentAndNextPrograms = [];
+                sections.forEach(section => {
+                    const visibleChannels = section.container.querySelectorAll('.channel-card:not(.hidden)');
+                    const sectionElement = document.getElementById(section.id);
+                    
+                    if (visibleChannels.length === 0) {
+                        sectionElement.classList.add('hidden');
+                    } else {
+                        sectionElement.classList.remove('hidden');
+                    }
+                });
+            }
+            
+            function parseEPGDate(dateString) {
+                const year = parseInt(dateString.substring(0, 4));
+                const month = parseInt(dateString.substring(4, 6)) - 1;
+                const day = parseInt(dateString.substring(6, 8));
+                const hour = parseInt(dateString.substring(8, 10));
+                const minute = parseInt(dateString.substring(10, 12));
+                const second = parseInt(dateString.substring(12, 14));
                 
-                for (let i = 0; i < channel.programs.length; i++) {
-                    const program = channel.programs[i];
-                    const [year, month, day, hour, minute] = [
-                        program.rawStart.substring(0, 4),
-                        program.rawStart.substring(4, 6) - 1,
-                        program.rawStart.substring(6, 8),
-                        program.rawStart.substring(8, 10),
-                        program.rawStart.substring(10, 12)
-                    ];
-                    
-                    const programTime = new Date(year, month, day, hour, minute).getTime();
-                    
-                    if (programTime >= currentTime - 3600000) { // Mostrar programas que começaram até 1h atrás
-                        currentAndNextPrograms.push(program);
-                        if (currentAndNextPrograms.length >= 2) break;
+                return new Date(year, month, day, hour, minute, second);
+            }
+            
+            function formatDateTime(date) {
+                const weekday = weekdaysShort[date.getDay()];
+                return `${date.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })} | ${weekday}`;
+            }
+            
+            function formatFullDateTime(date) {
+                const weekday = weekdaysShort[date.getDay()];
+                return `${date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit'
+                })} ${date.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })} | ${weekday}`;
+            }
+            
+            function getChannelLogo(channelName) {
+                for (const [key, url] of Object.entries(channelLogos)) {
+                    if (channelName.includes(key)) {
+                        return url;
                     }
                 }
                 
-                const channelCard = document.createElement('div');
-                channelCard.className = `channel-card rounded-lg overflow-hidden shadow-lg ${favorites.includes(channel.name) ? 'border-l-4 border-yellow-400' : ''}`;
-                channelCard.dataset.category = channel.category;
-                channelCard.dataset.name = channel.name;
+                return `https://via.placeholder.com/50x30/1a1a2e/ffffff?text=${encodeURIComponent(channelName.substring(0, 3))}`;
+            }
+            
+            function getRatingImage(rating) {
+                if (!rating) return null;
                 
-                channelCard.innerHTML = `
-                    <div class="bg-slate-800 p-4 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <img src="${channel.logo}" alt="${channel.name}" class="h-10 mr-3">
-                            <h3 class="font-semibold">${channel.name}</h3>
-                        </div>
-                        <button class="favorite-btn text-xl ${favorites.includes(channel.name) ? 'favorite' : 'text-slate-400'}" data-channel="${channel.name}">
-                            <i class="fas fa-star"></i>
-                        </button>
-                    </div>
-                    <div class="p-4 bg-slate-700">
-                        ${currentAndNextPrograms.length > 0 ? 
-                            currentAndNextPrograms.map(program => `
-                                <div class="program-item mb-3 last:mb-0 pl-3">
-                                    <div class="text-blue-400 text-sm font-medium">${program.start} - ${program.end}</div>
-                                    <h4 class="font-medium">${program.title}</h4>
-                                    <p class="text-slate-300 text-sm mt-1 line-clamp-2">${program.desc}</p>
-                                </div>
-                            `).join('') : 
-                            '<p class="text-slate-400 text-sm">Programação não disponível</p>'
+                rating = rating.toUpperCase();
+                
+                if (rating.includes('LIVRE') || rating === 'L') return ratingImages['L'];
+                if (rating.includes('10') || rating.includes('DEZ')) return ratingImages['10'];
+                if (rating.includes('12') || rating.includes('DOZE')) return ratingImages['12'];
+                if (rating.includes('14') || rating.includes('QUATORZE')) return ratingImages['14'];
+                if (rating.includes('16') || rating.includes('DEZESSEIS')) return ratingImages['16'];
+                if (rating.includes('18') || rating.includes('DEZOITO')) return ratingImages['18'];
+                
+                return null;
+            }
+            
+            function getExactlyFiveProgrammes(programmes) {
+                const now = new Date();
+                const sortedProgrammes = [...programmes].sort((a, b) => {
+                    const startTimeA = parseEPGDate(a.getAttribute('start'));
+                    const startTimeB = parseEPGDate(b.getAttribute('start'));
+                    return startTimeA - startTimeB;
+                });
+                
+                let currentIndex = -1;
+                
+                for (let i = 0; i < sortedProgrammes.length; i++) {
+                    const startTime = parseEPGDate(sortedProgrammes[i].getAttribute('start'));
+                    const endTime = parseEPGDate(sortedProgrammes[i].getAttribute('stop'));
+                    
+                    if (startTime <= now && endTime > now) {
+                        currentIndex = i;
+                        break;
+                    }
+                }
+                
+                if (currentIndex === -1) {
+                    for (let i = 0; i < sortedProgrammes.length; i++) {
+                        const startTime = parseEPGDate(sortedProgrammes[i].getAttribute('start'));
+                        if (startTime > now) {
+                            currentIndex = i;
+                            break;
                         }
-                    </div>
-                    <div class="bg-slate-900 px-4 py-3 text-center">
-                        <button class="full-schedule-btn text-blue-400 hover:text-blue-300 text-sm font-medium" data-channel="${channel.name}">
-                            Programação Completa <i class="fas fa-chevron-right ml-1"></i>
-                        </button>
-                    </div>
-                `;
+                    }
+                }
                 
-                channelsContainer.appendChild(channelCard);
-            });
-            
-            // Mostrar container ou mensagem de nenhum resultado
-            if (filteredChannels.length > 0) {
-                channelsContainer.classList.remove('hidden');
-                noResultsElement.classList.add('hidden');
-            } else {
-                channelsContainer.classList.add('hidden');
-                noResultsElement.classList.remove('hidden');
+                if (currentIndex === -1) return [];
+                return sortedProgrammes.slice(currentIndex, currentIndex + 5);
             }
             
-            // Adicionar eventos aos botões
-            document.querySelectorAll('.favorite-btn').forEach(btn => {
-                btn.addEventListener('click', toggleFavorite);
-            });
-            
-            document.querySelectorAll('.full-schedule-btn').forEach(btn => {
-                btn.addEventListener('click', showFullSchedule);
-            });
-        }
-
-        // Alternar favorito
-        function toggleFavorite(e) {
-            const channelName = e.currentTarget.dataset.channel;
-            const index = favorites.indexOf(channelName);
-            
-            if (index === -1) {
-                favorites.push(channelName);
-            } else {
-                favorites.splice(index, 1);
+            function createAndAppendChannelCard(channelName, channelId) {
+                const channelProgrammes = allProgrammesByChannel[channelId] || [];
+                const exactlyTwoProgrammes = getExactlyFiveProgrammes(channelProgrammes).slice(0, 2);
+                const channelCard = createChannelCard(channelName, exactlyTwoProgrammes, channelId);
+                
+                let categoryFound = false;
+                for (const [category, channelList] of Object.entries(channelCategories)) {
+                    if (channelList.some(name => channelName.includes(name))) {
+                        categoryFound = true;
+                        switch (category) {
+                            case 'movies':
+                                moviesChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'movies';
+                                break;
+                            case 'documentary':
+                                documentaryChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'documentary';
+                                break;
+                            case 'kids':
+                                kidsChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'kids';
+                                break;
+                            case 'sports':
+                                sportsChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'sports';
+                                break;
+                            default:
+                                otherChannels.appendChild(channelCard);
+                                channelCard.dataset.category = 'other';
+                        }
+                        break;
+                    }
+                }
+                
+                if (!categoryFound) {
+                    otherChannels.appendChild(channelCard);
+                    channelCard.dataset.category = 'other';
+                }
             }
             
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            renderChannels();
-        }
-
-        // Mostrar programação completa
-        function showFullSchedule(e) {
-            const channelName = e.currentTarget.dataset.channel;
-            const channel = epgData.find(c => c.name === channelName);
-            
-            if (!channel) return;
-            
-            modalChannelName.textContent = channel.name;
-            modalChannelLogo.src = channel.logo;
-            modalChannelLogo.alt = channel.name;
-            
-            modalProgramList.innerHTML = channel.programs.map(program => `
-                <div class="program-item p-3 bg-slate-700 rounded-lg">
-                    <div class="flex justify-between items-start">
-                        <div class="text-blue-400 font-medium">${program.start} - ${program.end}</div>
-                        <div class="text-xs bg-slate-600 px-2 py-1 rounded">${channel.category.toUpperCase()}</div>
-                    </div>
-                    <h4 class="font-bold mt-1">${program.title}</h4>
-                    <p class="text-slate-300 text-sm mt-1">${program.desc}</p>
-                </div>
-            `).join('');
-            
-            programModal.classList.remove('invisible', 'opacity-0');
-            programModal.classList.add('visible', 'opacity-100');
-        }
-
-        // Fechar modal
-        function closeModal() {
-            programModal.classList.add('invisible', 'opacity-0');
-            programModal.classList.remove('visible', 'opacity-100');
-        }
-
-        // Event Listeners
-        searchInput.addEventListener('input', (e) => {
-            currentSearch = e.target.value.toLowerCase();
-            renderChannels();
-        });
-
-        reloadBtn.addEventListener('click', loadEPG);
-
-        categoryButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentCategory = btn.dataset.category;
+            function createChannelCard(channelName, programmes, channelId) {
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                card.dataset.channelId = channelId;
                 
-                // Atualizar estilos dos botões
-                categoryButtons.forEach(b => {
-                    if (b.dataset.category === currentCategory) {
-                        if (currentCategory === 'favorites') {
-                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
-                            b.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
-                        } else if (currentCategory === 'all') {
-                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
-                            b.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                // Cabeçalho
+                const header = document.createElement('div');
+                header.className = 'bg-gray-800 p-3 flex items-center min-h-[60px]';
+                
+                const logoElement = document.createElement('img');
+                logoElement.className = 'h-8 w-8 min-w-[32px] mr-2 object-contain';
+                logoElement.src = getChannelLogo(channelName);
+                logoElement.alt = `${channelName} Logo`;
+                logoElement.onerror = function() {
+                    this.onerror = null;
+                    this.src = `https://via.placeholder.com/50x30/1a1a2e/ffffff?text=${encodeURIComponent(channelName.substring(0, 3))}`;
+                };
+                
+                const nameElement = document.createElement('h3');
+                nameElement.className = 'channel-name text-sm font-semibold text-white';
+                nameElement.textContent = channelName.length > 20 ? 
+                    channelName.substring(0, 20) + '...' : channelName;
+                nameElement.title = channelName;
+                
+                // Adicionar estrela de favoritos
+                const isFavorite = favoriteChannels[channelId];
+                
+                const starIcon = document.createElement('span');
+                starIcon.className = `favorite-star ml-auto ${isFavorite ? 'active' : ''}`;
+                starIcon.innerHTML = '★';
+                starIcon.dataset.channel = channelId;
+                starIcon.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(channelId);
+                };
+                
+                header.appendChild(logoElement);
+                header.appendChild(nameElement);
+                header.appendChild(starIcon);
+                card.appendChild(header);
+                
+                // Lista de programas
+                const programmesList = document.createElement('div');
+                programmesList.className = 'programmes-list p-3 space-y-2 flex-grow';
+                
+                if (programmes.length === 0) {
+                    programmesList.innerHTML = '<p class="text-gray-400 italic text-sm">Sem programação</p>';
+                } else {
+                    programmes.forEach((programme, index) => {
+                        programmesList.appendChild(createProgrammeItem(programme, index === 0));
+                    });
+                }
+                
+                card.appendChild(programmesList);
+                
+                // Botão
+                const button = document.createElement('button');
+                button.className = 'mt-auto mx-3 mb-3 py-1.5 text-sm bg-vibrant-orange hover:bg-orange-600 text-white rounded';
+                button.textContent = 'Programação completa';
+                button.onclick = () => showFullSchedule(channelName, channelId, logoElement.src);
+                
+                card.appendChild(button);
+                
+                return card;
+            }
+            
+            function toggleFavorite(channelId) {
+                favoriteChannels[channelId] = !favoriteChannels[channelId];
+                localStorage.setItem('favoriteChannels', JSON.stringify(favoriteChannels));
+                
+                // Atualizar UI
+                const starIcon = document.querySelector(`.favorite-star[data-channel="${channelId}"]`);
+                if (starIcon) {
+                    starIcon.classList.toggle('active');
+                }
+                
+                // Se o filtro de favoritos estiver ativo, atualiza a exibição
+                const favoriteFilter = document.querySelector('.filter-btn[data-filter="favorites"].active');
+                if (favoriteFilter) {
+                    const channelCard = document.querySelector(`.channel-card[data-channel-id="${channelId}"]`);
+                    if (channelCard) {
+                        if (favoriteChannels[channelId]) {
+                            channelCard.classList.remove('hidden');
                         } else {
-                            b.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                            b.classList.add('bg-slate-700', 'hover:bg-slate-600');
+                            channelCard.classList.add('hidden');
+                        }
+                    }
+                    checkEmptySections();
+                }
+            }
+            
+            function createProgrammeItem(programme, isCurrent = false) {
+                const startTime = parseEPGDate(programme.getAttribute('start'));
+                const endTime = parseEPGDate(programme.getAttribute('stop'));
+                const title = programme.getElementsByTagName('title')[0]?.textContent || 'Programa sem título';
+                const description = programme.getElementsByTagName('desc')[0]?.textContent || '';
+                
+                let ratingValue = null;
+                const ratingElements = programme.getElementsByTagName('rating');
+                if (ratingElements.length > 0) {
+                    const valueElement = ratingElements[0].getElementsByTagName('value')[0];
+                    if (valueElement) ratingValue = valueElement.textContent;
+                }
+                
+                const programmeItem = document.createElement('div');
+                programmeItem.className = 'programme-item';
+                
+                const now = new Date();
+                if (isCurrent && startTime <= now && endTime > now) {
+                    programmeItem.classList.add('bg-gray-800', 'bg-opacity-30');
+                }
+                
+                const timeElement = document.createElement('div');
+                timeElement.className = 'programme-time text-xs text-orange-400 flex items-center';
+                
+                const timeText = document.createElement('span');
+                timeText.textContent = `${formatDateTime(startTime)} - ${formatDateTime(endTime)}`;
+                timeElement.appendChild(timeText);
+                
+                if (startTime <= now && endTime > now) {
+                    const liveIndicator = document.createElement('span');
+                    liveIndicator.className = 'live-indicator';
+                    liveIndicator.textContent = 'AO VIVO';
+                    timeElement.appendChild(liveIndicator);
+                }
+                
+                const titleElement = document.createElement('div');
+                titleElement.className = 'programme-title font-medium text-sm mt-1';
+                titleElement.textContent = title.length > 30 ? 
+                    title.substring(0, 30) + '...' : title;
+                titleElement.title = title;
+                
+                const ratingImageUrl = getRatingImage(ratingValue);
+                if (ratingImageUrl) {
+                    const ratingImg = document.createElement('img');
+                    ratingImg.className = 'rating-icon ml-2';
+                    ratingImg.src = ratingImageUrl;
+                    ratingImg.alt = `Classificação ${ratingValue}`;
+                    titleElement.appendChild(ratingImg);
+                }
+                
+                programmeItem.appendChild(timeElement);
+                programmeItem.appendChild(titleElement);
+                
+                if (description) {
+                    const descElement = document.createElement('div');
+                    descElement.className = 'programme-desc text-xs text-gray-400 mt-1';
+                    descElement.textContent = description.length > 60 ? 
+                        description.substring(0, 60) + '...' : description;
+                    descElement.title = description;
+                    programmeItem.appendChild(descElement);
+                }
+                
+                return programmeItem;
+            }
+            
+            function showFullSchedule(channelName, channelId, logoUrl) {
+                modalChannelName.textContent = channelName;
+                modalChannelLogo.src = logoUrl;
+                modalChannelLogo.alt = `${channelName} Logo`;
+                modalScheduleList.innerHTML = '';
+                
+                const channelProgrammes = allProgrammesByChannel[channelId] || [];
+                const now = new Date();
+                
+                const futureProgrammes = channelProgrammes
+                    .filter(programme => {
+                        const endTime = parseEPGDate(programme.getAttribute('stop'));
+                        return endTime > now;
+                    })
+                    .sort((a, b) => {
+                        const startTimeA = parseEPGDate(a.getAttribute('start'));
+                        const startTimeB = parseEPGDate(b.getAttribute('start'));
+                        return startTimeA - startTimeB;
+                    });
+                
+                if (futureProgrammes.length === 0) {
+                    modalScheduleList.innerHTML = '<p class="text-gray-400 italic text-center py-4">Nenhuma programação disponível para as próximas 24 horas</p>';
+                } else {
+                    const firstProgrammeDate = parseEPGDate(futureProgrammes[0].getAttribute('start'));
+                    const dateHeader = document.createElement('div');
+                    dateHeader.className = 'text-vibrant-orange font-bold text-lg mb-2 border-b border-gray-700 pb-1';
+                    dateHeader.textContent = firstProgrammeDate.toLocaleDateString('pt-BR', { 
+                        weekday: 'long', 
+                        day: '2-digit', 
+                        month: '2-digit', 
+                        year: 'numeric' 
+                    });
+                    modalScheduleList.appendChild(dateHeader);
+                    
+                    futureProgrammes.forEach(programme => {
+                        const startTime = parseEPGDate(programme.getAttribute('start'));
+                        const endTime = parseEPGDate(programme.getAttribute('stop'));
+                        const title = programme.getElementsByTagName('title')[0]?.textContent || 'Programa sem título';
+                        const description = programme.getElementsByTagName('desc')[0]?.textContent || '';
+                        
+                        let ratingValue = null;
+                        const ratingElements = programme.getElementsByTagName('rating');
+                        if (ratingElements.length > 0) {
+                            const valueElement = ratingElements[0].getElementsByTagName('value')[0];
+                            if (valueElement) ratingValue = valueElement.textContent;
+                        }
+                        
+                        const programmeItem = document.createElement('div');
+                        programmeItem.className = 'bg-gray-800 bg-opacity-30 rounded-md p-3 mb-2';
+                        
+                        const now = new Date();
+                        if (startTime <= now && endTime > now) {
+                            programmeItem.classList.add('border', 'border-vibrant-orange');
+                        }
+                        
+                        const timeElement = document.createElement('div');
+                        timeElement.className = 'flex items-center text-sm font-medium text-vibrant-orange mb-1';
+                        
+                        const startWeekday = weekdaysShort[startTime.getDay()];
+                        const endWeekday = weekdaysShort[endTime.getDay()];
+                        
+                        timeElement.innerHTML = `${startTime.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })} | ${startWeekday} - ${endTime.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })} | ${endWeekday}`;
+                        
+                        if (startTime <= now && endTime > now) {
+                            const liveIndicator = document.createElement('span');
+                            liveIndicator.className = 'live-indicator';
+                            liveIndicator.textContent = 'AO VIVO';
+                            timeElement.appendChild(liveIndicator);
+                        }
+                        
+                        const titleElement = document.createElement('div');
+                        titleElement.className = 'font-medium';
+                        titleElement.textContent = title;
+                        
+                        const ratingImageUrl = getRatingImage(ratingValue);
+                        if (ratingImageUrl) {
+                            const ratingImg = document.createElement('img');
+                            ratingImg.className = 'rating-icon ml-2';
+                            ratingImg.src = ratingImageUrl;
+                            ratingImg.alt = `Classificação ${ratingValue}`;
+                            titleElement.appendChild(ratingImg);
+                        }
+                        
+                        programmeItem.appendChild(timeElement);
+                        programmeItem.appendChild(titleElement);
+                        
+                        if (description) {
+                            const descElement = document.createElement('div');
+                            descElement.className = 'text-sm text-gray-300 mt-1';
+                            descElement.textContent = description;
+                            programmeItem.appendChild(descElement);
+                        }
+                        
+                        modalScheduleList.appendChild(programmeItem);
+                    });
+                }
+                
+                modal.style.display = 'block';
+            }
+            
+            // Função para buscar trailer de um filme
+            async function buscarTrailer(tituloFilme) {
+                // Verificar cache primeiro
+                if (trailerCache[tituloFilme]) {
+                    mostrarTrailer(trailerCache[tituloFilme]);
+                    return;
+                }
+                
+                try {
+                    // Primeiro busca o ID do filme
+                    const searchResponse = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${encodeURIComponent(tituloFilme)}&language=pt-BR`);
+                    const searchData = await searchResponse.json();
+                    
+                    if (searchData.results && searchData.results.length > 0) {
+                        const filmeId = searchData.results[0].id;
+                        
+                        // Agora busca os vídeos do filme
+                        const videosResponse = await fetch(`https://api.themoviedb.org/3/movie/${filmeId}/videos?api_key=${tmdbApiKey}&language=pt-BR`);
+                        const videosData = await videosResponse.json();
+                        
+                        if (videosData.results && videosData.results.length > 0) {
+                            // Encontrar o primeiro trailer do YouTube
+                            const trailer = videosData.results.find(video => 
+                                video.site === 'YouTube' && video.type === 'Trailer'
+                            );
+                            
+                            if (trailer) {
+                                const trailerUrl = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
+                                // Salva no cache
+                                trailerCache[tituloFilme] = trailerUrl;
+                                localStorage.setItem('trailerCache', JSON.stringify(trailerCache));
+                                mostrarTrailer(trailerUrl);
+                            } else {
+                                mostrarTrailerNaoEncontrado();
+                            }
+                        } else {
+                            mostrarTrailerNaoEncontrado();
                         }
                     } else {
-                        if (b.dataset.category === 'all') {
-                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
-                            b.classList.add('bg-blue-600', 'hover:bg-blue-700');
-                        } else if (b.dataset.category === 'favorites') {
-                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
-                            b.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
-                        } else {
-                            b.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                            b.classList.add('bg-slate-700', 'hover:bg-slate-600');
+                        mostrarTrailerNaoEncontrado();
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar trailer:', error);
+                    mostrarTrailerNaoEncontrado();
+                }
+            }
+            
+            function mostrarTrailer(trailerUrl) {
+                trailerNotFound.classList.add('hidden');
+                
+                // Cria o iframe
+                const iframe = document.createElement('iframe');
+                iframe.className = 'trailer-iframe';
+                iframe.src = trailerUrl;
+                iframe.setAttribute('allowfullscreen', '');
+                iframe.setAttribute('allow', 'autoplay');
+                
+                // Limpa o container e adiciona o iframe
+                trailerContainer.innerHTML = '';
+                trailerContainer.appendChild(iframe);
+                
+                // Mostra o modal
+                trailerModal.style.display = 'block';
+            }
+            
+            function mostrarTrailerNaoEncontrado() {
+                trailerContainer.innerHTML = '';
+                trailerNotFound.classList.remove('hidden');
+                trailerModal.style.display = 'block';
+            }
+            
+            async function carregarFilmes() {
+                const container = document.getElementById("filmes");
+                container.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+                
+                const canais = [
+                    "Telecine Action", "Telecine Premium", "Telecine Pipoca", "Megapix", "HBO Family", "HBO", "HBO2",
+                    "Cinemax", "Telecine Touch", "Paramount", "Telecine Fun"
+                ];
+                
+                try {
+                    const response = await fetch(epgXmlUrl);
+                    const xmlText = await response.text();
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(xmlText, "text/xml");
+                    
+                    const programas = Array.from(xml.getElementsByTagName("programme"));
+                    const hoje = new Date();
+                    const hojeStr = hoje.toISOString().split("T")[0].replace(/-/g, "");
+                    
+                    const titulosUnicos = new Set();
+                    container.innerHTML = "";
+                    
+                    for (const canal of canais) {
+                        const programasDoCanal = programas.filter(p => {
+                            const channel = p.getAttribute("channel") || "";
+                            const start = p.getAttribute("start") || "";
+                            
+                            const startTime = new Date(
+                                parseInt(start.slice(0, 4)),
+                                parseInt(start.slice(4, 6)) - 1,
+                                parseInt(start.slice(6, 8)),
+                                parseInt(start.slice(8, 10)),
+                                parseInt(start.slice(10, 12))
+                            );
+                            
+                            return channel.toLowerCase().includes(canal.toLowerCase()) &&
+                                   start.startsWith(hojeStr) &&
+                                   startTime >= new Date();
+                        });
+                        
+                        for (const filme of programasDoCanal) {
+                            const titleRaw = filme.getElementsByTagName("title")[0]?.textContent || "Sem título";
+                            const titleClean = titleRaw.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+                            
+                            if (titulosUnicos.has(titleClean)) continue;
+                            
+                            const img = await buscarImagemFilme(titleRaw);
+                            if (img.includes("via.placeholder.com")) continue;
+                            
+                            titulosUnicos.add(titleClean);
+                            
+                            const channel = filme.getAttribute("channel");
+                            const start = filme.getAttribute("start");
+                            const horario = start ? start.slice(8, 10) + ":" + start.slice(10, 12) : "--:--";
+                            const rating = filme.getElementsByTagName("rating")[0]?.textContent || "L";
+                            
+                            // Obter logo do canal
+                            let channelLogo = '';
+                            for (const [key, url] of Object.entries(channelLogos)) {
+                                if (channel.includes(key)) {
+                                    channelLogo = `<img src="${url}" alt="${key}" class="channel-logo">`;
+                                    break;
+                                }
+                            }
+                            
+                            const card = document.createElement("div");
+                            card.className = "movie-card";
+                            card.innerHTML = `
+                                <img src="${img}" alt="${titleRaw}" class="w-full h-60 object-cover mb-2 rounded" loading="lazy">
+                                <h3 class="text-sm font-bold text-white">${titleRaw}</h3>
+                                <div class="flex items-center mt-1">
+                                    ${channelLogo}
+                                    <p class="text-xs text-gray-300">${channel}</p>
+                                </div>
+                                <p class="text-xs text-gray-300">Horário: ${horario}</p>
+                                <p class="text-xs text-yellow-400">Classificação: ${rating}</p>
+                                <button class="mt-2 w-full py-1 bg-vibrant-orange text-white rounded text-xs hover:bg-orange-600 transition-colors ver-trailer-btn" data-titulo="${titleRaw}">
+                                    Ver Trailer
+                                </button>
+                            `;
+                            container.appendChild(card);
+                            
+                            // Adicionar evento de clique ao botão de trailer
+                            card.querySelector('.ver-trailer-btn').addEventListener('click', (e) => {
+                                buscarTrailer(e.target.dataset.titulo);
+                            });
+                            
+                            break;
                         }
                     }
-                });
+                } catch (error) {
+                    console.error("Erro ao carregar filmes:", error);
+                    container.innerHTML = '<p class="text-red-400 text-center py-4">Erro ao carregar filmes</p>';
+                }
+            }
+            
+            async function buscarImagemFilme(tituloOriginal) {
+                const variacoes = [
+                    tituloOriginal,
+                    tituloOriginal.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
+                    tituloOriginal.split(":")[0],
+                    tituloOriginal.split("-")[0],
+                    tituloOriginal.replace(/\s+\d{4}$/, "")
+                ];
                 
-                renderChannels();
-            });
-        });
+                for (const titulo of variacoes) {
+                    try {
+                        const resposta = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${encodeURIComponent(titulo.trim())}`);
+                        const dados = await resposta.json();
+                        
+                        const filme = dados.results?.find(f => f.poster_path || f.backdrop_path);
+                        
+                        if (filme) {
+                            if (filme.poster_path) {
+                                return `https://image.tmdb.org/t/p/w500${filme.poster_path}`;
+                            } else if (filme.backdrop_path) {
+                                return `https://image.tmdb.org/t/p/w500${filme.backdrop_path}`;
+                            }
+                        }
+                    } catch (erro) {
+                        console.error("Erro ao buscar imagem:", titulo, erro);
+                    }
+                }
+                
+                return `https://via.placeholder.com/300x450?text=${encodeURIComponent(tituloOriginal)}`;
+            }
+            
+            // Funções auxiliares para eventos esportivos
+            function formatarDataHoraCompleta(date) {
+                const diasSemana = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+                const dia = date.getDate().toString().padStart(2, '0');
+                const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+                const hora = date.getHours().toString().padStart(2, '0');
+                const diaSemana = diasSemana[date.getDay()];
+                
+                return `${dia}/${mes} ${hora}h (${diaSemana})`;
+            }
+            
+            function getStatusEvento(dataEvento, agora) {
+                const inicio = new Date(dataEvento);
+                const fim = new Date(inicio);
+                fim.setHours(fim.getHours() + 2); // Assumindo duração de 2 horas
+                
+                if (inicio <= agora && fim > agora) return 'live';
+                if (inicio > agora && (inicio - agora) <= (5 * 60 * 60 * 1000)) return 'soon';
+                return 'upcoming';
+            }
+            
+            function corrigirNomeTime(nome) {
+                const correcoes = {
+                    "VT-": "",
+                    "brasil": "Brasil",
+                    "vitorias": "Vitória",
+                    "fla": "Flamengo",
+                    "flu": "Fluminense",
+                    "bot": "Botafogo",
+                    "cor": "Corinthians",
+                    "pal": "Palmeiras",
+                    "spfc": "São Paulo",
+                    "san": "Santos",
+                    "campeonato": "",
+                    "brasileiro": "",
+                    "libertadores": ""
+                };
+                
+                let nomeCorrigido = nome;
+                for (const [erro, correcao] of Object.entries(correcoes)) {
+                    nomeCorrigido = nomeCorrigido.replace(new RegExp(erro, 'gi'), correcao);
+                }
+                
+                // Capitalizar primeira letra
+                nomeCorrigido = nomeCorrigido.trim();
+                if (nomeCorrigido.length > 0) {
+                    nomeCorrigido = nomeCorrigido.charAt(0).toUpperCase() + nomeCorrigido.slice(1).toLowerCase();
+                }
+                
+                return nomeCorrigido || "Time desconhecido";
+            }
+            
+            function normalizarEsporte(titulo, desc) {
+                const texto = (titulo + desc).toLowerCase();
+                
+                if (/(futebol|brasileiro|brasileirão|paulista|carioca|libertadores|laliga|champions)/i.test(texto)) {
+                    return "Futebol";
+                }
+                if (/(ufc|mma|luta|mixed martial arts)/i.test(texto)) {
+                    return "UFC";
+                }
+                if (/box/i.test(texto)) {
+                    return "Boxe";
+                }
+                if (/(volei|vôlei)/i.test(texto)) {
+                    return "Vôlei";
+                }
+                if (/(nba|basquete)/i.test(texto)) {
+                    return "Basquete";
+                }
+                return "Outros Esportes";
+            }
+            
+            function extrairTimes(titulo) {
+                // Primeiro tenta encontrar padrão com "x" ou "vs"
+                const regexPadrao = /(.+?)\s+(?:vs|x|×)\s+(.+)/i;
+                const matchPadrao = titulo.match(regexPadrao);
+                if (matchPadrao) {
+                    return [corrigirNomeTime(matchPadrao[1]), corrigirNomeTime(matchPadrao[2])];
+                }
+                
+                // Se não encontrar, tenta dividir por hífen
+                const partes = titulo.split(/[-–]/);
+                if (partes.length >= 2) {
+                    return [corrigirNomeTime(partes[0]), corrigirNomeTime(partes[1])];
+                }
+                
+                // Se não conseguir, retorna o título original
+                return [corrigirNomeTime(titulo), ""];
+            }
+            
+            function getLogoCanalEsportivo(canalNome) {
+                for (const [canal, logo] of Object.entries(logosCanaisEsportivos)) {
+                    if (canalNome.includes(canal)) return logo;
+                }
+                return null;
+            }
+            
+            function criarCardEvento(evento) {
+                // Função auxiliar para encontrar o escudo mais adequado
+                const encontrarEscudo = (nomeTime) => {
+                    // Primeiro verifica se temos um escudo exato
+                    if (escudos[nomeTime]) return escudos[nomeTime];
+                    
+                    // Se não, procura por correspondência parcial
+                    for (const [time, escudo] of Object.entries(escudos)) {
+                        if (nomeTime.toLowerCase().includes(time.toLowerCase())) {
+                            return escudo;
+                        }
+                    }
+                    
+                    // Se não encontrar, usa um placeholder
+                    return `https://via.placeholder.com/80?text=${encodeURIComponent(nomeTime.substring(0, 2))}`;
+                };
 
-        closeModalButtons.forEach(btn => {
-            btn.addEventListener('click', closeModal);
-        });
+                const escudo1 = encontrarEscudo(evento.time1);
+                const escudo2 = encontrarEscudo(evento.time2);
+                const dataHora = formatarDataHoraCompleta(evento.data);
+                const logoCanal = getLogoCanalEsportivo(evento.canal);
+                
+                const card = document.createElement("div");
+                card.className = "sport-event-card";
+                
+                // Adiciona classes baseadas no status
+                if (evento.status === 'live') {
+                    card.classList.add("live");
+                } else if (evento.status === 'soon') {
+                    card.classList.add("soon");
+                }
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-bold text-orange-500">${evento.esporte}</span>
+                        <span class="text-xs text-gray-400">${dataHora}</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex flex-col items-center w-1/3">
+                            <img src="${escudo1}" alt="${evento.time1}" class="h-10 w-10 object-contain mb-1" onerror="this.onerror=null;this.src='https://via.placeholder.com/80?text=${encodeURIComponent(evento.time1.substring(0, 2))}'">
+                            <span class="text-sm text-center text-white">${evento.time1.length > 12 ? evento.time1.substring(0, 10) + '...' : evento.time1}</span>
+                        </div>
+                        <div class="text-xl font-bold text-white mx-2">X</div>
+                        <div class="flex flex-col items-center w-1/3">
+                            <img src="${escudo2}" alt="${evento.time2}" class="h-10 w-10 object-contain mb-1" onerror="this.onerror=null;this.src='https://via.placeholder.com/80?text=${encodeURIComponent(evento.time2.substring(0, 2))}'">
+                            <span class="text-sm text-center text-white">${evento.time2.length > 12 ? evento.time2.substring(0, 10) + '...' : evento.time2}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-center gap-2">
+                        ${logoCanal ? `<img src="${logoCanal}" alt="${evento.canal}" class="h-4">` : ''}
+                        <span class="text-xs text-gray-300">${evento.canal}</span>
+                        ${evento.status === 'live' ? '<span class="live-indicator ml-2">AO VIVO</span>' : ''}
+                        ${evento.status === 'soon' ? '<span class="soon-indicator ml-2">EM BREVE</span>' : ''}
+                    </div>
+                `;
+                
+                return card;
+            }
+            
+            function criarCardEventoMMA(evento) {
+                // Função para encontrar a imagem do lutador
+                const encontrarImagemLutador = (nomeLutador) => {
+                    // Procura pelo lutador (com tolerância a variações no nome)
+                    for (const [nome, img] of Object.entries(lutadoresUFC)) {
+                        if (nomeLutador.toLowerCase().includes(nome.toLowerCase())) {
+                            return img;
+                        }
+                    }
+                    
+                    // Se não encontrar, usa um placeholder genérico
+                    return `https://via.placeholder.com/150?text=${encodeURIComponent(nomeLutador.substring(0, 1))}`;
+                };
 
-        programModal.addEventListener('click', (e) => {
-            if (e.target === programModal) {
-                closeModal();
+                const imagemLutador1 = encontrarImagemLutador(evento.time1);
+                const imagemLutador2 = encontrarImagemLutador(evento.time2);
+                const dataHora = formatarDataHoraCompleta(evento.data);
+                const logoCanal = getLogoCanalEsportivo(evento.canal);
+                
+                const card = document.createElement("div");
+                card.className = "sport-event-card mma";
+                
+                // Adiciona classes baseadas no status
+                if (evento.status === 'live') {
+                    card.classList.add("live");
+                } else if (evento.status === 'soon') {
+                    card.classList.add("soon");
+                }
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-bold text-orange-500">${evento.esporte}</span>
+                        <span class="text-xs text-gray-400">${dataHora}</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex flex-col items-center w-1/3">
+                            <img src="${imagemLutador1}" alt="${evento.time1}" class="fighter-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/150?text=${encodeURIComponent(evento.time1.substring(0, 1))}'">
+                            <span class="fighter-name">${evento.time1.length > 12 ? evento.time1.substring(0, 10) + '...' : evento.time1}</span>
+                            <span class="fighter-nickname">${evento.time1.includes(' ') ? evento.time1.split(' ')[1] : ''}</span>
+                        </div>
+                        <div class="text-xl font-bold text-white mx-2">VS</div>
+                        <div class="flex flex-col items-center w-1/3">
+                            <img src="${imagemLutador2}" alt="${evento.time2}" class="fighter-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/150?text=${encodeURIComponent(evento.time2.substring(0, 1))}'">
+                            <span class="fighter-name">${evento.time2.length > 12 ? evento.time2.substring(0, 10) + '...' : evento.time2}</span>
+                            <span class="fighter-nickname">${evento.time2.includes(' ') ? evento.time2.split(' ')[1] : ''}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-center gap-2">
+                        ${logoCanal ? `<img src="${logoCanal}" alt="${evento.canal}" class="h-4">` : ''}
+                        <span class="text-xs text-gray-300">${evento.canal}</span>
+                        ${evento.status === 'live' ? '<span class="live-indicator ml-2">AO VIVO</span>' : ''}
+                        ${evento.status === 'soon' ? '<span class="soon-indicator ml-2">EM BREVE</span>' : ''}
+                    </div>
+                `;
+                
+                return card;
+            }
+            
+            async function carregarEventosEsportivos() {
+                const container = document.getElementById("jogos-container");
+                container.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+                
+                try {
+                    const eventosMap = new Map();
+                    const now = new Date();
+                    
+                    for (const url of sportEventsUrls) {
+                        const res = await fetch(url);
+                        const xmlText = await res.text();
+                        const xml = new DOMParser().parseFromString(xmlText, "text/xml");
+                        
+                        Array.from(xml.getElementsByTagName("programme")).forEach(prog => {
+                            const titulo = prog.getElementsByTagName("title")[0]?.textContent || "";
+                            const desc = prog.getElementsByTagName("desc")[0]?.textContent || "";
+                            const canal = prog.getAttribute("channel") || "";
+                            
+                            // Verifica se é um canal esportivo
+                            const isCanalEsportivo = canaisEsportivos.some(c => canal.includes(c));
+                            if (!isCanalEsportivo) return;
+                            
+                            // Verifica se parece ser um evento esportivo (contém times ou palavras-chave)
+                            const isEventoEsportivo = /(vs|x|×|jogo|partida|campeonato|liga|luta|ufc|mma)/i.test(titulo + desc);
+                            if (!isEventoEsportivo) return;
+                            
+                            const inicio = prog.getAttribute("start");
+                            const data = new Date(
+                                parseInt(inicio.slice(0, 4)),
+                                parseInt(inicio.slice(4, 6)) - 1,
+                                parseInt(inicio.slice(6, 8)),
+                                parseInt(inicio.slice(8, 10)),
+                                parseInt(inicio.slice(10, 12))
+                            );
+                            
+                            // Ajustar para o dia selecionado
+                            const hoje = new Date();
+                            hoje.setDate(hoje.getDate() + currentDayOffset);
+                            hoje.setHours(0, 0, 0, 0);
+                            
+                            const amanha = new Date(hoje);
+                            amanha.setDate(amanha.getDate() + 1);
+                            
+                            if (data < hoje || data >= amanha) return;
+                            
+                            // Determina o esporte
+                            const esporte = normalizarEsporte(titulo, desc);
+                            
+                            // Filtra por esporte selecionado
+                            if (currentSportFilter !== "Futebol" && esporte !== currentSportFilter) return;
+                            
+                            // Extrai os participantes
+                            let [time1, time2] = extrairTimes(titulo);
+                            
+                            // Para UFC/MMA, ajusta os nomes
+                            if (esporte === "UFC") {
+                                // Tenta extrair os nomes dos lutadores
+                                const lutadores = titulo.match(/(.+?)\s+(?:vs|x|×)\s+(.+)/i) || 
+                                                 titulo.match(/(.+?)\s+(?:vs|x|×)\s+(.+)/i) || 
+                                                 [null, time1, time2];
+                                time1 = lutadores[1] || time1;
+                                time2 = lutadores[2] || time2;
+                            }
+                            
+                            if (!time1 || !time2) return;
+                            
+                            // Determina o status do evento
+                            const status = getStatusEvento(data, now);
+                            
+                            // Cria o objeto do evento
+                            const evento = {
+                                titulo, 
+                                data, 
+                                time1, 
+                                time2, 
+                                esporte,
+                                canal,
+                                status
+                            };
+                            
+                            // Adiciona ao mapa (evita duplicatas)
+                            eventosMap.set(`${time1}-${time2}-${data.getTime()}`, evento);
+                        });
+                    }
+                    
+                    container.innerHTML = "";
+                    const eventos = Array.from(eventosMap.values())
+                        .sort((a, b) => a.data - b.data);
+                    
+                    if (eventos.length === 0) {
+                        container.innerHTML = `<p class="text-gray-400 text-center py-4">Nenhum evento encontrado para ${currentSportFilter}</p>`;
+                        return;
+                    }
+                    
+                    // Agrupa por data
+                    const eventosPorData = {};
+                    eventos.forEach(evento => {
+                        const dataKey = evento.data.toLocaleDateString('pt-BR');
+                        if (!eventosPorData[dataKey]) {
+                            eventosPorData[dataKey] = [];
+                        }
+                        eventosPorData[dataKey].push(evento);
+                    });
+                    
+                    // Adiciona cabeçalho de data e os cards
+                    for (const [dataStr, eventosDaData] of Object.entries(eventosPorData)) {
+                        const dataHeader = document.createElement("div");
+                        dataHeader.className = "text-vibrant-orange font-bold text-sm mb-2 mt-4 w-full";
+                        dataHeader.textContent = `📅 ${dataStr}`;
+                        container.appendChild(dataHeader);
+                        
+                        eventosDaData.forEach(evento => {
+                            // Decide qual tipo de card usar baseado no esporte
+                            if (evento.esporte === "UFC") {
+                                container.appendChild(criarCardEventoMMA(evento));
+                            } else {
+                                container.appendChild(criarCardEvento(evento));
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar eventos esportivos:", error);
+                    container.innerHTML = `<p class="text-red-400 text-center py-4">Erro ao carregar eventos</p>`;
+                }
             }
         });
+    
+function carregarFilmes() {
+    const filmesContainer = document.getElementById("filmes");
+    filmesContainer.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    const diasSemana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+    const filmesUnicos = new Set();
+    const filmes = [];
+    const hoje = new Date();
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', loadEPG);
-    </script>
+    fetch("https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml")
+        .then(response => response.text())
+        .then(xmlText => {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            const programmes = Array.from(xmlDoc.getElementsByTagName("programme"));
+
+            for (let diaOffset = 0; diaOffset <= 3; diaOffset++) {
+                const data = new Date();
+                data.setDate(hoje.getDate() + diaOffset);
+                const inicioDia = new Date(data.setHours(0, 0, 0, 0));
+                const fimDia = new Date(data.setHours(23, 59, 59, 999));
+
+                programmes.forEach(programme => {
+                    const canal = programme.getAttribute("channel");
+                    const titulo = programme.getElementsByTagName("title")[0]?.textContent.trim() || "";
+                    const inicio = parseEPGDate(programme.getAttribute("start"));
+                    const desc = programme.getElementsByTagName("desc")[0]?.textContent || "";
+
+                    if (!titulo || inicio < inicioDia || inicio > fimDia) return;
+
+                    const nomeNormalizado = titulo.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/gi, "");
+
+                    if (filmesUnicos.has(nomeNormalizado)) return;
+
+                    if (titulo.length < 2 || titulo.includes("(") || titulo.includes("...")) return;
+
+                    if (!desc.toLowerCase().includes("filme") && !desc.toLowerCase().includes("cinema") && !desc.toLowerCase().includes("movie")) return;
+
+                    filmesUnicos.add(nomeNormalizado);
+                    filmes.push({ titulo, inicio, canal });
+                });
+            }
+
+            filmes.sort((a, b) => a.inicio - b.inicio);
+            filmesContainer.innerHTML = "";
+
+            filmes.forEach(filme => {
+                const horario = filme.inicio.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+                const diaSemana = diasSemana[filme.inicio.getDay()];
+
+                const card = document.createElement("div");
+                card.className = "movie-card";
+                card.innerHTML = `
+                    <h3 class="text-sm font-semibold mb-1">${filme.titulo}</h3>
+                    <p class="text-xs text-gray-300">${horario} | ${diaSemana}</p>
+                `;
+                filmesContainer.appendChild(card);
+            });
+        })
+        .catch(() => {
+            filmesContainer.innerHTML = "<p class='text-red-500 text-sm'>Erro ao carregar filmes.</p>";
+        });
+}
+
+</script>
+<div class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center" id="trailerModal">
+<div class="bg-gray-900 p-4 rounded-lg shadow-lg relative w-full max-w-3xl">
+<button class="absolute top-2 right-2 text-white text-2xl" onclick="fecharModal()">×</button>
+<div class="aspect-video w-full" id="trailerContainer">
+<!-- Iframe será inserido aqui -->
+</div>
+</div>
+</div>
+<script>
+const apiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
+const cache = {};
+
+async function buscarTrailer(titulo) {
+  if (cache[titulo]) {
+    exibirModal(cache[titulo]);
+    return;
+  }
+
+  try {
+    const busca = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(titulo)}`);
+    const dadosBusca = await busca.json();
+    const filme = dadosBusca.results[0];
+    if (!filme) return alert("Trailer não encontrado");
+
+    const videos = await fetch(`https://api.themoviedb.org/3/movie/${filme.id}/videos?api_key=${apiKey}`);
+    const dadosVideos = await videos.json();
+    const trailer = dadosVideos.results.find(v => v.type === "Trailer" && v.site === "YouTube");
+    if (!trailer) return alert("Trailer não encontrado");
+
+    const videoURL = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
+    cache[titulo] = videoURL;
+    exibirModal(videoURL);
+  } catch (error) {
+    console.error("Erro ao buscar trailer:", error);
+    alert("Trailer não encontrado");
+  }
+}
+
+function exibirModal(videoURL) {
+  document.getElementById("trailerContainer").innerHTML =
+    `<iframe class="w-full h-full" src="${videoURL}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  document.getElementById("trailerModal").classList.remove("hidden");
+  document.getElementById("trailerModal").classList.add("flex");
+}
+
+function fecharModal() {
+  document.getElementById("trailerModal").classList.add("hidden");
+  document.getElementById("trailerModal").classList.remove("flex");
+  document.getElementById("trailerContainer").innerHTML = "";
+}
+
+function carregarFilmes() {
+    const filmesContainer = document.getElementById("filmes");
+    filmesContainer.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    const diasSemana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+    const filmesUnicos = new Set();
+    const filmes = [];
+    const hoje = new Date();
+
+    fetch("https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml")
+        .then(response => response.text())
+        .then(xmlText => {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+            const programmes = Array.from(xmlDoc.getElementsByTagName("programme"));
+
+            for (let diaOffset = 0; diaOffset <= 3; diaOffset++) {
+                const data = new Date();
+                data.setDate(hoje.getDate() + diaOffset);
+                const inicioDia = new Date(data.setHours(0, 0, 0, 0));
+                const fimDia = new Date(data.setHours(23, 59, 59, 999));
+
+                programmes.forEach(programme => {
+                    const canal = programme.getAttribute("channel");
+                    const titulo = programme.getElementsByTagName("title")[0]?.textContent.trim() || "";
+                    const inicio = parseEPGDate(programme.getAttribute("start"));
+                    const desc = programme.getElementsByTagName("desc")[0]?.textContent || "";
+
+                    if (!titulo || inicio < inicioDia || inicio > fimDia) return;
+
+                    const nomeNormalizado = titulo.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/gi, "");
+
+                    if (filmesUnicos.has(nomeNormalizado)) return;
+
+                    if (titulo.length < 2 || titulo.includes("(") || titulo.includes("...")) return;
+
+                    if (!desc.toLowerCase().includes("filme") && !desc.toLowerCase().includes("cinema") && !desc.toLowerCase().includes("movie")) return;
+
+                    filmesUnicos.add(nomeNormalizado);
+                    filmes.push({ titulo, inicio, canal });
+                });
+            }
+
+            filmes.sort((a, b) => a.inicio - b.inicio);
+            filmesContainer.innerHTML = "";
+
+            filmes.forEach(filme => {
+                const horario = filme.inicio.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+                const diaSemana = diasSemana[filme.inicio.getDay()];
+
+                const card = document.createElement("div");
+                card.className = "movie-card";
+                card.innerHTML = `
+                    <h3 class="text-sm font-semibold mb-1">${filme.titulo}</h3>
+                    <p class="text-xs text-gray-300">${horario} | ${diaSemana}</p>
+                `;
+                filmesContainer.appendChild(card);
+            });
+        })
+        .catch(() => {
+            filmesContainer.innerHTML = "<p class='text-red-500 text-sm'>Erro ao carregar filmes.</p>";
+        });
+}
+
+</script>
 </body>
 </html>
