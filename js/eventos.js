@@ -6,7 +6,10 @@ async function carregarEventosEsportivos() {
     "SporTV", "ESPN", "Premiere", "Combate", "Fox Sports", "Band Sports"
   ];
 
-  const sportEventsUrls = [epgXmlUrl]; // Pode adicionar mais XMLs se quiser
+  const sportEventsUrls = [
+    "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/claro.xml",
+    "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/epg.xml"
+  ];
 
   try {
     const eventosMap = new Map();
