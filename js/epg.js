@@ -1,5 +1,5 @@
 // Variáveis principais
-const epgXmlUrl = "https://corsproxy.io/?https://raw.githubusercontent.com/guiamax/tvxml/main/xml_guia.xml";
+const epgXmlUrl = "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml";
 const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
 const youtubeApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
 
