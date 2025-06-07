@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaxPlay TV - Guia de Programação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        .channel-card {
+            transition: all 0.3s ease;
+            background-color: #1e293b;
+        }
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        .program-item {
+            border-left: 3px solid #3b82f6;
+        }
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .favorite {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="bg-slate-900 py-4 px-6 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" alt="MaxPlay TV Logo" class="h-12 mr-4">
+                <h1 class="text-2xl font-bold text-blue-400">Guia de Programação</h1>
+            </div>
+            <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Buscar canal ou programa..." 
+                           class="bg-slate-800 text-white px-4 py-2 rounded-lg w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
+                </div>
+                <button id="reloadBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-sync-alt mr-2"></i> Recarregar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-6 px-4">
+        <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto pb-2">
+            <button class="category-btn px-4 py-2 rounded-full bg-blue-600 text-white" data-category="all">Todos</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="movies">Filmes/Séries</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="documentaries">Documentários</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="kids">Infantis</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="sports">Esportes</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="open">Abertos</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="news">Notícias</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-600" data-category="adult">Adulto</button>
+            <button class="category-btn px-4 py-2 rounded-full bg-yellow-600 hover:bg-yellow-700" data-category="favorites">Favoritos</button>
+        </div>
+
+        <div id="loading" class="text-center py-12">
+            <i class="fas fa-circle-notch fa-spin text-4xl text-blue-400"></i>
+            <p class="mt-4">Carregando programação...</p>
+        </div>
+
+        <div id="channelsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
+            <!-- Canais serão inseridos aqui via JavaScript -->
+        </div>
+
+        <div id="noResults" class="text-center py-12 hidden">
+            <i class="fas fa-tv text-4xl text-slate-500"></i>
+            <p class="mt-4 text-xl">Nenhum canal encontrado</p>
+            <p class="text-slate-400">Tente ajustar sua busca ou filtro</p>
+        </div>
+    </main>
+
+    <!-- Modal de Programação Completa -->
+    <div id="programModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 invisible opacity-0">
+        <div class="bg-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center bg-slate-900 px-6 py-4 border-b border-slate-700">
+                <h2 id="modalChannelName" class="text-xl font-bold"></h2>
+                <button id="closeModal" class="text-slate-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div id="modalChannelLogo" class="flex justify-center mb-6">
+                    <img src="" alt="" class="h-20">
+                </div>
+                <div id="modalProgramList" class="space-y-4">
+                    <!-- Programas serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+            <div class="bg-slate-900 px-6 py-3 border-t border-slate-700 text-right">
+                <button id="closeModalBottom" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Objeto com os logos dos canais
+        const channelLogos = {
+            "Globo": "https://i.imgur.com/4QZQZ9Q.png",
+            "SBT": "https://i.imgur.com/4QZQZ9Q.png",
+            "Record": "https://i.imgur.com/4QZQZ9Q.png",
+            "Band": "https://i.imgur.com/4QZQZ9Q.png",
+            "RedeTV!": "https://i.imgur.com/4QZQZ9Q.png",
+            "Cultura": "https://i.imgur.com/4QZQZ9Q.png",
+            "TV Brasil": "https://i.imgur.com/4QZQZ9Q.png",
+            "HBO": "https://i.imgur.com/4QZQZ9Q.png",
+            "Max": "https://i.imgur.com/4QZQZ9Q.png",
+            "Fox": "https://i.imgur.com/4QZQZ9Q.png",
+            "Discovery": "https://i.imgur.com/4QZQZ9Q.png",
+            "National Geographic": "https://i.imgur.com/4QZQZ9Q.png",
+            "Animal Planet": "https://i.imgur.com/4QZQZ9Q.png",
+            "History": "https://i.imgur.com/4QZQZ9Q.png",
+            "Cartoon Network": "https://i.imgur.com/4QZQZ9Q.png",
+            "Nickelodeon": "https://i.imgur.com/4QZQZ9Q.png",
+            "Disney Channel": "https://i.imgur.com/4QZQZ9Q.png",
+            "ESPN": "https://i.imgur.com/4QZQZ9Q.png",
+            "Fox Sports": "https://i.imgur.com/4QZQZ9Q.png",
+            "BandSports": "https://i.imgur.com/4QZQZ9Q.png",
+            "CNN": "https://i.imgur.com/4QZQZ9Q.png",
+            "GloboNews": "https://i.imgur.com/4QZQZ9Q.png",
+            "BandNews": "https://i.imgur.com/4QZQZ9Q.png",
+            "Playboy": "https://i.imgur.com/4QZQZ9Q.png",
+            "Sexy Hot": "https://i.imgur.com/4QZQZ9Q.png"
+        };
+
+        // Categorias dos canais
+        const channelCategories = {
+            "Globo": "open",
+            "SBT": "open",
+            "Record": "open",
+            "Band": "open",
+            "RedeTV!": "open",
+            "Cultura": "open",
+            "TV Brasil": "open",
+            "HBO": "movies",
+            "Max": "movies",
+            "Fox": "movies",
+            "Discovery": "documentaries",
+            "National Geographic": "documentaries",
+            "Animal Planet": "documentaries",
+            "History": "documentaries",
+            "Cartoon Network": "kids",
+            "Nickelodeon": "kids",
+            "Disney Channel": "kids",
+            "ESPN": "sports",
+            "Fox Sports": "sports",
+            "BandSports": "sports",
+            "CNN": "news",
+            "GloboNews": "news",
+            "BandNews": "news",
+            "Playboy": "adult",
+            "Sexy Hot": "adult"
+        };
+
+        // Variáveis globais
+        let epgData = [];
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let currentCategory = 'all';
+        let currentSearch = '';
+
+        // DOM Elements
+        const channelsContainer = document.getElementById('channelsContainer');
+        const loadingElement = document.getElementById('loading');
+        const noResultsElement = document.getElementById('noResults');
+        const searchInput = document.getElementById('searchInput');
+        const reloadBtn = document.getElementById('reloadBtn');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const programModal = document.getElementById('programModal');
+        const closeModalButtons = document.querySelectorAll('#closeModal, #closeModalBottom');
+        const modalChannelName = document.getElementById('modalChannelName');
+        const modalChannelLogo = document.getElementById('modalChannelLogo').querySelector('img');
+        const modalProgramList = document.getElementById('modalProgramList');
+
+        // Função para carregar o EPG
+        async function loadEPG() {
+            try {
+                loadingElement.classList.remove('hidden');
+                channelsContainer.classList.add('hidden');
+                noResultsElement.classList.add('hidden');
+
+                const response = await fetch('https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml');
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+                epgData = [];
+                const channels = xmlDoc.getElementsByTagName('channel');
+                
+                for (let channel of channels) {
+                    const channelId = channel.getAttribute('id');
+                    const channelName = channel.querySelector('display-name').textContent;
+                    
+                    const programs = xmlDoc.querySelectorAll(`programme[channel="${channelId}"]`);
+                    const programList = [];
+                    
+                    for (let program of programs) {
+                        const startTime = program.getAttribute('start');
+                        const endTime = program.getAttribute('stop');
+                        const title = program.querySelector('title')?.textContent || 'Programa desconhecido';
+                        const desc = program.querySelector('desc')?.textContent || 'Sem descrição disponível';
+                        
+                        programList.push({
+                            start: formatTime(startTime),
+                            end: formatTime(endTime),
+                            title,
+                            desc
+                        });
+                    }
+                    
+                    if (programList.length > 0) {
+                        epgData.push({
+                            id: channelId,
+                            name: channelName,
+                            programs: programList,
+                            category: channelCategories[channelName] || 'other',
+                            logo: channelLogos[channelName] || 'https://i.imgur.com/4QZQZ9Q.png'
+                        });
+                    }
+                }
+
+                renderChannels();
+            } catch (error) {
+                console.error('Erro ao carregar EPG:', error);
+                loadingElement.innerHTML = `
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+                    <p class="mt-4">Falha ao carregar a programação</p>
+                    <button onclick="loadEPG()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        Tentar novamente
+                    </button>
+                `;
+            }
+        }
+
+        // Formatar hora
+        function formatTime(timeString) {
+            const date = new Date(timeString);
+            return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Renderizar canais
+        function renderChannels() {
+            loadingElement.classList.add('hidden');
+            
+            let filteredChannels = [...epgData];
+            
+            // Aplicar filtro de categoria
+            if (currentCategory !== 'all') {
+                if (currentCategory === 'favorites') {
+                    filteredChannels = filteredChannels.filter(channel => favorites.includes(channel.name));
+                } else {
+                    filteredChannels = filteredChannels.filter(channel => channel.category === currentCategory);
+                }
+            }
+            
+            // Aplicar filtro de busca
+            if (currentSearch) {
+                const searchTerm = currentSearch.toLowerCase();
+                filteredChannels = filteredChannels.filter(channel => 
+                    channel.name.toLowerCase().includes(searchTerm) || 
+                    channel.programs.some(program => 
+                        program.title.toLowerCase().includes(searchTerm) || 
+                        program.desc.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Ordenar canais (favoritos primeiro, depois por nome)
+            filteredChannels.sort((a, b) => {
+                const aIsFavorite = favorites.includes(a.name);
+                const bIsFavorite = favorites.includes(b.name);
+                
+                if (aIsFavorite && !bIsFavorite) return -1;
+                if (!aIsFavorite && bIsFavorite) return 1;
+                return a.name.localeCompare(b.name);
+            });
+            
+            // Limpar container
+            channelsContainer.innerHTML = '';
+            
+            // Adicionar canais filtrados
+            filteredChannels.forEach(channel => {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+                
+                // Filtrar programas que estão acontecendo agora ou próximos
+                const currentPrograms = channel.programs.filter(program => {
+                    const [hours, minutes] = program.start.split(':').map(Number);
+                    return (hours > currentHour) || 
+                           (hours === currentHour && minutes >= currentMinute);
+                }).slice(0, 2);
+                
+                const channelCard = document.createElement('div');
+                channelCard.className = `channel-card rounded-lg overflow-hidden shadow-lg ${favorites.includes(channel.name) ? 'border-l-4 border-yellow-400' : ''}`;
+                channelCard.dataset.category = channel.category;
+                channelCard.dataset.name = channel.name;
+                
+                channelCard.innerHTML = `
+                    <div class="bg-slate-800 p-4 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="${channel.logo}" alt="${channel.name}" class="h-10 mr-3">
+                            <h3 class="font-semibold">${channel.name}</h3>
+                        </div>
+                        <button class="favorite-btn text-xl ${favorites.includes(channel.name) ? 'favorite' : 'text-slate-400'}" data-channel="${channel.name}">
+                            <i class="fas fa-star"></i>
+                        </button>
+                    </div>
+                    <div class="p-4 bg-slate-700">
+                        ${currentPrograms.length > 0 ? 
+                            currentPrograms.map(program => `
+                                <div class="program-item mb-3 last:mb-0 pl-3">
+                                    <div class="text-blue-400 text-sm font-medium">${program.start} - ${program.end}</div>
+                                    <h4 class="font-medium">${program.title}</h4>
+                                    <p class="text-slate-300 text-sm mt-1 line-clamp-2">${program.desc}</p>
+                                </div>
+                            `).join('') : 
+                            '<p class="text-slate-400 text-sm">Programação não disponível</p>'
+                        }
+                    </div>
+                    <div class="bg-slate-900 px-4 py-3 text-center">
+                        <button class="full-schedule-btn text-blue-400 hover:text-blue-300 text-sm font-medium" data-channel="${channel.name}">
+                            Programação Completa <i class="fas fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                
+                channelsContainer.appendChild(channelCard);
+            });
+            
+            // Mostrar container ou mensagem de nenhum resultado
+            if (filteredChannels.length > 0) {
+                channelsContainer.classList.remove('hidden');
+                noResultsElement.classList.add('hidden');
+            } else {
+                channelsContainer.classList.add('hidden');
+                noResultsElement.classList.remove('hidden');
+            }
+            
+            // Adicionar eventos aos botões
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', toggleFavorite);
+            });
+            
+            document.querySelectorAll('.full-schedule-btn').forEach(btn => {
+                btn.addEventListener('click', showFullSchedule);
+            });
+        }
+
+        // Alternar favorito
+        function toggleFavorite(e) {
+            const channelName = e.currentTarget.dataset.channel;
+            const index = favorites.indexOf(channelName);
+            
+            if (index === -1) {
+                favorites.push(channelName);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderChannels();
+        }
+
+        // Mostrar programação completa
+        function showFullSchedule(e) {
+            const channelName = e.currentTarget.dataset.channel;
+            const channel = epgData.find(c => c.name === channelName);
+            
+            if (!channel) return;
+            
+            modalChannelName.textContent = channel.name;
+            modalChannelLogo.src = channel.logo;
+            modalChannelLogo.alt = channel.name;
+            
+            modalProgramList.innerHTML = channel.programs.map(program => `
+                <div class="program-item p-3 bg-slate-700 rounded-lg">
+                    <div class="flex justify-between items-start">
+                        <div class="text-blue-400 font-medium">${program.start} - ${program.end}</div>
+                        <div class="text-xs bg-slate-600 px-2 py-1 rounded">${channel.category.toUpperCase()}</div>
+                    </div>
+                    <h4 class="font-bold mt-1">${program.title}</h4>
+                    <p class="text-slate-300 text-sm mt-1">${program.desc}</p>
+                </div>
+            `).join('');
+            
+            programModal.classList.remove('invisible', 'opacity-0');
+            programModal.classList.add('visible', 'opacity-100');
+        }
+
+        // Fechar modal
+        function closeModal() {
+            programModal.classList.add('invisible', 'opacity-0');
+            programModal.classList.remove('visible', 'opacity-100');
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            renderChannels();
+        });
+
+        reloadBtn.addEventListener('click', loadEPG);
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentCategory = btn.dataset.category;
+                
+                // Atualizar estilos dos botões
+                categoryButtons.forEach(b => {
+                    if (b.dataset.category === currentCategory) {
+                        if (currentCategory === 'favorites') {
+                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                            b.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+                        } else if (currentCategory === 'all') {
+                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                            b.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                        } else {
+                            b.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                            b.classList.add('bg-slate-700', 'hover:bg-slate-600');
+                        }
+                    } else {
+                        if (b.dataset.category === 'all') {
+                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                            b.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                        } else if (b.dataset.category === 'favorites') {
+                            b.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                            b.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+                        } else {
+                            b.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                            b.classList.add('bg-slate-700', 'hover:bg-slate-600');
+                        }
+                    }
+                });
+                
+                renderChannels();
+            });
+        });
+
+        closeModalButtons.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+
+        programModal.addEventListener('click', (e) => {
+            if (e.target === programModal) {
+                closeModal();
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', loadEPG);
+    </script>
+</body>
+</html>
