@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MaxPlay TV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: 'Poppins', sans-serif;
+    }
+    .movie-card {
+      min-width: 180px;
+      max-width: 200px;
+      background-color: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 0.75rem;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .movie-card:hover {
+      transform: translateY(-5px);
+    }
+    .loading-spinner {
+      border: 4px solid rgba(255,255,255,0.1);
+      border-left-color: #ff6b00;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <h1 class="text-2xl font-bold text-orange-500 mb-4">🎬 FILMES PARA ASSISTIR HOJE</h1>
+  <div id="filmes" class="flex gap-4 overflow-x-auto pb-4">
+    <div class="loading-spinner mx-auto"></div>
+  </div>
+
+  <div class="trailer-modal hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex justify-center items-center" id="trailer-modal">
+    <div class="relative bg-gray-800 rounded p-4 max-w-2xl w-full">
+      <span class="absolute top-2 right-3 text-white text-2xl cursor-pointer" id="close-trailer">×</span>
+      <div id="trailer-container" class="relative w-full h-0" style="padding-bottom:56.25%;"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
+    const epgXmlUrl = "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml";
+    function parseEPGDate(d) {
+      return new Date(
+        parseInt(d.substr(0, 4)), 
+        parseInt(d.substr(4, 2)) - 1, 
+        parseInt(d.substr(6, 2)), 
+        parseInt(d.substr(8, 2)), 
+        parseInt(d.substr(10, 2))
+      );
+    }
+  </script>
+  <script src="js/filmes.js"></script>
+  <script src="js/trailer.js"></script>
+</body>
+</html>
