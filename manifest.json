@@ -1,0 +1,21 @@
+{
+  "name": "MaxPlay TV",
+  "short_name": "MaxPlay",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#ff6b00",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/BvbCr0jH/IMG-6850.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.postimg.cc/BvbCr0jH/IMG-6850.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
