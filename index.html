@@ -3,6 +3,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
+        <meta name="theme-color" content="#ff6b00">
+<link rel="manifest" href="manifest.json" />
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MaxPlay TV - Guia</title>
 <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
@@ -1790,6 +1792,22 @@
 <!-- Iframe será inserido aqui -->
 </div>
 </div>
+        </div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log("Service Worker registrado"))
+      .catch(error => console.error("Erro ao registrar Service Worker", error));
+  }
+
+  if ('Notification' in window && Notification.permission !== 'granted') {
+    Notification.requestPermission();
+  }
+</script>
+
+</body>
+</html>
 </div>
 </body>
 </html>
