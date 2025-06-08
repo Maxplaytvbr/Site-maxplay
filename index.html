@@ -5,10 +5,10 @@
 <meta charset="utf-8"/>
 <meta content="#ff6b00" name="theme-color"/>
 <link href="manifest.json" rel="manifest"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MaxPlay TV - Guia</title>
 <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
-<meta content="MaxPlay TV - Guia" property="og:title"/>
+<meta content="MaxPlay TV - Guia" property="og:title">
 <meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
 <meta content="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" property="og:image"/>
 <link href="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" rel="icon"/>
@@ -466,6 +466,15 @@ body {
             color: white !important; 
             border-bottom: 2px solid white; 
         }
+
+
+/* Toggle Switch */
+#toggle-theme:checked + .block {
+  background-color: #ff6b00;
+}
+#toggle-theme:checked + .block + .dot {
+  transform: translateX(24px);
+}
 </style>
 </meta></head>
 <body>
@@ -514,15 +523,22 @@ body {
 </svg>
 <span id="current-time-display">Carregando...</span>
 </div>
+<div class="mt-2">
+<label class="relative inline-block w-14 h-8 cursor-pointer" for="toggle-theme">
+<input class="sr-only" id="toggle-theme" type="checkbox"/>
+<div class="block bg-gray-600 w-full h-full rounded-full transition"></div>
+<div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+<span class="absolute left-2 top-1 text-xs text-white dark-icon">🌙</span>
+<span class="absolute right-2 top-1 text-xs text-white light-icon">☀️</span>
+</label>
+</div>
+
+
 <div class="text-sm text-gray-400">
                 Última atualização: <span id="last-update">Carregando...</span>
 </div>
 </div>
 </header>
-<button class="fixed top-4 right-4 z-50 text-xl bg-gray-700 bg-opacity-30 text-white px-2 py-1 rounded hover:bg-opacity-50 transition" id="toggle-theme" title="Alternar tema">
-  🌞
-</button>
-
 <!-- Seção de Filmes em Destaque -->
 <section class="px-4 py-6 text-white" id="filmes-destaque">
 <h2 class="text-2xl font-bold mb-1 text-orange-500">🎬 Destaques do Dia</h2>
@@ -1830,12 +1846,10 @@ body {
 </script>
 
 <script>
-const themeToggleBtn = document.getElementById('toggle-theme');
-
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('preferred-theme', theme);
-  themeToggleBtn.textContent = theme === 'dark' ? '🌞' : '🌙';
+  document.getElementById('toggle-theme').checked = theme === 'dark';
 }
 
 function detectSystemTheme() {
@@ -1846,15 +1860,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem('preferred-theme');
   const theme = savedTheme || detectSystemTheme();
   applyTheme(theme);
-});
 
-themeToggleBtn.addEventListener('click', () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  applyTheme(currentTheme);
+  const toggle = document.getElementById('toggle-theme');
+  if (toggle) {
+    toggle.addEventListener('change', () => {
+      applyTheme(toggle.checked ? 'dark' : 'light');
+    });
+  }
 });
-</script>
-</body>
+</script></body>
 </html>
-
-
-
