@@ -18,7 +18,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -41,16 +40,6 @@
             font-family: 'Poppins', sans-serif;
         }
         
-        body.dark {
-            background-color: #0f172a;
-            color: #f8fafc;
-        }
-        
-        body.light {
-            background-color: #f8fafc;
-            color: #0f172a;
-        }
-        
         /* Loader */
         .loading-spinner {
             border: 4px solid rgba(255, 255, 255, 0.1);
@@ -59,16 +48,6 @@
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
-        }
-        
-        .dark .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left-color: #ff6b00;
-        }
-        
-        .light .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #ff6b00;
         }
         
         @keyframes spin {
@@ -106,19 +85,10 @@
             overflow: hidden;
         }
         
-        .light .channel-card {
-            background-color: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 107, 0, 0.3);
-        }
-        
         .channel-card:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .light .channel-card:hover {
-            background-color: rgba(0, 0, 0, 0.1);
         }
         
         .channel-name {
@@ -136,10 +106,6 @@
         
         .programme-item:hover {
             background-color: rgba(255, 107, 0, 0.1);
-        }
-        
-        .light .programme-item:hover {
-            background-color: rgba(255, 107, 0, 0.05);
         }
         
         .programme-title, .programme-desc {
@@ -166,15 +132,6 @@
         
         .filter-btn:hover:not(.active) {
             background-color: rgba(255, 107, 0, 0.2);
-        }
-        
-        .light .filter-btn {
-            background-color: #e2e8f0;
-            color: #1e293b;
-        }
-        
-        .light .filter-btn:hover:not(.active) {
-            background-color: rgba(255, 107, 0, 0.1);
         }
         
         /* Filtro Favoritos */
@@ -216,10 +173,6 @@
             animation: modalFadeIn 0.3s;
         }
         
-        .light .modal-content {
-            background-color: #ffffff;
-        }
-        
         @keyframes modalFadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -231,10 +184,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .light .modal-header {
-            border-bottom: 1px solid #e2e8f0;
         }
         
         .modal-body {
@@ -277,10 +226,6 @@
             animation: modalFadeIn 0.3s;
         }
         
-        .light .trailer-modal-content {
-            background-color: #ffffff;
-        }
-        
         .trailer-iframe-container {
             position: relative;
             padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
@@ -303,10 +248,6 @@
             color: #fff;
         }
         
-        .light .trailer-not-found {
-            color: #1e293b;
-        }
-        
         /* Scrollbar personalizada */
         ::-webkit-scrollbar {
             width: 8px;
@@ -316,10 +257,6 @@
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
-        }
-        
-        .light ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
         }
         
         ::-webkit-scrollbar-thumb {
@@ -340,10 +277,6 @@
             font-size: 0.875rem;
             display: inline-flex;
             align-items: center;
-        }
-        
-        .light .current-time {
-            background-color: rgba(255, 107, 0, 0.1);
         }
         
         /* Indicador AO VIVO */
@@ -404,19 +337,11 @@
             align-items: center;
         }
         
-        .light .auto-update-notice {
-            background-color: rgba(255, 107, 0, 0.05);
-        }
-        
         /* Dias da semana */
         .weekday {
             font-size: 0.75rem;
             color: #a0aec0;
             margin-left: 2px;
-        }
-        
-        .light .weekday {
-            color: #64748b;
         }
         
         /* Cards de filmes */
@@ -428,10 +353,6 @@
             padding: 0.75rem;
             flex-shrink: 0;
             transition: transform 0.3s ease;
-        }
-        
-        .light .movie-card {
-            background-color: rgba(0, 0, 0, 0.05);
         }
         
         .movie-card:hover {
@@ -495,160 +416,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Toggle de tema */
-        .theme-toggle {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-            margin-left: 10px;
-        }
-        
-        .theme-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .theme-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #1e293b;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .theme-slider:before {
-            position: absolute;
-            content: "🌙";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-        
-        input:checked + .theme-slider {
-            background-color: #e2e8f0;
-        }
-        
-        input:checked + .theme-slider:before {
-            content: "☀️";
-            transform: translateX(30px);
-        }
-        
-        /* Menu hamburguer */
-        .menu-btn {
-            width: 30px;
-            height: 30px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all .5s ease-in-out;
-            margin-left: 10px;
-        }
-        
-        .menu-btn__burger {
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            border-radius: 5px;
-            transition: all .5s ease-in-out;
-        }
-        
-        .light .menu-btn__burger {
-            background: #1e293b;
-        }
-        
-        .menu-btn__burger::before,
-        .menu-btn__burger::after {
-            content: '';
-            position: absolute;
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            border-radius: 5px;
-            transition: all .5s ease-in-out;
-        }
-        
-        .light .menu-btn__burger::before,
-        .light .menu-btn__burger::after {
-            background: #1e293b;
-        }
-        
-        .menu-btn__burger::before {
-            transform: translateY(-8px);
-        }
-        
-        .menu-btn__burger::after {
-            transform: translateY(8px);
-        }
-        
-        /* Menu aberto */
-        .menu-btn.open .menu-btn__burger {
-            transform: translateX(-50px);
-            background: transparent;
-        }
-        
-        .menu-btn.open .menu-btn__burger::before {
-            transform: rotate(45deg) translate(35px, -35px);
-        }
-        
-        .menu-btn.open .menu-btn__burger::after {
-            transform: rotate(-45deg) translate(35px, 35px);
-        }
-        
-        /* Menu dropdown */
-        .menu-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #1a2234;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 10px 0;
-            min-width: 200px;
-            z-index: 100;
-            display: none;
-        }
-        
-        .light .menu-dropdown {
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .menu-dropdown.show {
-            display: block;
-        }
-        
-        .menu-dropdown a {
-            display: block;
-            padding: 8px 16px;
-            color: #f8fafc;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-        
-        .light .menu-dropdown a {
-            color: #1e293b;
-        }
-        
-        .menu-dropdown a:hover {
-            background-color: rgba(255, 107, 0, 0.1);
-        }
-        
         /* Responsividade */
         @media (max-width: 640px) {
             .filters-container {
@@ -670,16 +437,6 @@
             .movie-card {
                 min-width: 150px;
             }
-            
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .search-container {
-                width: 100%;
-                margin-top: 10px;
-            }
         }
     
         .filter-btn.active { 
@@ -689,7 +446,7 @@
         }
 </style>
 </head>
-<body class="dark">
+<body>
 <!-- Botão Voltar ao Topo -->
 <button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
 <svg aria-hidden="true" class="h-6 w-6" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -708,50 +465,27 @@
 </div>
 </div>
 <header class="mb-6">
-<div class="flex justify-between items-center mb-6">
-<!-- Logo e título simplificados -->
-<div class="flex items-center">
-<h1 class="text-xl font-bold text-white dark:text-white">MaxPlayTV - Guia</h1>
+<div class="flex flex-col md:flex-row justify-between items-center mb-6">
+<div class="flex items-center mb-4 md:mb-0">
+<img alt="MaxPlay TV Logo" class="h-12 mr-3" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
+<h1 class="text-2xl font-bold text-white">MaxPlay TV <span class="text-vibrant-orange">– Guia</span></h1>
+<p class="text-sm text-gray-300 ml-1 mt-1">Sua programação de TV e filmes em um só lugar.</p>
 </div>
-
-<!-- Menu e controles -->
-<div class="flex items-center">
-<!-- Toggle de tema -->
-<label class="theme-toggle">
-<input type="checkbox" id="theme-toggle">
-<span class="theme-slider"></span>
-</label>
-
-<!-- Menu hamburguer -->
-<div class="menu-btn" id="menu-btn">
-<div class="menu-btn__burger"></div>
-</div>
-
-<!-- Menu dropdown -->
-<div class="menu-dropdown" id="menu-dropdown">
-<a href="#" id="logout-btn">Logout</a>
-<a href="https://chat.whatsapp.com/SEU_LINK_DO_GRUPO" target="_blank">Grupo WhatsApp</a>
-<a href="https://wa.me/SEU_NUMERO_OFICIAL" target="_blank">Contato Oficial</a>
-</div>
-</div>
-</div>
-
-<!-- Barra de busca e atualização -->
-<div class="flex flex-col sm:flex-row w-full gap-2">
+<div class="flex flex-col sm:flex-row w-full md:w-auto gap-2">
 <div class="relative flex-grow">
-<input class="w-full p-2 pl-3 pr-10 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-vibrant-orange dark:bg-gray-200 dark:text-gray-800 dark:border-gray-300" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
-<svg aria-hidden="true" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400 dark:text-gray-500" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<input class="w-full p-2 pl-3 pr-10 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-vibrant-orange" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
+<svg aria-hidden="true" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </div>
-<button class="px-4 py-2 bg-vibrant-orange text-white rounded-md hover:bg-opacity-90 transition-colors whitespace-nowrap" id="reload-epg">
+<button class="px-4 py-2 bg-vibrant-orange text-white rounded-md hover:bg-orange-500 transition-all transform hover:scale-105 shadow-md whitespace-nowrap" id="reload-epg">
 <svg aria-hidden="true" class="h-5 w-5 inline-block mr-1" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
                     Recarregar Programação
                 </button>
 </div>
-
+</div>
 <div class="flex justify-between items-center mb-4">
 <div class="current-time">
 <svg aria-hidden="true" class="h-4 w-4" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -759,16 +493,16 @@
 </svg>
 <span id="current-time-display">Carregando...</span>
 </div>
-<div class="text-sm text-gray-400 dark:text-gray-500">
+<div class="text-sm text-gray-400">
                 Última atualização: <span id="last-update">Carregando...</span>
 </div>
 </div>
 </header>
 <!-- Seção de Filmes em Destaque -->
-<section class="px-4 py-6 text-white dark:text-gray-800" id="filmes-destaque">
+<section class="px-4 py-6 text-white" id="filmes-destaque">
 
 <h2 class="text-2xl font-bold mb-1 text-orange-500">🎬 Destaques do Dia</h2>
-<p class="text-sm text-gray-300 dark:text-gray-600 mb-4">Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais.</p>
+<p class="text-sm text-gray-300 mb-4">Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais.</p>
 
 <div class="flex gap-4 overflow-x-auto pb-4" id="filmes">
 <div class="loading-spinner mx-auto"></div>
@@ -778,10 +512,11 @@
 <div class="container mx-auto px-4 py-6">
 <div class="flex justify-center items-center h-40" id="loading">
 <div class="loading-spinner"></div>
-<p class="ml-4 text-gray-300 dark:text-gray-600">Carregando programação...</p>
+<p class="ml-4 text-gray-300">Carregando programação...</p>
 </div>
 <div class="hidden bg-red-900 border border-red-700 text-white px-4 py-3 rounded mb-4" id="error-message"></div>
-<h2 class="text-2xl font-bold mb-4 text-orange-500">📺 CANAIS E PROGRAMAÇÃO DE HOJE</h2>
+<h2 class="text-2xl font-bold mb-1 text-orange-500">🔎 O Que Está Passando Agora na TV?</h2>
+<p class="text-sm text-gray-300 mb-4">Acompanhe todas as programações que estão passando e ainda vão passar nos principais canais.</p>
 <div class="filters-container overflow-x-auto pb-2">
 <div class="flex space-x-2 mb-4"><button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium favorite-filter" data-filter="favorites">
 <svg aria-hidden="true" class="h-4 w-4 inline-block mr-1" fill="currentColor" role="img" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -961,9 +696,6 @@
             const trailerClose = document.querySelector('.trailer-close');
             const trailerContainer = document.getElementById('trailer-container');
             const trailerNotFound = document.getElementById('trailer-not-found');
-            const themeToggle = document.getElementById('theme-toggle');
-            const menuBtn = document.getElementById('menu-btn');
-            const menuDropdown = document.getElementById('menu-dropdown');
             
             // Containers de canais por categoria
             const moviesChannels = document.getElementById('movies-channels');
@@ -982,85 +714,6 @@
             let favoriteChannels = JSON.parse(localStorage.getItem('favoriteChannels')) || {};
             const trailerCache = JSON.parse(localStorage.getItem('trailerCache')) || {};
             let reminders = JSON.parse(localStorage.getItem('filmReminders')) || {};
-            
-            // =============================================
-            // CONTROLE DE TEMA
-            // =============================================
-            
-            // Verificar preferência do sistema
-            function checkSystemThemePreference() {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                    return 'light';
-                }
-                return 'dark';
-            }
-            
-            // Carregar tema salvo ou usar preferência do sistema
-            function loadTheme() {
-                const savedTheme = localStorage.getItem('theme');
-                const systemTheme = checkSystemThemePreference();
-                const theme = savedTheme || systemTheme;
-                
-                document.body.classList.remove('dark', 'light');
-                document.body.classList.add(theme);
-                
-                // Atualizar o toggle
-                if (theme === 'light') {
-                    themeToggle.checked = true;
-                } else {
-                    themeToggle.checked = false;
-                }
-            }
-            
-            // Alternar entre temas
-            function toggleTheme() {
-                if (document.body.classList.contains('dark')) {
-                    document.body.classList.remove('dark');
-                    document.body.classList.add('light');
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    document.body.classList.remove('light');
-                    document.body.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                }
-            }
-            
-            // Ouvir mudanças no sistema
-            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
-                const newTheme = e.matches ? 'light' : 'dark';
-                document.body.classList.remove('dark', 'light');
-                document.body.classList.add(newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // Atualizar o toggle
-                if (newTheme === 'light') {
-                    themeToggle.checked = true;
-                } else {
-                    themeToggle.checked = false;
-                }
-            });
-            
-            // Configurar evento do toggle
-            themeToggle.addEventListener('change', toggleTheme);
-            
-            // =============================================
-            // MENU HAMBURGUER
-            // =============================================
-            
-            function toggleMenu() {
-                menuBtn.classList.toggle('open');
-                menuDropdown.classList.toggle('show');
-            }
-            
-            menuBtn.addEventListener('click', toggleMenu);
-            
-            // Fechar menu ao clicar fora
-            document.addEventListener('click', (e) => {
-                if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
-                    menuBtn.classList.remove('open');
-                    menuDropdown.classList.remove('show');
-                }
-            });
             
             // =============================================
             // SISTEMA DE LEMBRETES
@@ -1572,7 +1225,7 @@
                 
                 // Botão
                 const button = document.createElement('button');
-                button.className = 'mt-auto mx-3 mb-3 py-1.5 text-sm bg-vibrant-orange hover:bg-orange-600 text-white rounded';
+                button.className = 'mt-auto mx-3 mb-3 py-1.5 text-sm bg-vibrant-orange hover:bg-orange-600 text-white rounded transform hover:scale-105 shadow-sm';
                 button.textContent = 'Programação completa';
                 button.onclick = () => showFullSchedule(channelName, channelId, logoElement.src);
                 
@@ -1999,16 +1652,16 @@
                                 card.className = "movie-card";
                                 card.innerHTML = `
                                     <img src="${img}" alt="${titleRaw}" class="w-full h-60 object-cover mb-2 rounded" loading="lazy">
-                                    <h3 class="text-sm font-bold text-white dark:text-gray-800">${titleRaw}</h3>
+                                    <h3 class="text-sm font-bold text-white">${titleRaw}</h3>
                                     <div class="flex items-center justify-between mt-1">
                                         <div class="flex items-center">
                                             ${channelLogo}
-                                            <p class="text-xs text-gray-300 dark:text-gray-600">${channel}</p>
+                                            <p class="text-xs text-gray-300">${channel}</p>
                                         </div>
                                         <span class="text-xs bg-gray-700 px-2 py-1 rounded">${diaSemana} ${dataFormatada}</span>
                                     </div>
                                     <div class="flex items-center justify-between mt-1">
-                                        <p class="text-xs text-gray-300 dark:text-gray-600">Horário: ${horario}</p>
+                                        <p class="text-xs text-gray-300">Horário: ${horario}</p>
                                         <img src="${ratingImg}" alt="Classificação ${rating}" class="h-4">
                                     </div>
                                     <button class="mt-2 w-full py-1 bg-vibrant-orange text-white rounded text-xs hover:bg-orange-600 transition-colors ver-trailer-btn" data-titulo="${titleRaw}">
@@ -2073,7 +1726,6 @@
             }
 
             // Inicialização
-            loadTheme(); // Carrega o tema salvo ou preferência do sistema
             updateCurrentTime();
             setInterval(updateCurrentTime, 1000);
             
@@ -2155,6 +1807,55 @@
     Notification.requestPermission();
   }
 </script>
+
+
+<!-- Navegação inferior mobile -->
+<nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
+  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
+    </svg>
+    Início
+  </button>
+  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" />
+    </svg>
+    Buscar
+  </button>
+  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    Favoritos
+  </button>
+</nav>
+
+</body>
+</html>
+</div>
+
+<!-- Navegação inferior mobile -->
+<nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
+  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
+    </svg>
+    Início
+  </button>
+  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" />
+    </svg>
+    Buscar
+  </button>
+  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    Favoritos
+  </button>
+</nav>
 
 </body>
 </html>
