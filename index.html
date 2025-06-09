@@ -5,9 +5,9 @@
 <meta charset="utf-8"/>
 <meta content="#ff6b00" name="theme-color"/>
 <link href="manifest.json" rel="manifest"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MaxPlay TV - Guia</title>
-<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
+<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description">
 <meta content="MaxPlay TV - Guia" property="og:title"/>
 <meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
 <meta content="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" property="og:image"/>
@@ -447,6 +447,26 @@
 </style>
 </meta></head>
 <body>
+<header class="w-full bg-vibrant-orange flex items-center justify-between px-4 py-2">
+<img alt="MaxPlay Logo" class="h-10" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
+<button class="text-white text-3xl focus:outline-none" id="menu-button">☰</button>
+</header>
+<div class="flex items-center px-4 mt-2 gap-2">
+<input class="flex-1 p-2 rounded-md bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-vibrant-orange" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
+<button class="bg-vibrant-orange text-white px-3 py-2 rounded-md hover:bg-orange-600 transition" onclick="location.reload()">🔄</button>
+</div>
+<div class="flex justify-center mt-2">
+<div class="current-time text-sm px-3 py-1 bg-gray-800 border border-vibrant-orange rounded-md">
+<span id="current-time-display">Carregando...</span>
+</div>
+</div>
+<script>
+setInterval(() => {
+    const agora = new Date();
+    document.getElementById("current-time-display").textContent = agora.toLocaleTimeString("pt-BR");
+}, 1000);
+</script>
+
 <!-- Botão Voltar ao Topo -->
 <button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
 <svg aria-hidden="true" class="h-6 w-6" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -464,40 +484,7 @@
 </div>
 </div>
 </div>
-<header class="mb-6">
-<div class="flex flex-col md:flex-row justify-between items-center mb-6">
-<div class="flex items-center mb-4 md:mb-0">
-<img alt="MaxPlay TV Logo" class="h-12 mr-3" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
 
-<p class="text-sm text-gray-300 ml-1 mt-1">Sua programação de TV e filmes em um só lugar.</p>
-</div>
-<div class="flex flex-col sm:flex-row w-full md:w-auto gap-2">
-<div class="relative flex-grow">
-<input class="w-full p-2 pl-3 pr-10 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-vibrant-orange" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
-<svg aria-hidden="true" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</div>
-<button class="px-4 py-2 bg-vibrant-orange text-white rounded-md hover:bg-orange-500 transition-all transform hover:scale-105 shadow-md whitespace-nowrap" id="reload-epg">
-<svg aria-hidden="true" class="h-5 w-5 inline-block mr-1" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-                    Recarregar Programação
-                </button>
-</div>
-</div>
-<div class="flex justify-between items-center mb-4">
-<div class="current-time">
-<svg aria-hidden="true" class="h-4 w-4" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-<span id="current-time-display">Carregando...</span>
-</div>
-<div class="text-sm text-gray-400">
-                Última atualização: <span id="last-update">Carregando...</span>
-</div>
-</div>
-</header>
 <!-- Botão do menu hambúrguer -->
 <div class="fixed top-4 right-4 z-50 block md:hidden">
 <button class="text-white text-3xl focus:outline-none transition-transform transform hover:scale-110" id="menu-button">
@@ -511,9 +498,9 @@
 <button class="text-white text-2xl" id="close-menu">×</button>
 </div>
 <nav class="flex flex-col text-white p-4 space-y-3">
-<button class="text-left" onclick="scrollToTop()">🏠 Início</button>
-<button class="text-left" onclick="focarBusca()">🔍 Buscar</button>
-<button class="text-left" onclick="filtrarFavoritos()">⭐ Favoritos</button>
+
+
+
 <button class="text-left" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">🎬 Destaques</button>
 <button class="text-left" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">📺 Todos os Canais</button>
 <button class="text-left" onclick="mostrarSobre()">⚙️ Sobre</button>
@@ -524,7 +511,6 @@
 </div>
 <!-- Overlay -->
 <div class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" id="menu-overlay"></div>
-
 <!-- Seção de Filmes em Destaque -->
 <section class="px-4 py-6 text-white" id="filmes-destaque">
 <h2 class="text-2xl font-bold mb-1 text-orange-500">🎬 Destaques do Dia</h2>
@@ -1854,7 +1840,6 @@ document.addEventListener('DOMContentLoaded', () => {
     Favoritos
   </button>
 </nav>
-
 <script>
   const menu = document.getElementById('side-menu');
   const menuButton = document.getElementById('menu-button');
@@ -1908,7 +1893,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-
 <!-- Navegação inferior mobile -->
 <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
 <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
@@ -1930,5 +1914,3 @@ document.addEventListener('DOMContentLoaded', () => {
     Favoritos
   </button>
 </nav>
-
-
