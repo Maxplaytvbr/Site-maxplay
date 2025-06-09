@@ -35,6 +35,26 @@ document.addEventListener("click", function(e) {
   }
 });
 
+
+// Alternar exibição do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
 </script>
 <script>
         tailwind.config = {
@@ -54,6 +74,26 @@ document.addEventListener("click", function(e) {
         }
     
 // Alternar visualização do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
+
+// Alternar exibição do segundo programa
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("toggle-next-btn")) {
     const card = e.target.closest(".channel-card");
@@ -491,6 +531,30 @@ document.addEventListener("click", function(e) {
   display: inline-block;
 }
 
+
+/* Mostrar/esconder segunda programação */
+.programme-item.extra {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+.programme-item.extra.mostrar {
+  max-height: 500px;
+  opacity: 1;
+}
+/* Botão voltar no modal */
+#schedule-modal .voltar-btn {
+  background-color: #ff6b00;
+  color: white;
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-block;
+}
+
 </style>
 </head>
 <body>
@@ -518,6 +582,26 @@ setInterval(() => {
 }, 1000);
 
 // Alternar visualização do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
+
+// Alternar exibição do segundo programa
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("toggle-next-btn")) {
     const card = e.target.closest(".channel-card");
@@ -650,6 +734,7 @@ document.addEventListener("click", function(e) {
 <span class="modal-close">×</span>
 </div>
 <div class="modal-body">
+<button class="voltar-btn">⬅️ Voltar</button>
 <button class="voltar-btn">⬅️ Voltar</button>
 <div class="space-y-3" id="modal-schedule-list"></div>
 </div>
@@ -1891,6 +1976,26 @@ document.addEventListener("click", function(e) {
   }
 });
 
+
+// Alternar exibição do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
 </script>
 <div class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center" id="trailerModal">
 <div class="bg-gray-900 p-4 rounded-lg shadow-lg relative w-full max-w-3xl">
@@ -1912,6 +2017,26 @@ document.addEventListener("click", function(e) {
   }
 
 // Alternar visualização do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
+
+// Alternar exibição do segundo programa
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("toggle-next-btn")) {
     const card = e.target.closest(".channel-card");
@@ -2002,6 +2127,26 @@ document.addEventListener("click", function(e) {
   }
 });
 
+
+// Alternar exibição do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -2030,6 +2175,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Alternar visualização do segundo programa
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("toggle-next-btn")) {
+    const card = e.target.closest(".channel-card");
+    const extra = card.querySelector(".programme-item.extra");
+    if (!extra) return;
+    const isVisible = extra.classList.contains("mostrar");
+    extra.classList.toggle("mostrar");
+    e.target.textContent = isVisible ? "Ver próxima programação" : "Ver programação completa";
+  }
+});
+
+// Botão de voltar ao cards
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("voltar-btn")) {
+    document.getElementById("schedule-modal").style.display = "none";
+  }
+});
+
+
+// Alternar exibição do segundo programa
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("toggle-next-btn")) {
     const card = e.target.closest(".channel-card");
