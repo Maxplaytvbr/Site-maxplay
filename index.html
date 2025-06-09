@@ -10,7 +10,7 @@
 <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
 <meta content="MaxPlay TV - Guia" property="og:title"/>
 <meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
-<meta content="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" property="og:image">
+<meta content="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" property="og:image"/>
 <link href="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" rel="icon"/>
 <!-- Fontes -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
@@ -445,25 +445,22 @@
             border-bottom: 2px solid white; 
         }
 </style>
-</meta></head>
+</head>
 <body>
-<header class="w-full bg-vibrant-orange flex items-center justify-between px-4 py-2">
-<img alt="MaxPlay Logo" class="h-14 object-contain ml-2" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
+<header class="w-full bg-vibrant-orange flex items-center justify-between px-4 h-12">
+<img alt="MaxPlay Logo" class="h-10 object-contain ml-2" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
 <button class="text-white text-3xl focus:outline-none" id="menu-button">☰</button>
 </header>
 <!-- Barra de busca com botão e relógio -->
 <div class="flex items-center px-4 mt-2 gap-2">
 <input class="flex-1 h-8 px-3 rounded-md bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-vibrant-orange text-sm" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
-<button class="h-8 w-8 flex items-center justify-center bg-white rounded-full border border-vibrant-orange p-1" onclick="location.reload()" title="Recarregar">
-<img alt="Recarregar" class="h-6 w-6 object-contain" src="https://i.postimg.cc/VsSDm4Nq/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
+<button class="h-8 w-8 flex items-center justify-center bg-white border border-vibrant-orange rounded-md p-0 overflow-hidden" onclick="location.reload()" title="Recarregar">
+<img alt="Recarregar" class="h-full w-full object-contain" src="https://i.postimg.cc/VsSDm4Nq/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
 </button>
 <div class="h-8 px-2 flex items-center bg-gray-800 border border-vibrant-orange text-sm rounded-md text-white" id="current-time-display">
     Carregando...
   </div>
 </div>
-
-
-
 <div class="flex justify-center mt-1 text-xs text-gray-400">
     Última atualização: <span class="ml-1" id="last-update">--:--</span>
 </div>
