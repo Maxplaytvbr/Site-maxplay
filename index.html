@@ -7,11 +7,11 @@
 <link href="manifest.json" rel="manifest"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MaxPlay TV - Guia</title>
-<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description">
+<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
 <meta content="MaxPlay TV - Guia" property="og:title"/>
-<meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
-<meta content="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" property="og:image"/>
-<link href="https://i.postimg.cc/BvbCr0jH/IMG-6850.png" rel="icon"/>
+<meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description">
+<meta content="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" property="og:image"/>
+<link href="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" rel="icon"/>
 <!-- Fontes -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
@@ -448,7 +448,7 @@
 </meta></head>
 <body>
 <header class="w-full bg-vibrant-orange flex items-center justify-between px-4 py-2">
-<img alt="MaxPlay Logo" class="h-10" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
+<img alt="MaxPlay Logo" class="h-12 object-contain" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
 <button class="text-white text-3xl focus:outline-none" id="menu-button">☰</button>
 </header>
 <div class="flex items-center px-4 mt-2 gap-2">
@@ -460,13 +460,15 @@
 <span id="current-time-display">Carregando...</span>
 </div>
 </div>
+<div class="flex justify-center mt-1 text-xs text-gray-400">
+    Última atualização: <span class="ml-1" id="last-update">--:--</span>
+</div>
 <script>
 setInterval(() => {
     const agora = new Date();
     document.getElementById("current-time-display").textContent = agora.toLocaleTimeString("pt-BR");
 }, 1000);
 </script>
-
 <!-- Botão Voltar ao Topo -->
 <button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
 <svg aria-hidden="true" class="h-6 w-6" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -484,12 +486,8 @@ setInterval(() => {
 </div>
 </div>
 </div>
-
 <!-- Botão do menu hambúrguer -->
 <div class="fixed top-4 right-4 z-50 block md:hidden">
-<button class="text-white text-3xl focus:outline-none transition-transform transform hover:scale-110" id="menu-button">
-    ☰
-  </button>
 </div>
 <!-- Drawer lateral -->
 <div class="fixed top-0 right-0 w-64 h-full bg-gray-900 shadow-lg z-40 transform translate-x-full transition-transform duration-300 ease-in-out" id="side-menu">
@@ -498,9 +496,6 @@ setInterval(() => {
 <button class="text-white text-2xl" id="close-menu">×</button>
 </div>
 <nav class="flex flex-col text-white p-4 space-y-3">
-
-
-
 <button class="text-left" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">🎬 Destaques</button>
 <button class="text-left" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">📺 Todos os Canais</button>
 <button class="text-left" onclick="mostrarSobre()">⚙️ Sobre</button>
@@ -1820,26 +1815,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 </script>
 <!-- Navegação inferior mobile -->
-<nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
-<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-<path d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-    Início
-  </button>
-<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-<path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-    Buscar
-  </button>
-<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-    Favoritos
-  </button>
-</nav>
+
 <script>
   const menu = document.getElementById('side-menu');
   const menuButton = document.getElementById('menu-button');
@@ -1894,23 +1870,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 </html>
 <!-- Navegação inferior mobile -->
-<nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
-<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-<path d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-    Início
-  </button>
-<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-<path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-    Buscar
-  </button>
-<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-    Favoritos
-  </button>
-</nav>
+
