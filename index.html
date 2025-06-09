@@ -3,9 +3,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
-        <meta name="theme-color" content="#ff6b00">
-<link rel="manifest" href="manifest.json" />
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#ff6b00" name="theme-color"/>
+<link href="manifest.json" rel="manifest"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>MaxPlay TV - Guia</title>
 <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
 <meta content="MaxPlay TV - Guia" property="og:title"/>
@@ -445,7 +445,7 @@
             border-bottom: 2px solid white; 
         }
 </style>
-</head>
+</meta></head>
 <body>
 <!-- Botão Voltar ao Topo -->
 <button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
@@ -468,7 +468,7 @@
 <div class="flex flex-col md:flex-row justify-between items-center mb-6">
 <div class="flex items-center mb-4 md:mb-0">
 <img alt="MaxPlay TV Logo" class="h-12 mr-3" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
-<h1 class="text-2xl font-bold text-white">MaxPlay TV <span class="text-vibrant-orange">– Guia</span></h1>
+
 <p class="text-sm text-gray-300 ml-1 mt-1">Sua programação de TV e filmes em um só lugar.</p>
 </div>
 <div class="flex flex-col sm:flex-row w-full md:w-auto gap-2">
@@ -498,12 +498,37 @@
 </div>
 </div>
 </header>
+<!-- Botão do menu hambúrguer -->
+<div class="fixed top-4 right-4 z-50 block md:hidden">
+<button class="text-white text-3xl focus:outline-none transition-transform transform hover:scale-110" id="menu-button">
+    ☰
+  </button>
+</div>
+<!-- Drawer lateral -->
+<div class="fixed top-0 right-0 w-64 h-full bg-gray-900 shadow-lg z-40 transform translate-x-full transition-transform duration-300 ease-in-out" id="side-menu">
+<div class="flex justify-between items-center p-4 border-b border-gray-700">
+<span class="text-white font-semibold text-lg">Menu</span>
+<button class="text-white text-2xl" id="close-menu">×</button>
+</div>
+<nav class="flex flex-col text-white p-4 space-y-3">
+<button class="text-left" onclick="scrollToTop()">🏠 Início</button>
+<button class="text-left" onclick="focarBusca()">🔍 Buscar</button>
+<button class="text-left" onclick="filtrarFavoritos()">⭐ Favoritos</button>
+<button class="text-left" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">🎬 Destaques</button>
+<button class="text-left" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">📺 Todos os Canais</button>
+<button class="text-left" onclick="mostrarSobre()">⚙️ Sobre</button>
+<button class="text-left" onclick="logout()">➡️ Sair</button>
+<a class="text-left" href="https://wa.me/5583981647312" target="_blank">💬 Suporte (WhatsApp)</a>
+<a class="text-left" href="https://chat.whatsapp.com/H4uqhUcglUC5i4eZ4FlA1F" target="_blank">👥 Grupo Guia (WhatsApp)</a>
+</nav>
+</div>
+<!-- Overlay -->
+<div class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" id="menu-overlay"></div>
+
 <!-- Seção de Filmes em Destaque -->
 <section class="px-4 py-6 text-white" id="filmes-destaque">
-
 <h2 class="text-2xl font-bold mb-1 text-orange-500">🎬 Destaques do Dia</h2>
 <p class="text-sm text-gray-300 mb-4">Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais.</p>
-
 <div class="flex gap-4 overflow-x-auto pb-4" id="filmes">
 <div class="loading-spinner mx-auto"></div>
 </div>
@@ -1794,8 +1819,7 @@
 <!-- Iframe será inserido aqui -->
 </div>
 </div>
-        </div>
-
+</div>
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
@@ -1807,55 +1831,102 @@
     Notification.requestPermission();
   }
 </script>
-
-
 <!-- Navegação inferior mobile -->
 <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
-  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
-    </svg>
+<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
     Início
   </button>
-  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" />
-    </svg>
+<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
     Buscar
   </button>
-  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
+<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
     Favoritos
   </button>
 </nav>
 
+<script>
+  const menu = document.getElementById('side-menu');
+  const menuButton = document.getElementById('menu-button');
+  const closeButton = document.getElementById('close-menu');
+  const overlay = document.getElementById('menu-overlay');
+
+  function abrirMenu() {
+    menu.classList.remove('translate-x-full');
+    overlay.classList.remove('hidden');
+  }
+
+  function fecharMenu() {
+    menu.classList.add('translate-x-full');
+    overlay.classList.add('hidden');
+  }
+
+  menuButton.addEventListener('click', abrirMenu);
+  closeButton.addEventListener('click', fecharMenu);
+  overlay.addEventListener('click', fecharMenu);
+
+  function scrollToTop() {
+    fecharMenu();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function focarBusca() {
+    fecharMenu();
+    document.getElementById('channel-search').focus();
+  }
+
+  function filtrarFavoritos() {
+    fecharMenu();
+    document.querySelector('[data-filter="favorites"]').click();
+  }
+
+  function mostrarSobre() {
+    fecharMenu();
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      alert('Sobre: MaxPlay TV - Guia de Programação interativo.');
+    }
+  }
+
+  function logout() {
+    fecharMenu();
+    alert('Você saiu. Redirecionando...');
+    // window.location.href = '/logout';
+  }
+</script>
 </body>
 </html>
-</div>
 
 <!-- Navegação inferior mobile -->
 <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 flex justify-around items-center py-2 sm:hidden z-50">
-  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
-    </svg>
+<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
     Início
   </button>
-  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" />
-    </svg>
+<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 5.65a7.5 7.5 0 010 10.6z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
     Buscar
   </button>
-  <button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
+<button class="text-white flex flex-col items-center text-xs hover:text-vibrant-orange transition">
+<svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
     Favoritos
   </button>
 </nav>
 
-</body>
-</html>
+
