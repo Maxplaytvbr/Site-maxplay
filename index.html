@@ -469,7 +469,7 @@
 <div class="flex items-center mb-4 md:mb-0">
 <img alt="MaxPlay TV Logo" class="h-12 mr-3" src="https://i.postimg.cc/BvbCr0jH/IMG-6850.png"/>
 
-<p class="text-sm text-gray-300 ml-1 mt-1">Sua programação de TV e filmes em um só lugar.</p>
+
 </div>
 <div class="flex flex-col sm:flex-row w-full md:w-auto gap-2">
 <div class="relative flex-grow">
@@ -493,9 +493,7 @@
 </svg>
 <span id="current-time-display">Carregando...</span>
 </div>
-<div class="text-sm text-gray-400">
-                Última atualização: <span id="last-update">Carregando...</span>
-</div>
+
 </div>
 </header>
 <!-- Botão do menu hambúrguer -->
@@ -511,15 +509,33 @@
 <button class="text-white text-2xl" id="close-menu">×</button>
 </div>
 <nav class="flex flex-col text-white p-4 space-y-3">
-<button class="text-left" onclick="scrollToTop()">🏠 Início</button>
-<button class="text-left" onclick="focarBusca()">🔍 Buscar</button>
-<button class="text-left" onclick="filtrarFavoritos()">⭐ Favoritos</button>
-<button class="text-left" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">🎬 Destaques</button>
-<button class="text-left" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">📺 Todos os Canais</button>
-<button class="text-left" onclick="mostrarSobre()">⚙️ Sobre</button>
-<button class="text-left" onclick="logout()">➡️ Sair</button>
-<a class="text-left" href="https://wa.me/5583981647312" target="_blank">💬 Suporte (WhatsApp)</a>
-<a class="text-left" href="https://chat.whatsapp.com/H4uqhUcglUC5i4eZ4FlA1F" target="_blank">👥 Grupo Guia (WhatsApp)</a>
+<a class="flex items-center gap-2" onclick="scrollToTop()">
+<img class="h-5" src="https://i.postimg.cc/7ZDp7p9g/IMG-7051.png"/> Início
+</a>
+<a class="flex items-center gap-2" onclick="focarBusca()">
+<img class="h-5" src="https://i.postimg.cc/NF0fDKQw/IMG-7056.png"/> Buscar
+</a>
+<a class="flex items-center gap-2" onclick="filtrarFavoritos()">
+<img class="h-5" src="https://i.postimg.cc/mrgJpC0k/IMG-7053.png"/> Favoritos
+</a>
+<a class="flex items-center gap-2" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">
+<img class="h-5" src="https://i.postimg.cc/W3810GLn/IMG-7057.png"/> Destaques
+</a>
+<a class="flex items-center gap-2" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">
+<img class="h-5" src="https://i.postimg.cc/W3810GLn/IMG-7057.png"/> Todos os Canais
+</a>
+<a class="flex items-center gap-2" onclick="mostrarSobre()">
+<img class="h-5" src="https://i.postimg.cc/W3810GLn/IMG-7057.png"/> Sobre
+</a>
+<a class="flex items-center gap-2" onclick="logout()">
+<img class="h-5" src="https://i.postimg.cc/mgwKS8pK/IMG-7054.png"/> Sair
+</a>
+<a class="flex items-center gap-2" href="https://wa.me/5583981647312" target="_blank">
+<img class="h-5" src="https://i.postimg.cc/pL5r35zW/IMG-7058.png"/> Suporte WhatsApp
+</a>
+<a class="flex items-center gap-2" href="https://chat.whatsapp.com/H4uqhUcglUC5i4eZ4FlA1F" target="_blank">
+<img class="h-5" src="https://i.postimg.cc/pL5r35zW/IMG-7058.png"/> Grupo Guia WhatsApp
+</a>
 </nav>
 </div>
 <!-- Overlay -->
@@ -543,12 +559,7 @@
 <h2 class="text-2xl font-bold mb-1 text-orange-500">🔎 O Que Está Passando Agora na TV?</h2>
 <p class="text-sm text-gray-300 mb-4">Acompanhe todas as programações que estão passando e ainda vão passar nos principais canais.</p>
 <div class="filters-container overflow-x-auto pb-2">
-<div class="flex space-x-2 mb-4"><button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium favorite-filter" data-filter="favorites">
-<svg aria-hidden="true" class="h-4 w-4 inline-block mr-1" fill="currentColor" role="img" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-</svg>
-                    Favoritos
-                </button>
+<div class="flex space-x-2 mb-4">
 <button class="filter-btn active px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="all">Todos</button>
 <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="movies">Filmes e Séries</button>
 <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="documentary">Documentários</button>
