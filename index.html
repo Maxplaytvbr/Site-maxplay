@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="#ff6b00" name="theme-color"/>
-  <link href="manifest.json" rel="manifest"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   MaxPlay TV - Guia
-  </title>
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="#ff6b00" name="theme-color"/>
+    <link href="manifest.json" rel="manifest"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MaxPlay TV - Guia</title>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBQjE2vvEBUkNNkHKhxcVHUB2zyxfFBjy0",
+        authDomain: "maxplaytv-aee49.firebaseapp.com",
+        projectId: "maxplaytv-aee49",
+        storageBucket: "maxplaytv-aee49.firebasestorage.app",
+        messagingSenderId: "721372234845",
+        appId: "1:721372234845:web:f1d101d9d7e18603d2b9b4"
+      };
+
+      const app = firebase.initializeApp(firebaseConfig);
+      const messaging = firebase.messaging(app);
+
+      messaging.requestPermission()
+        .then(() => {
+          console.log("Permissão concedida para receber notificações!");
+          return messaging.getToken({ vapidKey: "BAoal6lyWxe_OUBjE21zsXADP9Qw-BZuMRphuFanYpdJ3e98p5LiWCBHIvMk6HLvFe2cQmJvwR0B3KoRmXot1rM" });
+        })
+        .then((token) => {
+          console.log("Token do dispositivo:", token);
+        })
+        .catch((err) => {
+          console.log("Erro ao pedir permissão ou obter o token:", err);
+        });
+    </script>
   <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
   <meta content="MaxPlay TV - Guia" property="og:title"/>
   <meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
