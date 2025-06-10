@@ -34,6 +34,16 @@
         .catch((err) => {
           console.log("Erro ao pedir permissão ou obter o token:", err);
         });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/worker.js')
+          .then(function(registration) {
+            console.log('Service Worker registrado com sucesso:', registration);
+          })
+          .catch(function(error) {
+            console.log('Falha ao registrar o Service Worker:', error);
+          });
+      }
     </script>
   <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
   <meta content="MaxPlay TV - Guia" property="og:title"/>
