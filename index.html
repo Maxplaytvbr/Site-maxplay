@@ -476,6 +476,29 @@ button[title="Recarregar"] img {
 }
 
 
+
+
+/* Nota do TMDb em estilo circular */
+.movie-card .movie-rating {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background-color: #0f172a;
+    color: #ff6b00;
+    border: 3px solid #ff6b00;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+
 </style>
 </head>
 <body>
@@ -1677,7 +1700,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                     }
                                 }
                                 
-                                // Obter logo do canal
+                                
+// Exibir a nota do TMDb sobre a capa
+const ratingBadge = document.createElement("div");
+ratingBadge.className = "movie-rating";
+ratingBadge.textContent = `${Math.round(dadosBusca.results[0].vote_average * 10)}%`;
+wrapper.appendChild(ratingBadge);
+
+// Obter logo do canal
                                 let channelLogo = '';
                                 for (const [key, url] of Object.entries(channelLogos)) {
                                     if (channel.includes(key)) {
