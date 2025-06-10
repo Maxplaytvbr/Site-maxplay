@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8"/>
-<meta content="#ff6b00" name="theme-color"/>
-<link href="manifest.json" rel="manifest"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MaxPlay TV - Guia</title>
-<meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
-<meta content="MaxPlay TV - Guia" property="og:title"/>
-<meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
-<meta content="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" property="og:image"/>
-<link href="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" rel="icon"/>
-<!-- Fontes -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-        tailwind.config = {
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="#ff6b00" name="theme-color"/>
+  <link href="manifest.json" rel="manifest"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   MaxPlay TV - Guia
+  </title>
+  <meta content="Guia MaxPlay TV com programação atualizada dos melhores canais, filmes e séries." name="description"/>
+  <meta content="MaxPlay TV - Guia" property="og:title"/>
+  <meta content="Veja a programação de hoje com filmes, séries e canais ao vivo." property="og:description"/>
+  <meta content="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" property="og:image"/>
+  <link href="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" rel="icon"/>
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <script>
+   tailwind.config = {
             theme: {
                 extend: {
                     colors: {
@@ -32,9 +34,9 @@
                 }
             }
         }
-    </script>
-<style>
-        body {
+  </script>
+  <style>
+   body {
             background-color: #0f172a;
             color: #f8fafc;
             font-family: 'Poppins', sans-serif;
@@ -474,177 +476,268 @@ button[title="Recarregar"] img {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-
-
-
-/* Nota do TMDb em estilo circular */
-.movie-card .movie-rating {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    background-color: #0f172a;
-    color: #ff6b00;
-    border: 3px solid #ff6b00;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    font-size: 0.75rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    z-index: 10;
+  </style>
+  <style>
+   body {
+    background-color: #1a2234; /* Fundo preto azulado */
+    color: #f8fafc;
 }
 
+.channel-card {
+    background-color: rgba(255, 255, 255, 0.1); /* Mantém o card com o fundo claro, mas com mais transparência */
+    border: 1px solid rgba(255, 107, 0, 0.6); /* Ajusta a borda para maior contraste */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); /* Leve sombra nos cards */
+    transition: transform 0.3s ease;
+}
 
-</style>
-</head>
-<body>
-<header class="w-full bg-vibrant-orange flex items-center justify-between px-4 h-12">
-<img alt="MaxPlay Logo" class="h-10 max-h-full object-contain ml-2" style="padding: 2px 0;" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
-<button class="text-white text-3xl focus:outline-none" id="menu-button">☰</button>
-</header>
-<!-- Barra de busca com botão e relógio -->
-<div class="flex items-center px-4 mt-2 gap-2">
-<input class="flex-1 h-8 px-3 rounded-md bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-vibrant-orange text-sm" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
-<button class="h-8 w-10 min-w-[2.5rem] flex-shrink-0 flex items-center justify-center bg-white border border-vibrant-orange rounded-md p-0 overflow-hidden" onclick="location.reload()" title="Recarregar">
-<img alt="Recarregar" class="h-full w-full object-contain" src="https://i.postimg.cc/VsSDm4Nq/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
-</button>
-<div class="h-8 px-2 flex items-center bg-gray-800 border border-vibrant-orange text-sm rounded-md text-white" id="current-time-display">
+.channel-card:hover {
+    transform: translateY(-3px);
+}
+
+button, .filter-btn, .reminder-btn {
+    background-color: rgba(255, 107, 0, 0.8); /* Botões com tom mais vibrante */
+    color: white;
+}
+
+button:hover, .filter-btn:hover, .reminder-btn:hover {
+    background-color: rgba(255, 107, 0, 1);
+    transform: translateY(-1px);
+}
+
+/* Esconde a segunda programação inicialmente */
+.programme-item:nth-child(2) {
+    display: none;
+}
+  </style>
+ </head>
+ <body>
+  <header class="w-full bg-vibrant-orange flex items-center justify-between px-4 h-12">
+   <img alt="MaxPlay Logo" class="h-10 max-h-full object-contain ml-2" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png" style="padding: 2px 0;"/>
+   <button class="text-white text-3xl focus:outline-none" id="menu-button">
+    ☰
+   </button>
+  </header>
+  <!-- Barra de busca com botão e relógio -->
+  <div class="flex items-center px-4 mt-2 gap-2">
+   <input class="flex-1 h-8 px-3 rounded-md bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-vibrant-orange text-sm" id="channel-search" placeholder="Buscar canal ou programa..." type="text"/>
+   <button class="h-8 w-10 min-w-[2.5rem] flex-shrink-0 flex items-center justify-center bg-white border border-vibrant-orange rounded-md p-0 overflow-hidden" onclick="location.reload()" title="Recarregar">
+    <img alt="Recarregar" class="h-full w-full object-contain" src="https://i.postimg.cc/VsSDm4Nq/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
+   </button>
+   <div class="h-8 px-2 flex items-center bg-gray-800 border border-vibrant-orange text-sm rounded-md text-white" id="current-time-display">
     Carregando...
+   </div>
   </div>
-</div>
-<div class="flex justify-center mt-1 text-xs text-gray-400">
-    Última atualização: <span class="ml-1" id="last-update">--:--</span>
-</div>
-<script>
-setInterval(() => {
+  <div class="flex justify-center mt-1 text-xs text-gray-400">
+   Última atualização:
+   <span class="ml-1" id="last-update">
+    --:--
+   </span>
+  </div>
+  <script>
+   setInterval(() => {
     const agora = new Date();
     document.getElementById("current-time-display").textContent = agora.toLocaleTimeString("pt-BR");
 }, 1000);
-</script>
-<!-- Botão Voltar ao Topo -->
-<button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
-<svg aria-hidden="true" class="h-6 w-6" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-<!-- Modal de Trailer -->
-<div class="trailer-modal" id="trailer-modal">
-<div class="trailer-modal-content">
-<span class="trailer-close">×</span>
-<div class="trailer-iframe-container" id="trailer-container">
-<div class="trailer-not-found hidden" id="trailer-not-found">
-<p>Trailer não encontrado para este filme.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Botão do menu hambúrguer -->
-<div class="fixed top-4 right-4 z-50 block md:hidden">
-</div>
-<!-- Drawer lateral -->
-<div class="fixed top-0 right-0 w-64 h-full bg-gray-900 shadow-lg z-40 transform translate-x-full transition-transform duration-300 ease-in-out" id="side-menu">
-<div class="flex justify-between items-center p-4 border-b border-gray-700">
-<span class="text-white font-semibold text-lg">Menu</span>
-<button class="text-white text-2xl" id="close-menu">×</button>
-</div>
-<nav class="flex flex-col text-white p-4 space-y-3">
-<button class="text-left" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">🎬 Destaques</button>
-<button class="text-left" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">📺 Todos os Canais</button>
-<button class="text-left" onclick="mostrarSobre()">⚙️ Sobre</button>
-<button class="text-left" onclick="logout()">➡️ Sair</button>
-<a class="text-left" href="https://wa.me/5583981647312" target="_blank">💬 Suporte (WhatsApp)</a>
-<a class="text-left" href="https://chat.whatsapp.com/H4uqhUcglUC5i4eZ4FlA1F" target="_blank">👥 Grupo Guia (WhatsApp)</a>
-</nav>
-</div>
-<!-- Overlay -->
-<div class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" id="menu-overlay"></div>
-<!-- Seção de Filmes em Destaque -->
-<section class="px-4 py-6 text-white" id="filmes-destaque">
-<h2 class="text-2xl font-bold mb-1 text-orange-500">🎬 Destaques do Dia</h2>
-<p class="text-sm text-gray-300 mb-4">Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais.</p>
-<div class="flex gap-4 overflow-x-auto pb-4" id="filmes">
-<div class="loading-spinner mx-auto"></div>
-</div>
-</section>
-<!-- Seção Principal de Canais -->
-<div class="container mx-auto px-4 py-6">
-<div class="flex justify-center items-center h-40" id="loading">
-<div class="loading-spinner"></div>
-<p class="ml-4 text-gray-300">Carregando programação...</p>
-</div>
-<div class="hidden bg-red-900 border border-red-700 text-white px-4 py-3 rounded mb-4" id="error-message"></div>
-<h2 class="text-2xl font-bold mb-1 text-orange-500">🔎 O Que Está Passando Agora na TV?</h2>
-<p class="text-sm text-gray-300 mb-4">Acompanhe todas as programações que estão passando e ainda vão passar nos principais canais.</p>
-<div class="filters-container overflow-x-auto pb-2">
-<div class="flex space-x-2 mb-4"><button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium favorite-filter" data-filter="favorites">
-<svg aria-hidden="true" class="h-4 w-4 inline-block mr-1" fill="currentColor" role="img" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-</svg>
-                    Favoritos
-                </button>
-<button class="filter-btn active px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="all">Todos</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="movies">Filmes e Séries</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="documentary">Documentários</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="kids">Infantis</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="sports">Esportes</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="adult">Adulto</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="open">Canais Abertos</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="news">Notícias</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="morning">Manhã</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="afternoon">Tarde</button>
-<button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="evening">Noite</button>
-</div>
-</div>
-<div class="hidden" id="channels-container">
-<!-- Seção de Filmes e Séries -->
-<section class="mb-8" id="movies-section">
-<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Filmes e Séries</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="movies-channels"></div>
-</section>
-<!-- Seção de Documentários -->
-<section class="mb-8" id="documentary-section">
-<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Documentários</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="documentary-channels"></div>
-</section>
-<!-- Seção Infantil -->
-<section class="mb-8" id="kids-section">
-<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Infantis</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kids-channels"></div>
-</section>
-<!-- Seção de Esportes -->
-<section class="mb-8" id="sports-section">
-<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Esportes</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="sports-channels"></div>
-</section>
-<!-- Seção de Outros Canais -->
-<section class="mb-8" id="other-section">
-<h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">Outros Canais</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="other-channels"></div>
-</section>
-</div>
-</div>
-<!-- Modal de Programação Completa -->
-<div class="modal" id="schedule-modal">
-<div class="modal-content">
-<div class="modal-header bg-gray-800">
-<div class="flex items-center">
-<img alt="Channel Logo" class="h-8 mr-2" id="modal-channel-logo" src=""/>
-<h3 class="text-lg font-bold text-white" id="modal-channel-name">Canal</h3>
-</div>
-<span class="modal-close">×</span>
-</div>
-<div class="modal-body">
-<div class="space-y-3" id="modal-schedule-list"></div>
-</div>
-</div>
-</div>
-<!-- JavaScript -->
-<script>
-        // Configurações globais
+  </script>
+  <!-- Botão Voltar ao Topo -->
+  <button class="fixed bottom-4 right-4 bg-vibrant-orange text-white p-3 rounded-full shadow-lg hidden z-50" id="back-to-top">
+   <svg aria-hidden="true" class="h-6 w-6" fill="none" role="img" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    </path>
+   </svg>
+  </button>
+  <!-- Modal de Trailer -->
+  <div class="trailer-modal" id="trailer-modal">
+   <div class="trailer-modal-content">
+    <span class="trailer-close">
+     ×
+    </span>
+    <div class="trailer-iframe-container" id="trailer-container">
+     <div class="trailer-not-found hidden" id="trailer-not-found">
+      <p>
+       Trailer não encontrado para este filme.
+      </p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- Botão do menu hambúrguer -->
+  <div class="fixed top-4 right-4 z-50 block md:hidden">
+  </div>
+  <!-- Drawer lateral -->
+  <div class="fixed top-0 right-0 w-64 h-full bg-gray-900 shadow-lg z-40 transform translate-x-full transition-transform duration-300 ease-in-out" id="side-menu">
+   <div class="flex justify-between items-center p-4 border-b border-gray-700">
+    <span class="text-white font-semibold text-lg">
+     Menu
+    </span>
+    <button class="text-white text-2xl" id="close-menu">
+     ×
+    </button>
+   </div>
+   <nav class="flex flex-col text-white p-4 space-y-3">
+    <button class="text-left" onclick="document.getElementById('filmes-destaque').scrollIntoView({ behavior: 'smooth' })">
+     🎬 Destaques
+    </button>
+    <button class="text-left" onclick="document.getElementById('channels-container').scrollIntoView({ behavior: 'smooth' })">
+     📺 Todos os Canais
+    </button>
+    <button class="text-left" onclick="mostrarSobre()">
+     ⚙️ Sobre
+    </button>
+    <button class="text-left" onclick="logout()">
+     ➡️ Sair
+    </button>
+    <a class="text-left" href="https://wa.me/5583981647312" target="_blank">
+     💬 Suporte (WhatsApp)
+    </a>
+    <a class="text-left" href="https://chat.whatsapp.com/H4uqhUcglUC5i4eZ4FlA1F" target="_blank">
+     👥 Grupo Guia (WhatsApp)
+    </a>
+   </nav>
+  </div>
+  <!-- Overlay -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" id="menu-overlay">
+  </div>
+  <!-- Seção de Filmes em Destaque -->
+  <section class="px-4 py-6 text-white" id="filmes-destaque">
+   <h2 class="text-2xl font-bold mb-1 text-orange-500">
+    🎬 Destaques do Dia
+   </h2>
+   <p class="text-sm text-gray-300 mb-4">
+    Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais.
+   </p>
+   <div class="flex gap-4 overflow-x-auto pb-4" id="filmes">
+    <div class="loading-spinner mx-auto">
+    </div>
+   </div>
+  </section>
+  <!-- Seção Principal de Canais -->
+  <div class="container mx-auto px-4 py-6">
+   <div class="flex justify-center items-center h-40" id="loading">
+    <div class="loading-spinner">
+    </div>
+    <p class="ml-4 text-gray-300">
+     Carregando programação...
+    </p>
+   </div>
+   <div class="hidden bg-red-900 border border-red-700 text-white px-4 py-3 rounded mb-4" id="error-message">
+   </div>
+   <h2 class="text-2xl font-bold mb-1 text-orange-500">
+    🔎 O Que Está Passando Agora na TV?
+   </h2>
+   <p class="text-sm text-gray-300 mb-4">
+    Acompanhe todas as programações que estão passando e ainda vão passar nos principais canais.
+   </p>
+   <div class="filters-container overflow-x-auto pb-2">
+    <div class="flex space-x-2 mb-4">
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium favorite-filter" data-filter="favorites">
+      <svg aria-hidden="true" class="h-4 w-4 inline-block mr-1" fill="currentColor" role="img" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+       </path>
+      </svg>
+      Favoritos
+     </button>
+     <button class="filter-btn active px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="all">
+      Todos
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="movies">
+      Filmes e Séries
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="documentary">
+      Documentários
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="kids">
+      Infantis
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="sports">
+      Esportes
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="adult">
+      Adulto
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="open">
+      Canais Abertos
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-filter="news">
+      Notícias
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="morning">
+      Manhã
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="afternoon">
+      Tarde
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-md bg-gray-800 text-sm font-medium" data-time="evening">
+      Noite
+     </button>
+    </div>
+   </div>
+   <div class="hidden" id="channels-container">
+    <!-- Seção de Filmes e Séries -->
+    <section class="mb-8" id="movies-section">
+     <h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">
+      Filmes e Séries
+     </h2>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="movies-channels">
+     </div>
+    </section>
+    <!-- Seção de Documentários -->
+    <section class="mb-8" id="documentary-section">
+     <h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">
+      Documentários
+     </h2>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="documentary-channels">
+     </div>
+    </section>
+    <!-- Seção Infantil -->
+    <section class="mb-8" id="kids-section">
+     <h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">
+      Infantis
+     </h2>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kids-channels">
+     </div>
+    </section>
+    <!-- Seção de Esportes -->
+    <section class="mb-8" id="sports-section">
+     <h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">
+      Esportes
+     </h2>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="sports-channels">
+     </div>
+    </section>
+    <!-- Seção de Outros Canais -->
+    <section class="mb-8" id="other-section">
+     <h2 class="category-title text-xl font-bold mb-4 text-vibrant-orange">
+      Outros Canais
+     </h2>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="other-channels">
+     </div>
+    </section>
+   </div>
+  </div>
+  <!-- Modal de Programação Completa -->
+  <div class="modal" id="schedule-modal">
+   <div class="modal-content">
+    <div class="modal-header bg-gray-800">
+     <div class="flex items-center">
+      <img alt="Channel Logo" class="h-8 mr-2" id="modal-channel-logo" src=""/>
+      <h3 class="text-lg font-bold text-white" id="modal-channel-name">
+       Canal
+      </h3>
+     </div>
+     <span class="modal-close">
+      ×
+     </span>
+    </div>
+    <div class="modal-body">
+     <div class="space-y-3" id="modal-schedule-list">
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- JavaScript -->
+  <script>
+   // Configurações globais
         const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251";
         const epgXmlUrl = "https://raw.githubusercontent.com/limaalef/BrazilTVEPG/main/vivoplay.xml";
         
@@ -1700,14 +1793,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     }
                                 }
                                 
-                                
-// Exibir a nota do TMDb sobre a capa
-const ratingBadge = document.createElement("div");
-ratingBadge.className = "movie-rating";
-ratingBadge.textContent = `${Math.round(dadosBusca.results[0].vote_average * 10)}%`;
-wrapper.appendChild(ratingBadge);
-
-// Obter logo do canal
+                                // Obter logo do canal
                                 let channelLogo = '';
                                 for (const [key, url] of Object.entries(channelLogos)) {
                                     if (channel.includes(key)) {
@@ -1857,17 +1943,19 @@ wrapper.appendChild(ratingBadge);
                 });
             });
         });
-    </script>
-<div class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center" id="trailerModal">
-<div class="bg-gray-900 p-4 rounded-lg shadow-lg relative w-full max-w-3xl">
-<button class="absolute top-2 right-2 text-white text-2xl" onclick="fecharModal()">×</button>
-<div class="aspect-video w-full" id="trailerContainer">
-<!-- Iframe será inserido aqui -->
-</div>
-</div>
-</div>
-<script>
-  if ('serviceWorker' in navigator) {
+  </script>
+  <div class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center" id="trailerModal">
+   <div class="bg-gray-900 p-4 rounded-lg shadow-lg relative w-full max-w-3xl">
+    <button class="absolute top-2 right-2 text-white text-2xl" onclick="fecharModal()">
+     ×
+    </button>
+    <div class="aspect-video w-full" id="trailerContainer">
+     <!-- Iframe será inserido aqui -->
+    </div>
+   </div>
+  </div>
+  <script>
+   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
       .then(() => console.log("Service Worker registrado"))
       .catch(error => console.error("Erro ao registrar Service Worker", error));
@@ -1876,10 +1964,10 @@ wrapper.appendChild(ratingBadge);
   if ('Notification' in window && Notification.permission !== 'granted') {
     Notification.requestPermission();
   }
-</script>
-<!-- Navegação inferior mobile -->
-<script>
-  const menu = document.getElementById('side-menu');
+  </script>
+  <!-- Navegação inferior mobile -->
+  <script>
+   const menu = document.getElementById('side-menu');
   const menuButton = document.getElementById('menu-button');
   const closeButton = document.getElementById('close-menu');
   const overlay = document.getElementById('menu-overlay');
@@ -1928,9 +2016,9 @@ wrapper.appendChild(ratingBadge);
     alert('Você saiu. Redirecionando...');
     // window.location.href = '/logout';
   }
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+  </script>
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", function () {
       const filter = this.dataset.filter;
@@ -1954,6 +2042,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-</script></body>
+  </script>
+  <script>
+   <script>
+function toggleProgramacao(cardId) {
+    const card = document.getElementById(cardId);
+    const programas = card.querySelectorAll('.programme-item');
+    const btnProxima = card.querySelector('.ver-proxima-btn');
+    const btnVoltar = card.querySelector('.ver-voltar-btn');
+
+    if (btnProxima.textContent === 'Ver Próxima Programação') {
+        programas[1].classList.remove('hidden');
+        btnProxima.textContent = 'Ver Toda Programação';
+        btnVoltar.classList.remove('hidden');
+    } else if (btnProxima.textContent === 'Ver Toda Programação') {
+        programas.forEach(programa => programa.classList.remove('hidden'));
+        btnProxima.classList.add('hidden');
+        btnVoltar.classList.remove('hidden');
+    }
+}
+
+function voltarParaProgramacaoInicial(cardId) {
+    const card = document.getElementById(cardId);
+    const programas = card.querySelectorAll('.programme-item');
+    const btnProxima = card.querySelector('.ver-proxima-btn');
+    const btnVoltar = card.querySelector('.ver-voltar-btn');
+
+    programas[1].classList.add('hidden');
+    programas[0].classList.remove('hidden');
+
+    btnProxima.textContent = 'Ver Próxima Programação';
+    btnProxima.classList.remove('hidden');
+    btnVoltar.classList.add('hidden');
+}
+</script>
+  </script>
+ </body>
 </html>
 <!-- Navegação inferior mobile -->
