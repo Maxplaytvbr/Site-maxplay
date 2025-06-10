@@ -398,13 +398,13 @@
         
         /* Botão de lembrete */
         .reminder-btn {
-            background-color: #6b7280;
+            background-color: #fde047;
             color: #1e293b;
             transition: all 0.2s ease;
         }
         
         .reminder-btn:hover {
-            background-color: #4b5563;
+            background-color: #facc15;
             transform: translateY(-1px);
         }
         
@@ -547,14 +547,6 @@ button:hover, .filter-btn:hover, .reminder-btn:hover {
   <style>
    button.definir-lembrete {
     background-color: #6b7280; /* Cor cinza suave */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-
-    background-color: #6b7280; /* Cor cinza suave */
     color: white;              /* Mantém o texto branco */
     border: none;              /* Remover borda */
     padding: 10px 20px;        /* Ajustando o padding para um tamanho agradável */
@@ -564,22 +556,12 @@ button:hover, .filter-btn:hover, .reminder-btn:hover {
 }
 
 button.definir-lembrete:hover {
-    background-color: #4b5563; /* Cor mais escura quando o botão é hover */
-
     background-color: #4b5563; /* Cor mais escura quando o botão é hover */
 }
   </style>
   <style>
    button.definir-lembrete {
     background-color: #6b7280; /* Cor cinza suave */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-
-    background-color: #6b7280; /* Cor cinza suave */
     color: white;              /* Mantém o texto branco */
     border: none;              /* Remover borda */
     padding: 10px 20px;        /* Ajustando o padding para um tamanho agradável */
@@ -589,8 +571,6 @@ button.definir-lembrete:hover {
 }
 
 button.definir-lembrete:hover {
-    background-color: #4b5563; /* Cor mais escura quando o botão é hover */
-
     background-color: #4b5563; /* Cor mais escura quando o botão é hover */
 }
   </style>
@@ -2340,6 +2320,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
   </script>
- </body>
+ 
+    <script>
+        const tmdbApiKey = "54b9cff0f48a3f127fa5cd5906bbe251"; // Sua chave da API TMDb
+
+        // Função para buscar detalhes do filme na API TMDb
+        async function fetchMovieDetails(movieId) {
+            const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbApiKey}&language=pt-BR`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Erro ao buscar detalhes do filme:', error);
+            }
+        }
+
+        // Função para atualizar o card de filme com a avaliação
+        async function updateMovieCard(movieId, cardElement) {
+            const movieData = await fetchMovieDetails(movieId);
+
+            if (movieData) {
+                const rating = movieData.vote_average; // Pega a avaliação do filme
+                const ratingElement = cardElement.querySelector('.movie-rating'); // Encontra o elemento do rating
+
+                if (ratingElement) {
+                    ratingElement.innerHTML = `
+                        <div class="rating-circle">
+                            ${rating * 10}% 
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Função para buscar todos os filmes e atualizar seus cards
+        function updateAllMovieCards() {
+            const movieCards = document.querySelectorAll('.movie-card'); // Seleciona todos os cards de filmes
+
+            movieCards.forEach(card => {
+                const movieId = card.dataset.movieId; // Assume que cada card tem um atributo data-movie-id com o ID do filme
+
+                if (movieId) {
+                    updateMovieCard(movieId, card); // Atualiza o card com a avaliação do filme
+                }
+            });
+        }
+
+        // Chama a função para atualizar os cards de filmes quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAllMovieCards(); // Atualiza todos os cards de filmes na página
+        });
+
+        // Atualizar os cards quando novos filmes forem carregados (caso a página tenha rolagem infinita ou carregamento dinâmico)
+        window.addEventListener('load', () => {
+            updateAllMovieCards(); // Chama novamente quando os novos filmes aparecerem
+        });
+    </script>
+
+    <!-- Estilo para a exibição da avaliação -->
+    <style>
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .rating-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ff6b00;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    </body>
+    
 </html>
 <!-- Navegação inferior mobile -->
