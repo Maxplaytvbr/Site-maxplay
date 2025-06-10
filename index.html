@@ -444,11 +444,43 @@
             color: white !important; 
             border-bottom: 2px solid white; 
         }
+
+/* ===== AJUSTES SOLICITADOS ===== */
+
+button[title="Recarregar"] img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.movie-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.movie-card > div:last-child {
+    margin-top: auto;
+}
+
+
+.channel-card {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 107, 0, 0.5) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+}
+.channel-card:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
 </style>
 </head>
 <body>
 <header class="w-full bg-vibrant-orange flex items-center justify-between px-4 h-12">
-<img alt="MaxPlay Logo" class="h-12 object-contain ml-2" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
+<img alt="MaxPlay Logo" class="h-10 max-h-full object-contain ml-2" style="padding: 2px 0;" src="https://i.postimg.cc/qB9QRnt9/Logotipo-delicado-monograma-feminino-bege-e-branco.png"/>
 <button class="text-white text-3xl focus:outline-none" id="menu-button">☰</button>
 </header>
 <!-- Barra de busca com botão e relógio -->
