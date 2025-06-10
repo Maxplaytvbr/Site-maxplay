@@ -2156,6 +2156,123 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+  </script>
+  <script>
+   <script>
+async function updateFilmRatings() {
+    const films = document.querySelectorAll('.movie-card');  // Selecionando todos os cards de filmes
+
+    for (let film of films) {
+        const filmId = film.dataset.movieId; // Pega o ID do filme para fazer a chamada à API
+        const ratingCircle = film.querySelector('.rating-circle'); // Selecionando o círculo de rating
+
+        // Se o filme não tem ID válido, pula
+        if (!filmId) continue;
+
+        try {
+            // Fazendo a requisição para a API do TheMovieDB
+            const response = await fetch(`https://api.themoviedb.org/3/movie/${filmId}?api_key=YOUR_API_KEY`);
+            const data = await response.json();
+
+            if (data && data.vote_average) {
+                const voteAverage = data.vote_average;
+                const percentage = Math.round(voteAverage * 10); // Convertendo a nota para porcentagem
+                
+                // Ajustando a cor do círculo baseado na avaliação
+                let color = '';
+                if (percentage >= 70) {
+                    color = '#ff6b00'; // Laranja
+                } else if (percentage >= 60) {
+                    color = '#facc15'; // Amarelo
+                } else {
+                    color = '#ef4444'; // Vermelho
+                }
+
+                // Atualizando o círculo de porcentagem
+                ratingCircle.textContent = `${percentage}%`;
+                ratingCircle.style.backgroundColor = color;
+                ratingCircle.classList.remove('hidden'); // Certificando-se de que o círculo seja visível
+            }
+        } catch (error) {
+            console.error('Erro ao buscar a avaliação do filme:', error);
+        }
+    }
+}
+
+// Chama a função assim que o conteúdo da página for carregado
+document.addEventListener('DOMContentLoaded', updateFilmRatings);
+  </script>
+  <script>
+   <script>
+function toggleProgramacao(cardId) {
+    const card = document.getElementById(cardId);
+    const programas = card.querySelectorAll('.programme-item');
+    const btnProxima = card.querySelector('.ver-proxima-btn');
+    const btnVoltar = card.querySelector('.ver-voltar-btn');
+
+    // Exibir a segunda programação e alterar o botão para "Ver Toda Programação"
+    if (btnProxima.textContent === 'Ver Próxima Programação') {
+        programas[1].classList.remove('hidden');  // Exibir a segunda programação
+        btnProxima.textContent = 'Ver Toda Programação';  // Mudar texto do botão
+        btnVoltar.classList.remove('hidden'); // Mostrar botão de voltar
+    }
+    // Exibir toda a programação e alterar o botão para "Voltar"
+    else if (btnProxima.textContent === 'Ver Toda Programação') {
+        programas.forEach(programa => programa.classList.remove('hidden'));
+        btnProxima.classList.add('hidden'); // Esconder o botão "Ver Próxima Programação"
+        btnVoltar.classList.remove('hidden'); // Mostrar botão "Voltar"
+    }
+}
+
+function voltarParaProgramacaoInicial(cardId) {
+    const card = document.getElementById(cardId);
+    const programas = card.querySelectorAll('.programme-item');
+    const btnProxima = card.querySelector('.ver-proxima-btn');
+    const btnVoltar = card.querySelector('.ver-voltar-btn');
+
+    // Resetar para exibir apenas a programação ao vivo
+    programas[1].classList.add('hidden'); // Esconder a segunda programação
+    programas[0].classList.remove('hidden'); // Garantir que a primeira programação está visível
+
+    btnProxima.textContent = 'Ver Próxima Programação';
+    btnProxima.classList.remove('hidden'); // Mostrar o botão novamente
+    btnVoltar.classList.add('hidden'); // Esconder o botão "Voltar"
+}
+
+// Funcionalidade para fechar a aba de "Ver Toda Programação" com o botão "X"
+function closeFullSchedule(cardId) {
+    const card = document.getElementById(cardId);
+    const modal = card.querySelector('.programacao-completa-modal');
+    modal.style.display = 'none'; // Esconde a aba de programação completa
+    voltarParaProgramacaoInicial(cardId); // Volta para a programação inicial
+}
+
+// Função para abrir a aba de "Ver Toda Programação" quando o botão é clicado
+function openFullSchedule(cardId) {
+    const card = document.getElementById(cardId);
+    const modal = card.querySelector('.programacao-completa-modal');
+    modal.style.display = 'block'; // Exibe a aba de programação completa
+}
+
+// Adicionar o event listener para o botão "X" de fechar
+document.addEventListener('DOMContentLoaded', () => {
+    const closeButtons = document.querySelectorAll('.modal-close'); // Seleciona todos os "X"
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const cardId = this.closest('.channel-card').id;
+            closeFullSchedule(cardId);
+        });
+    });
+
+    // Adiciona o evento de clique para o botão de "Ver Toda Programação"
+    const fullScheduleButtons = document.querySelectorAll('.ver-toda-programacao-btn');
+    fullScheduleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const cardId = this.closest('.channel-card').id;
+            openFullSchedule(cardId);
+        });
+    });
+});
 </script>
   </script>
  </body>
