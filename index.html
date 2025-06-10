@@ -2103,6 +2103,53 @@ function voltarParaProgramacaoInicial(cardId) {
     btnVoltar.classList.add('hidden');
 }
   </script>
+  <script>
+   <script>
+// Função para puxar a avaliação dos filmes da API do TheMovieDB e exibir a porcentagem
+async function updateFilmRatings() {
+    const films = document.querySelectorAll('.movie-card');  // Selecionando todos os cards de filmes
+
+    for (let film of films) {
+        const filmId = film.dataset.movieId; // Pega o ID do filme para fazer a chamada à API
+        const ratingCircle = film.querySelector('.rating-circle'); // Selecionando o círculo de rating
+
+        // Se o filme não tem ID válido, pula
+        if (!filmId) continue;
+
+        try {
+            // Fazendo a requisição para a API do TheMovieDB
+            const response = await fetch(`https://api.themoviedb.org/3/movie/${filmId}?api_key=YOUR_API_KEY`);
+            const data = await response.json();
+            
+            if (data && data.vote_average) {
+                const voteAverage = data.vote_average;
+                const percentage = Math.round(voteAverage * 10); // Convertendo a nota para porcentagem
+                
+                // Ajustando a cor do círculo baseado na avaliação
+                let color = '';
+                if (percentage >= 70) {
+                    color = '#ff6b00'; // Laranja
+                } else if (percentage >= 60) {
+                    color = '#facc15'; // Amarelo
+                } else {
+                    color = '#ef4444'; // Vermelho
+                }
+                
+                // Atualizando o círculo de porcentagem
+                ratingCircle.textContent = `${percentage}%`;
+                ratingCircle.style.backgroundColor = color;
+                ratingCircle.classList.remove('hidden'); // Certificando-se de que o círculo seja visível
+            }
+        } catch (error) {
+            console.error('Erro ao buscar a avaliação do filme:', error);
+        }
+    }
+}
+
+// Chama a função assim que o conteúdo da página for carregado
+document.addEventListener('DOMContentLoaded', updateFilmRatings);
+</script>
+  </script>
  </body>
 </html>
 <!-- Navegação inferior mobile -->
