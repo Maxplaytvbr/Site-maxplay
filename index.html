@@ -509,6 +509,33 @@ button:hover, .filter-btn:hover, .reminder-btn:hover {
     display: none;
 }
   </style>
+  <style>
+   body {
+    background-color: #121c28; /* Preto azulado mais escuro */
+    color: #f8fafc;
+}
+
+.channel-card {
+    background-color: rgba(255, 255, 255, 0.1); /* Mantém o card com o fundo claro, mas com mais transparência */
+    border: 1px solid rgba(255, 107, 0, 0.6); /* Ajusta a borda para maior contraste */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); /* Leve sombra nos cards */
+    transition: transform 0.3s ease;
+}
+
+.channel-card:hover {
+    transform: translateY(-3px);
+}
+
+button, .filter-btn, .reminder-btn {
+    background-color: rgba(255, 107, 0, 0.8); /* Botões com tom mais vibrante */
+    color: white;
+}
+
+button:hover, .filter-btn:hover, .reminder-btn:hover {
+    background-color: rgba(255, 107, 0, 1);
+    transform: translateY(-1px);
+}
+  </style>
  </head>
  <body>
   <header class="w-full bg-vibrant-orange flex items-center justify-between px-4 h-12">
@@ -2075,7 +2102,6 @@ function voltarParaProgramacaoInicial(cardId) {
     btnProxima.classList.remove('hidden');
     btnVoltar.classList.add('hidden');
 }
-</script>
   </script>
  </body>
 </html>
