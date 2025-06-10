@@ -536,6 +536,29 @@ button:hover, .filter-btn:hover, .reminder-btn:hover {
     transform: translateY(-1px);
 }
   </style>
+  <style>
+   #header-logo img {
+    max-height: 50px;  /* Limita a altura da logo para que não ultrapasse a barra laranja */
+    max-width: 100%;   /* A largura será ajustada automaticamente */
+    height: auto;      /* Mantém a proporção da imagem */
+    width: auto;       /* Garante que a largura se ajuste proporcionalmente */
+}
+  </style>
+  <style>
+   button.definir-lembrete {
+    background-color: #6b7280; /* Cor cinza suave */
+    color: white;              /* Mantém o texto branco */
+    border: none;              /* Remover borda */
+    padding: 10px 20px;        /* Ajustando o padding para um tamanho agradável */
+    font-size: 16px;           /* Tamanho da fonte */
+    border-radius: 5px;        /* Bordas arredondadas */
+    cursor: pointer;          /* Cursor de pointer para interatividade */
+}
+
+button.definir-lembrete:hover {
+    background-color: #4b5563; /* Cor mais escura quando o botão é hover */
+}
+  </style>
  </head>
  <body>
   <header class="w-full bg-vibrant-orange flex items-center justify-between px-4 h-12">
@@ -2273,7 +2296,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-</script>
   </script>
  </body>
 </html>
