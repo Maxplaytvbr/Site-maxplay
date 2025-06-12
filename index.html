@@ -356,7 +356,7 @@
     .movie-card {
       min-width: 160px;
       max-width: 180px;
-      height: 420px; /* Aumentado para comportar todos os elementos */
+      height: 460px; /* Aumentado para comportar todos os elementos com mais folga */
       background-color: rgba(255, 255, 255, 0.05);
       border-radius: 6px;
       padding: 0.75rem;
@@ -371,6 +371,25 @@
     
     .movie-card:hover {
       transform: translateY(-5px);
+    }
+    
+    .movie-card-live {
+      border: 2px solid #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+    
+    .live-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #ef4444;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      z-index: 2;
+      animation: pulse 1.5s infinite;
     }
     
     .movie-poster-container {
@@ -524,7 +543,7 @@
       
       .movie-card {
         min-width: 140px;
-        height: 400px;
+        height: 440px;
       }
     }
     
@@ -1777,13 +1796,21 @@
                   parseInt(start.slice(10, 12))
                 );
                 
+                const endTime = new Date(
+                  parseInt(p.getAttribute("stop").slice(0, 4)),
+                  parseInt(p.getAttribute("stop").slice(4, 6)) - 1,
+                  parseInt(p.getAttribute("stop").slice(6, 8)),
+                  parseInt(p.getAttribute("stop").slice(8, 10)),
+                  parseInt(p.getAttribute("stop").slice(10, 12))
+                );
+                
                 // Filtra para incluir apenas filmes (exclui séries, programas, etc.)
                 const title = p.getElementsByTagName("title")[0]?.textContent || "";
                 const isMovie = !title.match(/(EP\.|Episódio|Série|Temporada|Programa|Show|Novela)/i);
                 
                 return channel.toLowerCase().includes(canal.toLowerCase()) &&
                        start.startsWith(dia) &&
-                       startTime >= new Date() && // Só mostra programas futuros
+                       (startTime >= new Date() || (startTime <= new Date() && endTime > new Date())) && // Mostra programas futuros ou ao vivo
                        isMovie; // Apenas filmes
               });
               
@@ -1801,6 +1828,7 @@
                 
                 const channel = filme.getAttribute("channel");
                 const start = filme.getAttribute("start");
+                const stop = filme.getAttribute("stop");
                 const startTime = new Date(
                   parseInt(start.slice(0, 4)),
                   parseInt(start.slice(4, 6)) - 1,
@@ -1808,7 +1836,16 @@
                   parseInt(start.slice(8, 10)),
                   parseInt(start.slice(10, 12))
                 );
-                const horario = start ? start.slice(8, 10) + ":" + start.slice(10, 12) : "--:--";
+                const endTime = new Date(
+                  parseInt(stop.slice(0, 4)),
+                  parseInt(stop.slice(4, 6)) - 1,
+                  parseInt(stop.slice(6, 8)),
+                  parseInt(stop.slice(8, 10)),
+                  parseInt(stop.slice(10, 12))
+                );
+                
+                const agora = new Date();
+                const estaAoVivo = startTime <= agora && endTime > agora;
                 
                 // Formata a data completa para exibição
                 const dataExibicao = new Date(
@@ -1859,9 +1896,10 @@
                 }
                 
                 const card = document.createElement("div");
-                card.className = "movie-card";
+                card.className = `movie-card ${estaAoVivo ? 'movie-card-live' : ''}`;
                 card.innerHTML = `
                   <div class="movie-poster-container relative">
+                    ${estaAoVivo ? '<span class="live-badge">AO VIVO AGORA</span>' : ''}
                     <img src="${img}" alt="${titleRaw}" class="w-full h-60 object-cover mb-2 rounded" loading="lazy">
                     ${rating !== null ? `
                       <div class="rating-circle ${ratingClass}">
@@ -1878,7 +1916,11 @@
                     <span class="text-xs bg-gray-700 px-2 py-1 rounded">${diaSemana} ${dataFormatada}</span>
                   </div>
                   <div class="flex items-center justify-between mt-1">
-                    <p class="text-xs text-gray-300">Horário: ${horario}</p>
+                    <p class="text-xs ${estaAoVivo ? 'text-red-400 font-bold' : 'text-gray-300'}">
+                      ${estaAoVivo ? 
+                        `AO VIVO até ${endTime.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}` : 
+                        `Horário: ${startTime.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}`}
+                    </p>
                     <img src="${ratingImg}" alt="Classificação ${ratingIndicativa}" class="h-4">
                   </div>
                   <button class="ver-trailer-btn mt-2 w-full py-1 bg-vibrant-orange text-white rounded text-xs hover:bg-orange-600 transition-colors" data-titulo="${titleRaw}">
@@ -1920,6 +1962,53 @@
           console.error("Erro ao carregar filmes:", error);
           container.innerHTML = '<p class="text-red-400 text-center py-4">Erro ao carregar filmes</p>';
         }
+      }
+      
+      function atualizarStatusFilmes() {
+        const cards = document.querySelectorAll('.movie-card');
+        const agora = new Date();
+        
+        cards.forEach(card => {
+          const horarioElement = card.querySelector('.definir-lembrete');
+          if (!horarioElement) return;
+          
+          const horario = parseInt(horarioElement.dataset.horario);
+          const startTime = new Date(horario);
+          const endTime = new Date(horario + (2 * 60 * 60 * 1000)); // Assumindo 2 horas de duração
+          
+          const estaAoVivo = startTime <= agora && endTime > agora;
+          
+          if (estaAoVivo) {
+            card.classList.add('movie-card-live');
+            
+            // Atualiza o badge AO VIVO se não existir
+            if (!card.querySelector('.live-badge')) {
+              const badge = document.createElement('span');
+              badge.className = 'live-badge';
+              badge.textContent = 'AO VIVO AGORA';
+              card.querySelector('.movie-poster-container').prepend(badge);
+            }
+            
+            // Atualiza o texto do horário
+            const horarioText = card.querySelector('p.text-xs');
+            if (horarioText) {
+              horarioText.classList.add('text-red-400', 'font-bold');
+              horarioText.classList.remove('text-gray-300');
+              horarioText.textContent = `AO VIVO até ${endTime.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}`;
+            }
+          } else {
+            card.classList.remove('movie-card-live');
+            const badge = card.querySelector('.live-badge');
+            if (badge) badge.remove();
+            
+            const horarioText = card.querySelector('p.text-xs');
+            if (horarioText && startTime > agora) {
+              horarioText.classList.remove('text-red-400', 'font-bold');
+              horarioText.classList.add('text-gray-300');
+              horarioText.textContent = `Horário: ${startTime.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}`;
+            }
+          }
+        });
       }
       
       async function buscarImagemFilme(tituloOriginal) {
@@ -2031,6 +2120,9 @@
       // Iniciar carregamento dos dados
       fetchEPGData();
       carregarFilmes();
+      
+      // Atualizar status dos filmes periodicamente
+      setInterval(atualizarStatusFilmes, 60000); // Atualiza a cada minuto
       
       // Event Listeners
       channelSearch.addEventListener('input', handleSearch);
