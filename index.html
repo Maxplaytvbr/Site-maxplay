@@ -345,7 +345,7 @@
       margin-right: 4px;
     }
     
-    /* Dias da semana */
+    /* Dias da semana abreviados */
     .weekday {
       font-size: 0.75rem;
       color: #a0aec0;
@@ -523,6 +523,151 @@
       min-width: 80px;
     }
     
+    /* Modal de detalhes do filme */
+    .movie-details-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 100;
+      overflow-y: auto;
+    }
+    
+    .movie-details-content {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      margin: 5% auto;
+      background-color: #1a2234;
+      border-radius: 8px;
+      padding: 20px;
+      animation: modalFadeIn 0.3s;
+    }
+    
+    .movie-details-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: #a0aec0;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .movie-details-close:hover {
+      color: #ff6b00;
+    }
+    
+    .movie-details-header {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    @media (min-width: 768px) {
+      .movie-details-header {
+        flex-direction: row;
+      }
+    }
+    
+    .movie-details-poster {
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .movie-details-poster img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+    
+    .movie-details-info {
+      flex-grow: 1;
+    }
+    
+    .movie-details-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: white;
+    }
+    
+    .movie-details-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+      color: #a0aec0;
+      font-size: 14px;
+    }
+    
+    .movie-details-overview {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .movie-details-rating {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    
+    .movie-details-rating-value {
+      font-weight: bold;
+      color: #ff6b00;
+    }
+    
+    .movie-details-cast {
+      margin-top: 30px;
+    }
+    
+    .movie-details-cast-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: white;
+      border-bottom: 1px solid #2d3748;
+      padding-bottom: 5px;
+    }
+    
+    .movie-details-cast-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 15px;
+    }
+    
+    .movie-details-cast-member {
+      text-align: center;
+    }
+    
+    .movie-details-cast-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 5px;
+      background-color: #2d3748;
+    }
+    
+    .movie-details-cast-name {
+      font-size: 12px;
+      color: white;
+      margin-bottom: 2px;
+    }
+    
+    .movie-details-cast-character {
+      font-size: 11px;
+      color: #a0aec0;
+    }
+    
     /* Responsividade */
     @media (max-width: 640px) {
       .filters-container {
@@ -545,6 +690,23 @@
         min-width: 140px;
         height: 440px;
       }
+      
+      .movie-details-content {
+        width: 95%;
+        margin: 10% auto;
+      }
+      
+      .movie-details-header {
+        flex-direction: column;
+      }
+      
+      .movie-details-poster {
+        max-width: 100%;
+      }
+      
+      .movie-details-cast-list {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      }
     }
     
     @media (max-width: 400px) {
@@ -563,6 +725,25 @@
       margin-top: auto;
       padding: 8px;
       font-size: 14px;
+    }
+    
+    /* Mais detalhes button */
+    .mais-detalhes-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      font-size: 14px;
+      background-color: rgba(255, 107, 0, 0.3);
+      border: 1px solid rgba(255, 107, 0, 0.5);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-align: center;
+    }
+    
+    .mais-detalhes-btn:hover {
+      background-color: rgba(255, 107, 0, 0.5);
     }
   </style>
 </head>
@@ -619,6 +800,18 @@
             Trailer não encontrado para este filme.
           </p>
         </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de Detalhes do Filme -->
+  <div class="movie-details-modal" id="movie-details-modal">
+    <div class="movie-details-content">
+      <span class="movie-details-close" id="movie-details-close">
+        ×
+      </span>
+      <div id="movie-details-body">
+        <!-- O conteúdo será preenchido dinamicamente -->
       </div>
     </div>
   </div>
@@ -938,6 +1131,11 @@
       const modalChannelLogo = document.getElementById('modal-channel-logo');
       const modalScheduleList = document.getElementById('modal-schedule-list');
       
+      // Elementos do modal de detalhes do filme
+      const movieDetailsModal = document.getElementById('movie-details-modal');
+      const movieDetailsClose = document.getElementById('movie-details-close');
+      const movieDetailsBody = document.getElementById('movie-details-body');
+      
       // Containers de canais por categoria
       const moviesChannels = document.getElementById('movies-channels');
       const documentaryChannels = document.getElementById('documentary-channels');
@@ -957,79 +1155,121 @@
       let reminders = JSON.parse(localStorage.getItem('filmReminders')) || {};
       
       // =============================================
-      // SISTEMA DE LEMBRETES
+      // FUNÇÕES DO MODAL DE DETALHES DO FILME
       // =============================================
       
-      // Pedir permissão para notificações
-      function requestNotificationPermission() {
-        if ('Notification' in window) {
-          Notification.requestPermission().then(permission => {
-            console.log('Permissão para notificações:', permission);
-          });
-        }
-      }
-      
-      // Função para adicionar lembrete
-      function addReminder(movieTitle, channel, startTime) {
-        const reminderId = `${movieTitle}-${startTime}`;
-        reminders[reminderId] = {
-          title: movieTitle,
-          channel: channel,
-          time: startTime,
-          notified: false
-        };
-        localStorage.setItem('filmReminders', JSON.stringify(reminders));
+      // Função para abrir o modal de detalhes do filme
+      async function abrirDetalhesFilme(tituloFilme, channel, startTime) {
+        // Mostrar loading no modal
+        movieDetailsBody.innerHTML = '<div class="loading-spinner mx-auto my-20"></div>';
+        movieDetailsModal.style.display = 'block';
         
-        // Mostrar feedback visual
-        showToast(`Lembrete definido para "${movieTitle}"`);
-      }
-      
-      // Mostrar toast de confirmação
-      function showToast(message) {
-        const toast = document.createElement('div');
-        toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg reminder-toast z-50';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-          toast.style.opacity = '0';
-          setTimeout(() => toast.remove(), 300);
-        }, 3000);
-      }
-      
-      // Verificar lembretes periodicamente
-      function checkReminders() {
-        const now = new Date().getTime();
-        
-        Object.keys(reminders).forEach(id => {
-          const reminder = reminders[id];
-          const movieTime = reminder.time;
-          const fiveMinutesBefore = movieTime - (5 * 60 * 1000);
+        try {
+          // Buscar detalhes do filme na API do TMDB
+          const tituloNormalizado = normalizarTitulo(tituloFilme);
+          const urlBusca = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${encodeURIComponent(tituloNormalizado)}`;
           
-          if (!reminder.notified && now >= fiveMinutesBefore && now < movieTime) {
-            showNotification(reminder);
-            reminder.notified = true;
-            reminders[id] = reminder;
-            localStorage.setItem('filmReminders', JSON.stringify(reminders));
+          const respostaBusca = await fetch(urlBusca);
+          const dadosBusca = await respostaBusca.json();
+          
+          if (!dadosBusca.results?.length) {
+            movieDetailsBody.innerHTML = '<p class="text-center py-10 text-gray-400">Nenhuma informação encontrada para este filme.</p>';
+            return;
           }
-        });
-      }
-      
-      // Mostrar notificação
-      function showNotification(reminder) {
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification(`🎬 ${reminder.title}`, {
-            body: `Começa em 5 minutos no ${reminder.channel}`,
-            icon: 'https://i.postimg.cc/BvbCr0jH/IMG-6850.png'
-          });
-        } else {
-          // Fallback para alerta se notificações não forem permitidas
-          alert(`⏰ Lembrete: ${reminder.title} começa em 5 minutos no ${reminder.channel}`);
+          
+          // Pegar o primeiro resultado (assumindo que é o mais relevante)
+          const filmeId = dadosBusca.results[0].id;
+          
+          // Buscar detalhes completos e créditos
+          const [detalhesResposta, creditosResposta] = await Promise.all([
+            fetch(`https://api.themoviedb.org/3/movie/${filmeId}?api_key=${tmdbApiKey}&language=pt-BR`),
+            fetch(`https://api.themoviedb.org/3/movie/${filmeId}/credits?api_key=${tmdbApiKey}`)
+          ]);
+          
+          const [detalhes, creditos] = await Promise.all([
+            detalhesResposta.json(),
+            creditosResposta.json()
+          ]);
+          
+          // Construir o HTML do modal
+          let html = `
+            <div class="movie-details-header">
+              <div class="movie-details-poster">
+                <img src="${detalhes.poster_path ? `https://image.tmdb.org/t/p/w500${detalhes.poster_path}` : 'https://via.placeholder.com/500x750?text=Poster+Não+Disponível'}" alt="${detalhes.title}">
+              </div>
+              <div class="movie-details-info">
+                <h1 class="movie-details-title">${detalhes.title}</h1>
+                <div class="movie-details-meta">
+                  ${detalhes.release_date ? `<span>${new Date(detalhes.release_date).toLocaleDateString('pt-BR')}</span>` : ''}
+                  ${detalhes.runtime ? `<span>${Math.floor(detalhes.runtime / 60)}h ${detalhes.runtime % 60}m</span>` : ''}
+                  ${detalhes.genres?.length ? `<span>${detalhes.genres.map(g => g.name).join(', ')}</span>` : ''}
+                </div>
+                <div class="movie-details-rating">
+                  <span class="movie-details-rating-value">${detalhes.vote_average ? detalhes.vote_average.toFixed(1) : 'N/A'}</span>
+                  <span>/10 (${detalhes.vote_count ? detalhes.vote_count : '0'} votos)</span>
+                </div>
+                <div class="movie-details-overview">
+                  <h3 class="font-bold mb-2">Sinopse</h3>
+                  <p>${detalhes.overview || 'Sinopse não disponível.'}</p>
+                </div>
+                <div class="movie-details-channel-info">
+                  <p><strong>Canal:</strong> ${channel}</p>
+                  <p><strong>Horário:</strong> ${new Date(startTime).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</p>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Adicionar elenco se disponível
+          if (creditos.cast?.length) {
+            html += `
+              <div class="movie-details-cast">
+                <h3 class="movie-details-cast-title">Elenco Principal</h3>
+                <div class="movie-details-cast-list">
+            `;
+            
+            // Pegar os 10 primeiros atores
+            const elencoPrincipal = creditos.cast.slice(0, 10);
+            
+            for (const ator of elencoPrincipal) {
+              html += `
+                <div class="movie-details-cast-member">
+                  <img src="${ator.profile_path ? `https://image.tmdb.org/t/p/w185${ator.profile_path}` : 'https://via.placeholder.com/185x278?text=Sem+Foto'}" 
+                       alt="${ator.name}" 
+                       class="movie-details-cast-photo"
+                       onerror="this.onerror=null;this.src='https://via.placeholder.com/185x278?text=Sem+Foto'">
+                  <div class="movie-details-cast-name">${ator.name}</div>
+                  <div class="movie-details-cast-character">${ator.character || 'Personagem'}</div>
+                </div>
+              `;
+            }
+            
+            html += `
+                </div>
+              </div>
+            `;
+          }
+          
+          movieDetailsBody.innerHTML = html;
+          
+        } catch (error) {
+          console.error('Erro ao buscar detalhes do filme:', error);
+          movieDetailsBody.innerHTML = '<p class="text-center py-10 text-red-400">Erro ao carregar informações do filme.</p>';
         }
       }
       
-      // Verificar lembretes a cada minuto
-      setInterval(checkReminders, 60000);
+      // Função para fechar o modal de detalhes
+      function fecharModalDetalhes() {
+        movieDetailsModal.style.display = 'none';
+      }
+      
+      // Configurar eventos do modal de detalhes
+      movieDetailsClose.addEventListener('click', fecharModalDetalhes);
+      window.addEventListener('click', (event) => {
+        if (event.target === movieDetailsModal) {
+          fecharModalDetalhes();
+        }
+      });
       
       // =============================================
       // FUNÇÕES PRINCIPAIS
@@ -1926,11 +2166,11 @@
                   <button class="ver-trailer-btn mt-2 w-full py-1 bg-vibrant-orange text-white rounded text-xs hover:bg-orange-600 transition-colors" data-titulo="${titleRaw}">
                     Ver Trailer
                   </button>
-                  <button class="definir-lembrete" 
+                  <button class="mais-detalhes-btn" 
                           data-titulo="${titleRaw}" 
-                          data-horario="${startTime.getTime()}" 
-                          data-canal="${channel}">
-                    ⏰ Definir Lembrete
+                          data-canal="${channel}"
+                          data-horario="${startTime.getTime()}">
+                    Mais Detalhes
                   </button>
                 `;
                 container.appendChild(card);
@@ -1941,10 +2181,10 @@
                   buscarTrailer(e.target.dataset.titulo);
                 });
                 
-                // Adicionar evento de clique ao botão de lembrete
-                card.querySelector('.definir-lembrete').addEventListener('click', (e) => {
+                // Adicionar evento de clique ao botão de mais detalhes
+                card.querySelector('.mais-detalhes-btn').addEventListener('click', (e) => {
                   e.stopPropagation();
-                  addReminder(
+                  abrirDetalhesFilme(
                     e.target.dataset.titulo,
                     e.target.dataset.canal,
                     parseInt(e.target.dataset.horario)
@@ -1969,7 +2209,7 @@
         const agora = new Date();
         
         cards.forEach(card => {
-          const horarioElement = card.querySelector('.definir-lembrete');
+          const horarioElement = card.querySelector('.mais-detalhes-btn');
           if (!horarioElement) return;
           
           const horario = parseInt(horarioElement.dataset.horario);
@@ -2113,9 +2353,6 @@
         fecharMenu();
         alert('Você saiu. Redirecionando...');
       }
-      
-      // Pedir permissão para notificações
-      requestNotificationPermission();
       
       // Iniciar carregamento dos dados
       fetchEPGData();
