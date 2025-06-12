@@ -40,7 +40,7 @@
     }
 
     body {
-      background-color: var(--maxplay-dark);
+      background-color: #070c13;
       color: var(--maxplay-light);
       font-family: 'Poppins', sans-serif;
       line-height: 1.6;
@@ -108,7 +108,7 @@
       font-size: 15px;
     }
     
-    .programme-item {
+    .programme-item { background-color: transparent;
       border-left: 2px solid #ff6b00;
       transition: all 0.2s ease;
       padding: 0.3rem 0.5rem;
@@ -432,21 +432,7 @@
     }
     
     /* Botão de lembrete */
-    .definir-lembrete {
-      background-color: rgba(255, 107, 0, 0.2);
-      color: #ff6b00;
-      border: 1px solid rgba(255, 107, 0, 0.3);
-      padding: 6px;
-      font-size: 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin-top: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .definir-lembrete {font-size: 10px;margin-top: 8px;display: block;width: 100%;text-align: center;padding: 4px;background-color: rgba(255, 107, 0, 0.3);border: 1px solid rgba(255, 107, 0, 0.5);color: white;border-radius: 4px;cursor: pointer;transition: background-color 0.3s ease;}
     
     .definir-lembrete:hover {
       background-color: rgba(255, 107, 0, 0.3);
@@ -471,7 +457,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background-color: var(--maxplay-dark);
+      background-color: #070c13;
       border: 3px solid;
       display: flex;
       align-items: center;
@@ -559,44 +545,6 @@
       padding: 8px;
       font-size: 14px;
     }
-
-    /* Estilos para o modal de detalhes do filme */
-    #movie-details-modal {
-      transition: opacity 0.3s ease;
-    }
-
-    .movie-person-card {
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-
-    .movie-person-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .movie-person-img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-    }
-
-    .movie-person-name {
-      font-size: 14px;
-      font-weight: 500;
-      padding: 8px;
-      text-align: center;
-    }
-
-    .genre-tag {
-      display: inline-block;
-      background-color: var(--vibrant-orange);
-      color: white;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-    }
   </style>
 </head>
 <body>
@@ -651,67 +599,6 @@
           <p>
             Trailer não encontrado para este filme.
           </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal de Detalhes do Filme -->
-  <div class="fixed inset-0 z-50 hidden" id="movie-details-modal">
-    <div class="absolute inset-0 bg-black bg-opacity-80"></div>
-    <div class="relative h-full w-full overflow-y-auto">
-      <div class="container mx-auto px-4 py-16">
-        <!-- Botão Fechar -->
-        <button class="absolute top-4 right-4 text-white text-3xl z-50" id="close-movie-modal">
-          &times;
-        </button>
-        
-        <!-- Conteúdo do Modal -->
-        <div class="relative z-10">
-          <!-- Backdrop (imagem de fundo) -->
-          <div class="absolute inset-0 -z-10 opacity-30 overflow-hidden">
-            <img id="movie-backdrop" class="w-full h-full object-cover" src="" alt="">
-          </div>
-          
-          <!-- Grid de Layout -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Poster (lado esquerdo) -->
-            <div class="lg:col-span-1">
-              <img id="movie-poster" class="w-full rounded-lg shadow-xl" src="" alt="">
-            </div>
-            
-            <!-- Detalhes (lado direito) -->
-            <div class="lg:col-span-2 bg-gray-900 bg-opacity-80 p-6 rounded-lg">
-              <!-- Título e Informações Básicas -->
-              <div class="mb-6">
-                <h2 id="movie-title" class="text-3xl font-bold text-white mb-2"></h2>
-                <div class="flex flex-wrap items-center gap-4 text-gray-300">
-                  <span id="movie-year" class="text-lg"></span>
-                  <span id="movie-rating" class="text-lg"></span>
-                  <span id="movie-duration" class="text-lg"></span>
-                  <div id="movie-genres" class="flex flex-wrap gap-2"></div>
-                </div>
-              </div>
-              
-              <!-- Sinopse -->
-              <div class="mb-8">
-                <h3 class="text-xl font-semibold text-white mb-2">Sinopse</h3>
-                <p id="movie-overview" class="text-gray-300"></p>
-              </div>
-              
-              <!-- Diretores -->
-              <div class="mb-8" id="movie-directors-section">
-                <h3 class="text-xl font-semibold text-white mb-4">Diretores</h3>
-                <div id="movie-directors" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
-              </div>
-              
-              <!-- Elenco -->
-              <div class="mb-8">
-                <h3 class="text-xl font-semibold text-white mb-4">Elenco Principal</h3>
-                <div id="movie-cast" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -912,13 +799,13 @@
       'Sony': 'https://i.postimg.cc/bwDdDyFm/IMG-6878.jpg',
       'TNT': 'https://i.postimg.cc/kXhBg6wV/IMG-6879.png',
       'TNT Novelas': 'https://i.postimg.cc/1RB8bYqr/IMG-6880.jpg',
-      'Space': 'https://i.postimg.cc/D0xms8TM/IMG-6881.jpg',
-      'Cinemax': 'https://i.postimg.cc/x8fccLWm/IMG-6882.jpg',
+      'Space': 'https://i.postimg.cc/BbknDNcs/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-35.png',
+      'Cinemax': 'https://i.postimg.cc/dV8Vk27P/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-34.png',
       'Megapix': 'https://i.postimg.cc/fLjVz8gZ/IMG-6883.jpg',
       'Sony Movies': 'https://i.postimg.cc/mDGcWvj8/IMG-6884.jpg',
       'Fox': 'https://i.postimg.cc/0NS63kYz/IMG-6885.jpg',
       'Animal Planet': 'https://i.postimg.cc/pXdmvYQb/IMG-6886.png',
-      'History': 'https://i.postimg.cc/FH7kyg1g/IMG-6887.jpg',
+      'History': 'https://i.postimg.cc/bvgYLqHm/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-30.png',
       'Discovery Kids': 'https://i.postimg.cc/bwWD3DtX/IMG-6888.png',
       'Band': 'https://i.postimg.cc/c41nHNSz/IMG-6889.png',
       'Band Sports': 'https://i.postimg.cc/Pr68vFf5/IMG-6890.png',
@@ -927,32 +814,48 @@
       'Record': 'https://logodownload.org/wp-content/uploads/2014/02/record-logo-tv-0.png',
       'HBO': 'https://logodownload.org/wp-content/uploads/2017/04/hbo-logo-1.png',
       'Telecine': 'https://logodownload.org/wp-content/uploads/2017/07/telecine-logo-1.png',
-      'SporTV': 'https://logodownload.org/wp-content/uploads/2017/07/sportv-logo-0.png',
+      'SporTV': 'https://i.postimg.cc/G2NCStBx/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-19.png',
       'ESPN': 'https://logodownload.org/wp-content/uploads/2015/05/espn-logo-4.png',
       'Discovery': 'https://logodownload.org/wp-content/uploads/2017/04/discovery-channel-logo-1.png',
-      'Cartoon Network': 'https://logodownload.org/wp-content/uploads/2018/06/cartoon-network-logo-1.png',
-      'Nickelodeon': 'https://logodownload.org/wp-content/uploads/2018/07/nickelodeon-logo-1.png',
+      'Cartoon Network': 'https://i.postimg.cc/hvTtLTCd/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-6.png',
+      'Nickelodeon': 'https://i.postimg.cc/ncmHg4Gj/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-24.png',
       'Disney': 'https://logodownload.org/wp-content/uploads/2018/10/disney-channel-logo-1.png',
       'GloboNews': 'https://logodownload.org/wp-content/uploads/2017/07/globo-news-logo-0.png',
-      'CNN Brasil': 'https://logodownload.org/wp-content/uploads/2020/02/cnn-brasil-logo-0.png',
-      "AMC": "https://i.postimg.cc/t4vK31X0/IMG-6911.jpg",
-      "AXN": "https://i.postimg.cc/qM4H4VmF/IMG-6909.jpg",
-      "A&E": "https://i.postimg.cc/15BhzC23/IMG-6912.png",
-      "Prime Box Brazil": "https://i.postimg.cc/2yYMkhxW/IMG-6913.png",
-      "Comedy Central": "https://i.postimg.cc/k5kLHk6f/IMG-6914.png",
-      "Paramount Network": "https://i.postimg.cc/KzBChJtF/IMG-6915.png",
-      "Travel Box": "https://i.postimg.cc/xjGBsp03/IMG-6916.png",
+      'CNN Brasil': 'https://i.postimg.cc/3RPw0nZh/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-5.png',
+      "AMC": "https://i.postimg.cc/YSz0V6kf/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-39.png",
+      "AXN": "https://i.postimg.cc/T1pPpBbC/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-37.png",
+      "A&E": "https://i.postimg.cc/76B6Pq55/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-38.png",
+      "Prime Box Brazil": "https://i.postimg.cc/bYBJKNXM/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-36.png",
+      "Comedy Central": "https://i.postimg.cc/TY5wGMfP/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-33.png",
+      "Paramount Network": "https://i.postimg.cc/CxyKxPxs/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-32.png",
       "TLC": "https://i.postimg.cc/Prt90bJs/IMG-6917.png",
       "E!": "https://i.postimg.cc/SND34XYX/IMG-6918.jpg",
       "Arte 1": "https://i.postimg.cc/VkvTkYXK/IMG-6919.png",
-      "Fish": "https://i.postimg.cc/T3ssyZ9f/IMG-6920.png",
-      "Nick Jr.": "https://i.postimg.cc/Xqn1S3Vc/IMG-6924.png",
-      "Nickelodeon": "https://i.postimg.cc/yNSb0vQ9/IMG-6921.png",
-      "Cartoon Network": "https://i.postimg.cc/ZRtDHp2Q/IMG-6922.png",
-      "Cartoonito": "https://i.postimg.cc/hjLZ5hqt/IMG-6923.png",
+      "Fish": "https://i.postimg.cc/gJ0zT1gm/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-26.png",
+      "Nick Jr.": "https://i.postimg.cc/66gWMjnx/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-25.png",
+      "Cartoonito": "https://i.postimg.cc/Gm1cC4XM/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-22.png",
       "Premiere": "https://i.postimg.cc/dQ9SR7BW/IMG-6926.png",
-      "Record": "https://i.postimg.cc/Vv4GzTvy/IMG-6925.png",
-      "RedeTV!": "https://i.postimg.cc/xTTp60p9/IMG-6927.png"
+      "RedeTV!": "https://i.postimg.cc/xTTp60p9/IMG-6927.png",
+      "TNT Series": "https://i.postimg.cc/SKhjDT0x/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-40.png",
+      "Lifetime": "https://i.postimg.cc/Kzcjy18X/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-41.png",
+      "Fox News": "https://i.postimg.cc/pL8pQN6S/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-42.png",
+      "Travel Box": "https://i.postimg.cc/XJDjSxPF/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-29.png",
+      "ZooMoo": "https://i.postimg.cc/9QtcFcSc/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-23.png",
+      "Woohoo": "https://i.postimg.cc/N0sBKWqm/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-21.png",
+      "TV Câmara": "https://i.postimg.cc/J0kLw8ZV/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-18.png",
+      "TV Brasil": "https://i.postimg.cc/263Ywh55/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-17.png",
+      "TV Cultura": "https://i.postimg.cc/QN99NWqs/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-15.png",
+      "Rede Brasil": "https://i.postimg.cc/05T6z2tS/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-14.png",
+      "TV Gazeta": "https://i.postimg.cc/G2B2pZGz/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-13.png",
+      "Rede Vida": "https://i.postimg.cc/ZK6WptgM/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-11.png",
+      "TV Aparecida": "https://i.postimg.cc/Vk1dFZPL/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-10.png",
+      "Canção Nova": "https://i.postimg.cc/bvwr7Gv7/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-9.png",
+      "TV Rá-Tim-Bum": "https://i.postimg.cc/Bv7b4qLX/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-8.png",
+      "Dreamworks": "https://i.postimg.cc/fW9yQQwR/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-7.png",
+      "CNN Brasil": "https://i.postimg.cc/3RPw0nZh/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-5.png",
+      "Jovem Pan News": "https://i.postimg.cc/jSsSfWyD/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-3.png",
+      "Boomerang": "https://i.postimg.cc/28d53dLp/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-2.png",
+      "Agro+": "https://i.postimg.cc/13J5r9KJ/Amarelo-Preto-e-Vermelho-Ilustrado-Festa-Junina-Post-para-Instagram-zip-1.png"
     };
 
     // Classificação indicativa
@@ -1830,116 +1733,6 @@
         trailerModal.style.display = 'block';
       }
 
-      // Função para mostrar detalhes do filme
-      async function mostrarDetalhesFilme(movieId) {
-        if (!movieId) return;
-
-        const modal = document.getElementById('movie-details-modal');
-        const loader = document.createElement('div');
-        loader.className = 'loading-spinner mx-auto my-16';
-        modal.innerHTML = '';
-        modal.appendChild(loader);
-        modal.classList.remove('hidden');
-
-        try {
-          // Buscar detalhes do filme
-          const movieResponse = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbApiKey}&language=pt-BR`);
-          const movieData = await movieResponse.json();
-
-          // Buscar créditos do filme (elenco e diretores)
-          const creditsResponse = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${tmdbApiKey}`);
-          const creditsData = await creditsResponse.json();
-
-          // Preencher os dados no modal
-          document.getElementById('movie-poster').src = movieData.poster_path 
-            ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}`
-            : 'https://via.placeholder.com/500x750?text=Poster+Não+Disponível';
-          
-          document.getElementById('movie-backdrop').src = movieData.backdrop_path 
-            ? `https://image.tmdb.org/t/p/original${movieData.backdrop_path}`
-            : 'https://via.placeholder.com/1280x720?text=Imagem+Não+Disponível';
-          
-          document.getElementById('movie-title').textContent = movieData.title;
-          document.getElementById('movie-year').textContent = new Date(movieData.release_date).getFullYear();
-          
-          const rating = Math.round(movieData.vote_average * 10);
-          document.getElementById('movie-rating').innerHTML = `
-            <span class="flex items-center">
-              <span class="mr-1">${rating}%</span>
-              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-              </svg>
-            </span>
-          `;
-          
-          document.getElementById('movie-duration').textContent = `${Math.floor(movieData.runtime / 60)}h ${movieData.runtime % 60}m`;
-          
-          const genresContainer = document.getElementById('movie-genres');
-          genresContainer.innerHTML = '';
-          movieData.genres.forEach(genre => {
-            const tag = document.createElement('span');
-            tag.className = 'genre-tag';
-            tag.textContent = genre.name;
-            genresContainer.appendChild(tag);
-          });
-          
-          document.getElementById('movie-overview').textContent = movieData.overview || 'Sinopse não disponível.';
-          
-          // Preencher diretores
-          const directors = creditsData.crew.filter(person => person.job === 'Director');
-          const directorsContainer = document.getElementById('movie-directors');
-          directorsContainer.innerHTML = '';
-          
-          if (directors.length > 0) {
-            directors.slice(0, 4).forEach(director => {
-              const directorCard = document.createElement('div');
-              directorCard.className = 'movie-person-card';
-              directorCard.innerHTML = `
-                <img src="${director.profile_path ? `https://image.tmdb.org/t/p/w200${director.profile_path}` : 'https://via.placeholder.com/200x300?text=Sem+Imagem'}" 
-                     alt="${director.name}" 
-                     class="movie-person-img">
-                <div class="movie-person-name">${director.name}</div>
-              `;
-              directorsContainer.appendChild(directorCard);
-            });
-          } else {
-            document.getElementById('movie-directors-section').classList.add('hidden');
-          }
-          
-          // Preencher elenco
-          const castContainer = document.getElementById('movie-cast');
-          castContainer.innerHTML = '';
-          
-          creditsData.cast.slice(0, 5).forEach(actor => {
-            const actorCard = document.createElement('div');
-            actorCard.className = 'movie-person-card';
-            actorCard.innerHTML = `
-              <img src="${actor.profile_path ? `https://image.tmdb.org/t/p/w200${actor.profile_path}` : 'https://via.placeholder.com/200x300?text=Sem+Imagem'}" 
-                   alt="${actor.name}" 
-                   class="movie-person-img">
-              <div class="movie-person-name">${actor.name} <br> <span class="text-xs text-gray-400">${actor.character}</span></div>
-            `;
-            castContainer.appendChild(actorCard);
-          });
-          
-        } catch (error) {
-          console.error('Erro ao carregar detalhes do filme:', error);
-          modal.innerHTML = '<div class="text-center text-white py-16">Erro ao carregar detalhes do filme</div>';
-        }
-      }
-
-      // Função para buscar ID do filme pelo título
-      async function getMovieIdByTitle(title) {
-        try {
-          const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${encodeURIComponent(title)}&language=pt-BR`);
-          const data = await response.json();
-          return data.results?.[0]?.id || null;
-        } catch (error) {
-          console.error('Erro ao buscar ID do filme:', error);
-          return null;
-        }
-      }
-      
       async function carregarFilmes() {
         const container = document.getElementById("filmes");
         container.innerHTML = '<div class="loading-spinner mx-auto"></div>';
@@ -2057,27 +1850,10 @@
                 // Obter imagem da classificação indicativa
                 const ratingImg = ratingImages[rating] || ratingImages['L'];
                 
-                // Buscar ID do filme na TMDB para obter a avaliação
-                let filmeId = '';
-                try {
-                  const buscaFilme = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${encodeURIComponent(titleRaw)}`);
-                  const dadosFilme = await buscaFilme.json();
-                  if (dadosFilme.results?.length) {
-                    filmeId = dadosFilme.results[0].id;
-                  }
-                } catch (e) {
-                  console.error('Erro ao buscar ID do filme:', e);
-                }
-                
                 const card = document.createElement("div");
                 card.className = "movie-card";
-                card.addEventListener('click', async () => {
-                  const movieId = await getMovieIdByTitle(titleRaw);
-                  if (movieId) mostrarDetalhesFilme(movieId);
-                });
                 card.innerHTML = `
                   <div class="movie-poster-container">
-                    <div class="rating-circle hidden" id="rating-${filmeId}"></div>
                     <img src="${img}" alt="${titleRaw}" class="w-full h-60 object-cover mb-2 rounded" loading="lazy">
                   </div>
                   <h3 class="text-sm font-bold text-white">${titleRaw}</h3>
@@ -2120,11 +1896,6 @@
                   );
                 });
                 
-                // Atualizar a avaliação do filme se tiver ID
-                if (filmeId) {
-                  await updateFilmRating(filmeId);
-                }
-                
                 // Limitar a quantidade de filmes exibidos para não sobrecarregar
                 if (titulosUnicos.size >= 30) break; // Limite de 30 filmes
               }
@@ -2135,36 +1906,6 @@
         } catch (error) {
           console.error("Erro ao carregar filmes:", error);
           container.innerHTML = '<p class="text-red-400 text-center py-4">Erro ao carregar filmes</p>';
-        }
-      }
-      
-      async function updateFilmRating(movieId) {
-        if (!movieId) return;
-        
-        try {
-          const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbApiKey}`);
-          const data = await response.json();
-          
-          if (data.vote_average) {
-            const ratingElement = document.getElementById(`rating-${movieId}`);
-            if (!ratingElement) return;
-            
-            const percentage = Math.round(data.vote_average * 10);
-            
-            ratingElement.textContent = `${percentage}%`;
-            ratingElement.classList.remove('hidden');
-            
-            // Defina a classe com base na porcentagem
-            if (percentage >= 70) {
-              ratingElement.classList.add('rating-high');
-            } else if (percentage >= 50) {
-              ratingElement.classList.add('rating-medium');
-            } else {
-              ratingElement.classList.add('rating-low');
-            }
-          }
-        } catch (error) {
-          console.error('Erro ao buscar avaliação do filme:', error);
         }
       }
       
@@ -2236,17 +1977,6 @@
             iframe.remove();
           }
           trailerNotFound.classList.add('hidden');
-        }
-      });
-
-      // Configurar modal de detalhes do filme
-      document.getElementById('close-movie-modal').addEventListener('click', () => {
-        document.getElementById('movie-details-modal').classList.add('hidden');
-      });
-
-      document.getElementById('movie-details-modal').addEventListener('click', (e) => {
-        if (e.target === document.getElementById('movie-details-modal')) {
-          document.getElementById('movie-details-modal').classList.add('hidden');
         }
       });
       
