@@ -1794,7 +1794,7 @@
                 // Verifica se o título já foi adicionado e se não contém "EP" ou "Episódio"
                 if (titulosUnicos.has(titleClean)) continue;
                 
-                const img = await buscarImagemFilme(titleRaw);
+                const { image: img, rating } = await buscarImagemFilme(titleRaw);
                 if (img.includes("via.placeholder.com")) continue;
                 
                 titulosUnicos.add(titleClean);
@@ -1822,19 +1822,19 @@
                 const dataFormatada = `${diaMes}/${mes}`;
                 
                 // Obter classificação indicativa
-                let rating = "L";
+                let ratingIndicativa = "L";
                 const ratingElement = filme.getElementsByTagName("rating")[0];
                 if (ratingElement) {
                   const valueElement = ratingElement.getElementsByTagName("value")[0];
                   if (valueElement) {
-                    rating = valueElement.textContent;
+                    ratingIndicativa = valueElement.textContent;
                     // Normaliza a classificação
-                    if (rating.includes('LIVRE') || rating === 'L') rating = 'L';
-                    else if (rating.includes('10') || rating.includes('DEZ')) rating = '10';
-                    else if (rating.includes('12') || rating.includes('DOZE')) rating = '12';
-                    else if (rating.includes('14') || rating.includes('QUATORZE')) rating = '14';
-                    else if (rating.includes('16') || rating.includes('DEZESSEIS')) rating = '16';
-                    else if (rating.includes('18') || rating.includes('DEZOITO')) rating = '18';
+                    if (ratingIndicativa.includes('LIVRE') || ratingIndicativa === 'L') ratingIndicativa = 'L';
+                    else if (ratingIndicativa.includes('10') || ratingIndicativa.includes('DEZ')) ratingIndicativa = '10';
+                    else if (ratingIndicativa.includes('12') || ratingIndicativa.includes('DOZE')) ratingIndicativa = '12';
+                    else if (ratingIndicativa.includes('14') || ratingIndicativa.includes('QUATORZE')) ratingIndicativa = '14';
+                    else if (ratingIndicativa.includes('16') || ratingIndicativa.includes('DEZESSEIS')) ratingIndicativa = '16';
+                    else if (ratingIndicativa.includes('18') || ratingIndicativa.includes('DEZOITO')) ratingIndicativa = '18';
                   }
                 }
                 
@@ -1848,13 +1848,26 @@
                 }
                 
                 // Obter imagem da classificação indicativa
-                const ratingImg = ratingImages[rating] || ratingImages['L'];
+                const ratingImg = ratingImages[ratingIndicativa] || ratingImages['L'];
+                
+                // Determinar a classe de cor com base na avaliação
+                let ratingClass = '';
+                if (rating !== null) {
+                  if (rating >= 70) ratingClass = 'rating-high';
+                  else if (rating >= 50) ratingClass = 'rating-medium';
+                  else ratingClass = 'rating-low';
+                }
                 
                 const card = document.createElement("div");
                 card.className = "movie-card";
                 card.innerHTML = `
-                  <div class="movie-poster-container">
+                  <div class="movie-poster-container relative">
                     <img src="${img}" alt="${titleRaw}" class="w-full h-60 object-cover mb-2 rounded" loading="lazy">
+                    ${rating !== null ? `
+                      <div class="rating-circle ${ratingClass}">
+                        ${rating}%
+                      </div>
+                    ` : ''}
                   </div>
                   <h3 class="text-sm font-bold text-white">${titleRaw}</h3>
                   <div class="flex items-center justify-between mt-1">
@@ -1866,7 +1879,7 @@
                   </div>
                   <div class="flex items-center justify-between mt-1">
                     <p class="text-xs text-gray-300">Horário: ${horario}</p>
-                    <img src="${ratingImg}" alt="Classificação ${rating}" class="h-4">
+                    <img src="${ratingImg}" alt="Classificação ${ratingIndicativa}" class="h-4">
                   </div>
                   <button class="ver-trailer-btn mt-2 w-full py-1 bg-vibrant-orange text-white rounded text-xs hover:bg-orange-600 transition-colors" data-titulo="${titleRaw}">
                     Ver Trailer
@@ -1926,18 +1939,20 @@
             const filme = dados.results?.find(f => f.poster_path || f.backdrop_path);
             
             if (filme) {
-              if (filme.poster_path) {
-                return `https://image.tmdb.org/t/p/w500${filme.poster_path}`;
-              } else if (filme.backdrop_path) {
-                return `https://image.tmdb.org/t/p/w500${filme.backdrop_path}`;
-              }
+              return {
+                image: filme.poster_path ? `https://image.tmdb.org/t/p/w500${filme.poster_path}` : `https://image.tmdb.org/t/p/w500${filme.backdrop_path}`,
+                rating: filme.vote_average ? Math.round(filme.vote_average * 10) : null
+              };
             }
           } catch (erro) {
             console.error("Erro ao buscar imagem:", titulo, erro);
           }
         }
         
-        return `https://via.placeholder.com/300x450?text=${encodeURIComponent(tituloOriginal)}`;
+        return {
+          image: `https://via.placeholder.com/300x450?text=${encodeURIComponent(tituloOriginal)}`,
+          rating: null
+        };
       }
 
       // Inicialização
