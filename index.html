@@ -668,6 +668,139 @@
       color: #a0aec0;
     }
     
+    /* Trailer button */
+    .ver-trailer-btn {
+      width: 100%;
+      margin-top: auto;
+      padding: 8px;
+      font-size: 14px;
+    }
+    
+    /* Mais detalhes button */
+    .mais-detalhes-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      font-size: 14px;
+      background-color: rgba(255, 107, 0, 0.3);
+      border: 1px solid rgba(255, 107, 0, 0.5);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-align: center;
+    }
+    
+    .mais-detalhes-btn:hover {
+      background-color: rgba(255, 107, 0, 0.5);
+    }
+
+    /* Estilos para a seção de filmes em destaque */
+    #filmes-destaque {
+      position: relative;
+    }
+
+    #filmes {
+      scrollbar-width: thin;
+      scrollbar-color: var(--vibrant-orange) rgba(255, 255, 255, 0.05);
+      padding-bottom: 16px;
+      margin-bottom: -16px; /* Compensa o padding para não afetar o layout */
+      scroll-behavior: smooth;
+    }
+
+    /* Sombra gradiente nos cantos para indicar mais conteúdo */
+    #filmes::before, #filmes::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #filmes::before {
+      left: 0;
+      background: linear-gradient(90deg, rgba(7, 12, 19, 0.8) 0%, rgba(7, 12, 19, 0) 100%);
+    }
+
+    #filmes::after {
+      right: 0;
+      background: linear-gradient(270deg, rgba(7, 12, 19, 0.8) 0%, rgba(7, 12, 19, 0) 100%);
+    }
+
+    /* Setas de navegação */
+    .scroll-arrows {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .scroll-arrow {
+      pointer-events: all;
+      background-color: rgba(255, 107, 0, 0.7);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .scroll-arrow:hover {
+      background-color: var(--vibrant-orange);
+      transform: scale(1.1);
+    }
+
+    .scroll-arrow.left {
+      margin-left: -18px;
+    }
+
+    .scroll-arrow.right {
+      margin-right: -18px;
+    }
+
+    /* Indicador de scroll */
+    .scroll-indicator {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--vibrant-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scroll-indicator span {
+      margin: 0 8px;
+    }
+
+    .scroll-indicator::before,
+    .scroll-indicator::after {
+      content: '➤';
+      color: var(--vibrant-orange);
+      font-size: 10px;
+    }
+
+    .scroll-indicator::before {
+      transform: rotate(180deg);
+      margin-right: 8px;
+    }
+
+    .scroll-indicator::after {
+      margin-left: 8px;
+    }
+
     /* Responsividade */
     @media (max-width: 640px) {
       .filters-container {
@@ -707,6 +840,20 @@
       .movie-details-cast-list {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       }
+
+      .scroll-arrow {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+
+      .scroll-arrow.left {
+        margin-left: -14px;
+      }
+
+      .scroll-arrow.right {
+        margin-right: -14px;
+      }
     }
     
     @media (max-width: 400px) {
@@ -717,33 +864,6 @@
       .programme-title, .programme-desc {
         font-size: 0.9rem;
       }
-    }
-
-    /* Trailer button */
-    .ver-trailer-btn {
-      width: 100%;
-      margin-top: auto;
-      padding: 8px;
-      font-size: 14px;
-    }
-    
-    /* Mais detalhes button */
-    .mais-detalhes-btn {
-      width: 100%;
-      margin-top: 8px;
-      padding: 8px;
-      font-size: 14px;
-      background-color: rgba(255, 107, 0, 0.3);
-      border: 1px solid rgba(255, 107, 0, 0.5);
-      color: white;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      text-align: center;
-    }
-    
-    .mais-detalhes-btn:hover {
-      background-color: rgba(255, 107, 0, 0.5);
     }
   </style>
 </head>
@@ -857,16 +977,34 @@
   </div>
   
   <!-- Seção de Filmes em Destaque -->
-  <section class="px-4 py-6 text-white" id="filmes-destaque">
+  <section class="px-4 py-6 text-white relative" id="filmes-destaque">
     <h2 class="text-2xl font-bold mb-1 text-orange-500">
       🎬 Destaques do Dia
     </h2>
     <p class="text-sm text-gray-300 mb-4">
-      Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais.
+      Acompanhe aqui os filmes que ainda vão passar hoje nos principais canais. 
+      <span class="text-vibrant-orange font-medium">Role para o lado → para ver mais</span>
     </p>
-    <div class="flex gap-4 overflow-x-auto pb-4" id="filmes">
-      <div class="loading-spinner mx-auto">
+    
+    <div class="relative">
+      <div class="flex gap-4 overflow-x-auto pb-4 scroll-container" id="filmes">
+        <div class="loading-spinner mx-auto"></div>
       </div>
+      
+      <!-- Setas de navegação -->
+      <div class="scroll-arrows">
+        <button class="scroll-arrow left hidden md:flex" onclick="scrollFilmes(-300)">
+          &lt;
+        </button>
+        <button class="scroll-arrow right hidden md:flex" onclick="scrollFilmes(300)">
+          &gt;
+        </button>
+      </div>
+    </div>
+    
+    <!-- Indicador de scroll -->
+    <div class="scroll-indicator">
+      Arraste para os lados para ver mais filmes
     </div>
   </section>
   
@@ -2284,6 +2422,31 @@
         };
       }
 
+      // Função para rolar os filmes
+      function scrollFilmes(amount) {
+        const filmesContainer = document.getElementById('filmes');
+        filmesContainer.scrollBy({ left: amount, behavior: 'smooth' });
+      }
+
+      // Mostrar/ocultar setas conforme a posição do scroll
+      function updateScrollArrows() {
+        const filmesContainer = document.getElementById('filmes');
+        const leftArrow = document.querySelector('.scroll-arrow.left');
+        const rightArrow = document.querySelector('.scroll-arrow.right');
+        
+        if (filmesContainer.scrollLeft > 0) {
+          leftArrow.classList.remove('hidden');
+        } else {
+          leftArrow.classList.add('hidden');
+        }
+        
+        if (filmesContainer.scrollLeft < filmesContainer.scrollWidth - filmesContainer.clientWidth) {
+          rightArrow.classList.remove('hidden');
+        } else {
+          rightArrow.classList.add('hidden');
+        }
+      }
+
       // Inicialização
       updateCurrentTime();
       setInterval(updateCurrentTime, 1000);
@@ -2360,6 +2523,9 @@
       
       // Atualizar status dos filmes periodicamente
       setInterval(atualizarStatusFilmes, 60000); // Atualiza a cada minuto
+      
+      // Configurar eventos de scroll para os filmes
+      document.getElementById('filmes').addEventListener('scroll', updateScrollArrows);
       
       // Event Listeners
       channelSearch.addEventListener('input', handleSearch);
